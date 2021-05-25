@@ -1,0 +1,250 @@
+{
+  "country": [
+    {
+      "Mexico": {
+        "ally": [
+          {
+            "id": "64558sqdd8q1sdf48ae",
+            "updateDate": "9/05/2021",
+            "creationDate": "5/05/2021",
+            "name": "Coca Cola",
+            "channelType": "",
+            "contact": {
+              "name": "Arturo Escobar",
+              "email": "artucobar@cocacola.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "La de siempre, original y deliciosa, la que refresca a millones de personas en todo el mundo.",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64558sdqsd838282827",
+            "creationDate": "5/05/2021",
+            "name": "Colgate",
+            "channelType": "",
+            "contact": {
+              "name": "Pedro Escobar",
+              "email": "artucobar@colgate.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "Somos Colgate, una compañía de cuidado, innovación y crecimiento, reimaginando un futuro más saludable para todas las personas, sus mascotas y nuestro planeta.            ",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64558sgonzs8282827",
+            "creationDate": "5/05/2021",
+            "name": "Pepsi",
+            "channelType": "",
+            "contact": {
+              "name": "Andres Escobar",
+              "email": "andrecobar@pepsi.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "Somos una de las compañías líderes del sector de alimentos y bebidas en el mundo.",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64juelsqazs8282827",
+            "creationDate": "5/05/2021",
+            "name": "Nike",
+            "channelType": "",
+            "contact": {
+              "name": "Pablo Escobar",
+              "email": "pablocobar@cocacola.com",
+              "phoneNumber": "(+1) 343456642"
+            },
+            "description": "Nunca es fácil probar algo nuevo. Pero es excelente. Porque no importa cuántas veces te caigas, siempre ganas algo. Probar cosas nuevas siempre es una victoria.",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64ju34DDZEd8282827",
+            "creationDate": "5/05/2021",
+            "name": "Adidas",
+            "channelType": "",
+            "contact": {
+              "name": "Martin Escobar",
+              "email": "martincobar@cocacola.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Colombia": {
+        "ally": [
+          {
+            "id": "64558sqdd8q1sdf48ae",
+            "updateDate": "9/05/2021",
+            "creationDate": "5/05/2021",
+            "name": "Coca Cola",
+            "channelType": "",
+            "contact": {
+              "name": "Arturo Escobar",
+              "email": "artucobar@cocacola.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "La de siempre, original y deliciosa, la que refresca a millones de personas en todo el mundo.",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64558sdqsd838282827",
+            "creationDate": "5/05/2021",
+            "name": "Colgate",
+            "channelType": "",
+            "contact": {
+              "name": "Pedro Escobar",
+              "email": "artucobar@colgate.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "Somos Colgate, una compañía de cuidado, innovación y crecimiento, reimaginando un futuro más saludable para todas las personas, sus mascotas y nuestro planeta.            ",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64558sgonzs8282827",
+            "creationDate": "5/05/2021",
+            "name": "Pepsi",
+            "channelType": "",
+            "contact": {
+              "name": "Andres Escobar",
+              "email": "andrecobar@pepsi.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "Somos una de las compañías líderes del sector de alimentos y bebidas en el mundo.",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64juelsqazs8282827",
+            "creationDate": "5/05/2021",
+            "name": "Nike",
+            "channelType": "",
+            "contact": {
+              "name": "Pablo Escobar",
+              "email": "pablocobar@cocacola.com",
+              "phoneNumber": "(+1) 343456642"
+            },
+            "description": "Nunca es fácil probar algo nuevo. Pero es excelente. Porque no importa cuántas veces te caigas, siempre ganas algo. Probar cosas nuevas siempre es una victoria.",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64ju34DDZEd8282827",
+            "creationDate": "5/05/2021",
+            "name": "Adidas",
+            "channelType": "",
+            "contact": {
+              "name": "Martin Escobar",
+              "email": "martincobar@cocacola.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Venezuela": {
+        "ally": [
+          {
+            "id": "64558sqdd8q1sdf48ae",
+            "updateDate": "9/05/2021",
+            "creationDate": "5/05/2021",
+            "name": "Coca Cola",
+            "channelType": "",
+            "contact": {
+              "name": "Arturo Escobar",
+              "email": "artucobar@cocacola.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "La de siempre, original y deliciosa, la que refresca a millones de personas en todo el mundo.",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64558sdqsd838282827",
+            "creationDate": "5/05/2021",
+            "name": "Colgate",
+            "channelType": "",
+            "contact": {
+              "name": "Pedro Escobar",
+              "email": "artucobar@colgate.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "Somos Colgate, una compañía de cuidado, innovación y crecimiento, reimaginando un futuro más saludable para todas las personas, sus mascotas y nuestro planeta.            ",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64558sgonzs8282827",
+            "creationDate": "5/05/2021",
+            "name": "Pepsi",
+            "channelType": "",
+            "contact": {
+              "name": "Andres Escobar",
+              "email": "andrecobar@pepsi.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "Somos una de las compañías líderes del sector de alimentos y bebidas en el mundo.",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64juelsqazs8282827",
+            "creationDate": "5/05/2021",
+            "name": "Nike",
+            "channelType": "",
+            "contact": {
+              "name": "Pablo Escobar",
+              "email": "pablocobar@cocacola.com",
+              "phoneNumber": "(+1) 343456642"
+            },
+            "description": "Nunca es fácil probar algo nuevo. Pero es excelente. Porque no importa cuántas veces te caigas, siempre ganas algo. Probar cosas nuevas siempre es una victoria.",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          },
+          {
+            "id": "64ju34DDZEd8282827",
+            "creationDate": "5/05/2021",
+            "name": "Adidas",
+            "channelType": "",
+            "contact": {
+              "name": "Martin Escobar",
+              "email": "martincobar@cocacola.com",
+              "phoneNumber": "(+1) 3434242342"
+            },
+            "description": "",
+            "carvajalContact": {
+              "email" : "juanmugo@carvajal.com"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
