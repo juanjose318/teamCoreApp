@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./configurar-aliados.component.scss']
 })
 export class ConfigurarAliadosComponent implements OnInit {
-  descriptionBoxText: String = "Herramienta que permite Habilitar en inhabilitar tanto comercio como un fabriacante y sobre este ultimo, activar los socios Comerciales y las referencisa del catalogo de productos para el envio de la Meta Data de ventar para inventarios al aliado";
+  descriptionBoxText: String = "Herramienta que permite  Habilitar en inhabilitar tanto comercio como un fabriacante y sobre este ultimo, activar los socios Comerciales y las referencisa del catalogo de productos para el envio de la Meta Data de ventar para inventarios al aliado";
 
   constructor() { }
 
