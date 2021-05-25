@@ -1,0 +1,20 @@
+.card {
+    width: 80%;
+    margin:1% auto;
+    border: none;
+}
+.wrapper {
+    display: flex;
+    justify-content: center;
+    flex-flow: row;
+}
+
+.btn-wrapper{
+    margin-right: 2%;
+}
+
+.input-group-text {
+    font-weight: 600;
+    background:none;
+    border:none;
+}
