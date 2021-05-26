@@ -11,16 +11,20 @@ export class ResultsTableComponent implements OnChanges {
   @Input() allies: any = [];
   allyCollection;
 
+  /**
+   * Variables para el paginador
+   */
   page = 1;
   pageSize = 4;
-  
   collectionSize;
 
   constructor() {
-    // this.refreshCountries();
    }
 
-   ngOnChanges(changes:SimpleChanges){
+   /**
+    * Atribuir variable esperando input
+    */
+   ngOnChanges(){
      if(this.allies){
       this.collectionSize = this.allies.allies.length;
       this.allyCollection = this.allies.allies;
@@ -28,10 +32,11 @@ export class ResultsTableComponent implements OnChanges {
      }
    }
 
-  // refreshCountries() {
-  //   this.allyCollection
-  //     .map((ally, i) => ({id: i + 1, ...ally}))
-  //     .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
-  // }
+  refreshCountries() {
+    console.log(this.allyCollection);
+    this.allyCollection
+      .map((ally, i) => ({id: i + 1, ...ally}))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  }
 
 }

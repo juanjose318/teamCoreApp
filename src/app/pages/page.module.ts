@@ -8,7 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { TextBoxComponent } from '../components/text-box/text-box.component';
 import { HttpClientModule } from '@angular/common/http';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuditAllyComponent } from '../components/audit-ally/audit-ally.component';
 
 
 @NgModule({
@@ -17,6 +18,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     ResultsTableComponent,
     SearchCreateAllyComponent,
     TextBoxComponent,
+    AuditAllyComponent,
+
   ],
   imports: [
     CommonModule,

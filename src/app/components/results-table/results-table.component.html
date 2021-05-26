@@ -1,15 +1,23 @@
-<!-- <div class="d-flex justify-content-between p-2">
-  <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()">
+<div class="d-flex justify-content-center middle-box">
+  <ngb-pagination 
+  class="paginator"
+  [collectionSize]="collectionSize" 
+  [(page)]="page" 
+  [pageSize]="pageSize" 
+  (pageChange)="refreshCountries()">
   </ngb-pagination>
 
-  <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
-    <option [ngValue]="2">2 items per page</option>
-    <option [ngValue]="4">4 items per page</option>
-    <option [ngValue]="6">6 items per page</option>
+  <select class="custom-select"  [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+    <option [ngValue]="2">2</option>
+    <option [ngValue]="4">4</option>
+    <option [ngValue]="10">10</option>
+    <option [ngValue]="20">20</option>
+    <option [ngValue]="50">50</option>
+    <option [ngValue]="100">100</option>
   </select>
-</div> -->
+</div>
 
-<table class="table">
+<table class="table table-hover">
   <thead>
     <colgroup span="2">
     </colgroup>
@@ -31,11 +39,10 @@
       <th scope="col">Editar/Eliminar</th>
     </tr>
     <tr>
-
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let ally of allies?.allies">
+    <tr *ngFor="let ally of allyCollection">
       <td scope="row">{{ ally?.id }}</td>
       <td scope="row">{{ ally?.creationDate | date: 'd/MMM/y HH:mm' }}</td>
       <td> {{ ally?.channelType }}</td>
@@ -48,7 +55,7 @@
       <td> {{ ally?.contactPhoneNumber }}</td>
       <td> {{ ally?.description }}</td>
       <td> {{ ally?.carvajalContact }}</td>
-      <td> <i class="bi bi-x"></i> <i class="bi bi-check"></i> <i class="bi bi-trash"></i></td>
+      <td> <i class="bi bi-pencil action-icon"></i> <i class="bi bi-trash action-icon"></i></td>
     </tr>
   </tbody>
 </table>
