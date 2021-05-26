@@ -7,6 +7,9 @@ import { ResultsTableComponent } from '../components/results-table/results-table
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { TextBoxComponent } from '../components/text-box/text-box.component';
+import { HttpClientModule } from '@angular/common/http';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -18,9 +21,11 @@ import { TextBoxComponent } from '../components/text-box/text-box.component';
   imports: [
     CommonModule,
     FormsModule,
+    NgbModule,
     BrowserModule,
+    HttpClientModule,
     ReactiveFormsModule,
     PageRoutingModule
-  ]
+  ],
 })
 export class PageModule { }

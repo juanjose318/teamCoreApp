@@ -1,3 +1,54 @@
-<p>
-  results-table works!
-</p>
+<!-- <div class="d-flex justify-content-between p-2">
+  <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()">
+  </ngb-pagination>
+
+  <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+    <option [ngValue]="2">2 items per page</option>
+    <option [ngValue]="4">4 items per page</option>
+    <option [ngValue]="6">6 items per page</option>
+  </select>
+</div> -->
+
+<table class="table">
+  <thead>
+    <colgroup span="2">
+    </colgroup>
+    <colgroup span="2">
+    </colgroup>
+    <tr class="bg-primary text-white">
+      <th scope="col">ID Aliado</th>
+      <th scope="col">Fecha de Creacion</th>
+      <th scope="colgroup"> Tipo de Canal </th>
+      <th scope="colgroup"> Ruta </th>
+      <th scope="col">Pais del Aliado</th>
+      <th scope="col">Nombre del Aliado</th>
+      <th scope="col">Identificacion del Aliado</th>
+      <th scope="col">Contacto del Aliado</th>
+      <th scope="col">Correo del Aliado</th>
+      <th scope="col">Telefono del Aliado</th>
+      <th scope="col">Descripcion del Aliado</th>
+      <th scope="col">Contacto de Carvajal</th>
+      <th scope="col">Editar/Eliminar</th>
+    </tr>
+    <tr>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ally of allies?.allies">
+      <td scope="row">{{ ally?.id }}</td>
+      <td scope="row">{{ ally?.creationDate | date: 'd/MMM/y HH:mm' }}</td>
+      <td> {{ ally?.channelType }}</td>
+      <td> {{ ally?.route }}</td>
+      <td>{{ ally?.countryId }}</td>
+      <td> {{ ally?.name }}</td>
+      <td> {{ ally?.identification }}</td>
+      <td> {{ ally?.contactName }}</td>
+      <td> {{ ally?.contactEmail }}</td>
+      <td> {{ ally?.contactPhoneNumber }}</td>
+      <td> {{ ally?.description }}</td>
+      <td> {{ ally?.carvajalContact }}</td>
+      <td> <i class="bi bi-x"></i> <i class="bi bi-check"></i> <i class="bi bi-trash"></i></td>
+    </tr>
+  </tbody>
+</table>
