@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-audit-ally',
   templateUrl: './audit-ally.component.html',
   styleUrls: ['./audit-ally.component.scss']
 })
-export class AuditAllyComponent implements OnInit {
+export class AuditAllyComponent implements OnChanges {
   @Input() textAudit: string;
   @Input() audit: any;
 
@@ -17,7 +17,10 @@ export class AuditAllyComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnChanges() {
+    if (this.audit) {
+      this.collectionSize = this.audit.audit.length;
+      this.auditCollection = this.audit.audit;
+    }
   }
-
 }

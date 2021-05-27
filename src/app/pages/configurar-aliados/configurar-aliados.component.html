@@ -9,10 +9,13 @@
       <p><small>*Campos obligatorios</small></p>
       <app-text-box [text]="descriptionBoxText"></app-text-box>
       <app-search-create-ally [allies]="allies" (allySearched)="handleSearch($event)"></app-search-create-ally>
-    <app-results-table [allies]="allies"></app-results-table>
+      <app-results-table [allies]="allies"></app-results-table>
     </div>
 
-    <app-audit-ally [textAudit]="descriptionAudit"></app-audit-ally>
+    <app-audit-ally 
+    [audit]="audit" 
+    [textAudit]="descriptionAudit">
+    </app-audit-ally>
 
   </div>
 </div>
