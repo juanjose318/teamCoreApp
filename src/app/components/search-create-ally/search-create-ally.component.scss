@@ -1,20 +1,65 @@
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
 .card {
-    width: 80%;
-    margin:1% auto;
-    border: none;
+  width: 100%;
+  margin: 1% auto;
 }
+
+.input-group {
+  padding-right: 2%;
+}
+
 .wrapper {
-    display: flex;
-    justify-content: center;
-    flex-flow: row;
+  display: block;
 }
 
-.btn-wrapper{
-    margin-right: 2%;
+.field {
+  margin-bottom: 4%;
 }
 
-.input-group-text {
-    font-weight: 600;
-    background:none;
-    border:none;
+.wrapper>.input-group {
+  width: 25%;
+  float: left;
+}
+
+.infoAlly {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.btn-wrapper {
+  display: flex;
+  flex-flow: column;
+}
+
+.btn-wrapper-2 {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.btn-wrapper>button {
+  margin-bottom: 10%;
+}
+
+.sideLabel {
+  box-sizing: border-box;
+  padding: 0 1%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.allyField {
+  margin-bottom: 4%;
+}
+
+.bi {
+  padding-left: 4px;
+}
+
+.btn-group {
+  display: flex !important;
+  flex-flow: row nowrap !important;
+  align-items: flex-start;
 }

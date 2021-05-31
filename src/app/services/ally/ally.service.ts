@@ -6,11 +6,8 @@ import { Subject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AliadoService {
     private allyListener = new Subject<{ allies: any[] }>();
-
     private allies: any;
-
     private jsonUrl = '../../assets/db/db.json';
-
     constructor(
         private http: HttpClient,
     ) { }
@@ -21,8 +18,9 @@ export class AliadoService {
                 this.allies = data;
                 this.allyListener.next({
                     allies: this.allies
-                })
-            }));
+                });
+            })
+            );
     }
 
     getAllyListener() {

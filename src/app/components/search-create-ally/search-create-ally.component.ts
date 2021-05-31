@@ -6,32 +6,44 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./search-create-ally.component.scss']
 })
 export class SearchCreateAllyComponent {
+  @Input() isConfiginfoSending: boolean;
   @Input() allies;
+
   @Output() allySearched: EventEmitter<any> = new EventEmitter();
 
-  selectedCountry: string = '';
-  selectedAlly: string = '';
+  selectedCountry = '';
+  selectedAlly = '';
 
   constructor() { }
 
   /**
    * TODO: hacer que filtre el array basado en la seleccion del ID
-   * @param country 
+   * @param country
    */
   filterCountry(country) {
     this.selectedCountry = country;
     console.log(country);
-    const result = this.allies.allies.filter(ally => ally.countryId == this.selectedCountry);
+    const result = this.allies.allies.filter(ally => ally.countryId === this.selectedCountry);
     // this.allies = result;
     // Aca empezar el llamado a la base de datos con el parametros country
   }
 
-  filterAlly(allyName){
+  filterAlly(allyName) {
     this.selectedAlly = allyName;
   }
 
   searchAlly() {
-    this.allySearched.emit(this.selectedAlly);
+    console.log('search');
+    // this.allySearched.emit(this.selectedAlly);
   }
+
+  saveAlly() {
+    console.log('save');
+  }
+
+  cancel() {
+    console.log('cancel');
+
+   }
 
 }

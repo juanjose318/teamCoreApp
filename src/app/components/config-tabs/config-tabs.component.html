@@ -1,0 +1,22 @@
+<!--Asignar valor de tabla para definir como distribuir la informacion 
+  y condicionar el layout -->
+<ngb-tabset [destroyOnHide]="false" (tabChange)="beforeChange($event)">
+  <ngb-tab id="tab-2">
+    <ng-template ngbTabTitle><b>Paso 1 - Empresas</b></ng-template>
+    <ng-template ngbTabContent>
+      <app-results-table [tableNumber]="tableNumber"></app-results-table>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab  id="tab-3">
+    <ng-template ngbTabTitle><b>Paso 2 - Socio Comercial</b></ng-template>
+    <ng-template ngbTabContent>
+      <app-results-table [tableNumber]="tableNumber"></app-results-table>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab  id="tab-4">
+    <ng-template ngbTabTitle><b>Paso 3 - Productos</b></ng-template>
+    <ng-template ngbTabContent>
+      <app-results-table [tableNumber]="tableNumber"></app-results-table>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>

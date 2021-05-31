@@ -10,6 +10,12 @@ import { TextBoxComponent } from '../components/text-box/text-box.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuditAllyComponent } from '../components/audit-ally/audit-ally.component';
+import { ConfigurarEnviosAliadoComponent } from './configurar-envios-aliado/configurar-envios-aliado.component';
+import { ConfigTabsComponent } from '../components/config-tabs/config-tabs.component';
+import { AuditConfigComponent } from '../components/audit-config/audit-config.component';
+import { UploadMasterFileComponent } from '../components/upload-master-file/upload-master-file.component';
+import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
+import { SerchCompanyComponent } from '../components/serch-company/serch-company.component';
 
 
 @NgModule({
@@ -19,7 +25,12 @@ import { AuditAllyComponent } from '../components/audit-ally/audit-ally.componen
     SearchCreateAllyComponent,
     TextBoxComponent,
     AuditAllyComponent,
-
+    AuditConfigComponent,
+    ConfigurarEnviosAliadoComponent,
+    ConfigTabsComponent,
+    UploadMasterFileComponent,
+    TrazabilidadComponent,
+    SerchCompanyComponent,
   ],
   imports: [
     CommonModule,

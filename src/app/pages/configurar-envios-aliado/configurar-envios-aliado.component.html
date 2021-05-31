@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="card border-secondary">
+    <div class="card-header bg-primary text-white ">
+      <h5 class="head-title"> Configurar > Servicios > Analiticos > CENc > Configurar envio de informacion a Aliados
+      </h5>
+    </div>
+    <div class="card-body">
+      <p><small>*Campos obligatorios</small></p>
+      <app-text-box [text]="descriptionText"></app-text-box>
+    </div>
+    <div class="container">
+      <app-search-create-ally [allies]="allies" [isConfiginfoSending]="configInfoSending"
+        (allySearched)="handleSearch($event)"></app-search-create-ally>
+      <div class="card">
+        <div class="card-body">
+          <app-config-tabs></app-config-tabs>
+        </div>
+      </div>
+      <div class="card audit">
+        <div class="card-body">
+          <div class="card-header bg-primary text-white">
+            Auditoria
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

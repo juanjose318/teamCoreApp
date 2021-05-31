@@ -9,12 +9,20 @@ table {
 th {
   font-size: 0.6rem;
   vertical-align: text-top;
-  border: 1px solid #fff;
+  border: 1px solid rgb(184, 184, 184);
 }
 
 td {
-  border: 1px solid #000;
+  border: 1px solid rgb(184, 184, 184);
   font-size: 0.6rem;
+}
+
+.field {
+  margin-bottom: 2%;
+}
+
+.paginator {
+  padding-top: 2%;
 }
 
 .custom-select {
@@ -26,15 +34,21 @@ td {
   flex-flow: row;
   align-items: baseline;
   justify-content: flex-start !important;
-  margin: 2%;
 }
 
 .action-icon {
-    cursor: pointer;
-    font-size: 0.8rem;
-    color: rgb(255, 3, 3);
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: rgb(255, 3, 3);
 }
 
-.action-icon:first-of-type{
-    margin-right: 10px;
+.action-icon:first-of-type {
+  margin-right: 10px;
+}
+
+.btn-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content:space-around;
+  margin: 2% 0;
 }

@@ -1,55 +1,219 @@
-<div class="d-flex justify-content-center middle-box">
-  <ngb-pagination 
-  class="paginator"
-  [collectionSize]="collectionSize" 
-  [(page)]="page" 
-  [pageSize]="pageSize" 
-  (pageChange)="refreshCountries()">
-  </ngb-pagination>
-
-  <select class="custom-select"  [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
-    <option [ngValue]="2">2</option>
-    <option [ngValue]="4">4</option>
-    <option [ngValue]="10">10</option>
-    <option [ngValue]="20">20</option>
-    <option [ngValue]="50">50</option>
-    <option [ngValue]="100">100</option>
-  </select>
+<div *ngIf="tableNumber === 1">
+  <div class="d-flex justify-content-center middle-box">
+    <ngb-pagination class="paginator" [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+      (pageChange)="refreshCountries()">
+    </ngb-pagination>
+    <select class="custom-select" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+      <option [ngValue]="2">2</option>
+      <option [ngValue]="4">4</option>
+      <option [ngValue]="10">10</option>
+      <option [ngValue]="20">20</option>
+      <option [ngValue]="50">50</option>
+      <option [ngValue]="100">100</option>
+    </select>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr class="bg-primary text-white">
+        <th scope="col">ID Aliado</th>
+        <th scope="col">Fecha de Creacion</th>
+        <th scope="col">Tipo de Canal</th>
+        <th scope="col">Ruta</th>
+        <th scope="col">Pais del Aliado</th>
+        <th scope="col">Nombre del Aliado</th>
+        <th scope="col">Identificacion del Aliado</th>
+        <th scope="col">Contacto del Aliado</th>
+        <th scope="col">Correo del Aliado</th>
+        <th scope="col">Telefono del Aliado</th>
+        <th scope="col">Descripcion del Aliado</th>
+        <th scope="col">Contacto de Carvajal</th>
+        <th scope="col">Editar/Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ally of allyCollection">
+        <td scope="row">{{ ally?.id }}</td>
+        <td scope="row">{{ ally?.creationDate | date: 'd/MMM/y HH:mm' }}</td>
+        <td> {{ ally?.channelType }}</td>
+        <td> {{ ally?.route }}</td>
+        <td>{{ ally?.countryId }}</td>
+        <td> {{ ally?.name }}</td>
+        <td> {{ ally?.identification }}</td>
+        <td> {{ ally?.contactName }}</td>
+        <td> {{ ally?.contactEmail }}</td>
+        <td> {{ ally?.contactPhoneNumber }}</td>
+        <td> {{ ally?.description }}</td>
+        <td (select)='activar(ally)'> {{ ally?.carvajalContact }}</td>
+        <td> <i class="bi bi-pencil action-icon"></i> <i class="bi bi-trash action-icon"></i></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
-<table class="table table-hover">
-  <thead>
-    <tr class="bg-primary text-white">
-      <th scope="col">ID Aliado</th>
-      <th scope="col">Fecha de Creacion</th>
-      <th scope="col">Tipo de Canal</th>
-      <th scope="col">Ruta</th>
-      <th scope="col">Pais del Aliado</th>
-      <th scope="col">Nombre del Aliado</th>
-      <th scope="col">Identificacion del Aliado</th>
-      <th scope="col">Contacto del Aliado</th>
-      <th scope="col">Correo del Aliado</th>
-      <th scope="col">Telefono del Aliado</th>
-      <th scope="col">Descripcion del Aliado</th>
-      <th scope="col">Contacto de Carvajal</th>
-      <th scope="col">Editar/Eliminar</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let ally of allyCollection">
-      <td scope="row">{{ ally?.id }}</td>
-      <td scope="row">{{ ally?.creationDate | date: 'd/MMM/y HH:mm' }}</td>
-      <td> {{ ally?.channelType }}</td>
-      <td> {{ ally?.route }}</td>
-      <td>{{ ally?.countryId }}</td>
-      <td> {{ ally?.name }}</td>
-      <td> {{ ally?.identification }}</td>
-      <td> {{ ally?.contactName }}</td>
-      <td> {{ ally?.contactEmail }}</td>
-      <td> {{ ally?.contactPhoneNumber }}</td>
-      <td> {{ ally?.description }}</td>
-      <td> {{ ally?.carvajalContact }}</td>
-      <td> <i class="bi bi-pencil action-icon"></i> <i class="bi bi-trash action-icon"></i></td>
-    </tr>
-  </tbody>
-</table>
+<!-- Empresa -->
+<div *ngIf="tableNumber === 2">
+
+  <div class="btn-wrapper">
+    <button class="btn btn-primary">Activar/Inactivar</button>
+    <button class="btn btn-primary">Agregar</button>
+    <button class="btn btn-primary">Configurar</button>
+  </div>
+  <div class="d-flex justify-content-center middle-box">
+    <ngb-pagination class="paginator" [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+      (pageChange)="refreshCountries()">
+    </ngb-pagination>
+    <select class="custom-select" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+      <option [ngValue]="2">2</option>
+      <option [ngValue]="4">4</option>
+      <option [ngValue]="10">10</option>
+      <option [ngValue]="20">20</option>
+      <option [ngValue]="50">50</option>
+      <option [ngValue]="100">100</option>
+    </select>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr class="bg-primary text-white">
+        <th scope="col">ID Registro</th>
+        <th scope="col">Seleccionar</th>
+        <th scope="col">Id Aliado</th>
+        <th scope="col">Nombre Aliado</th>
+        <th scope="col">ID Empresa</th>
+        <th scope="col">EAN Empresa</th>
+        <th scope="col">Nombre Empresa</th>
+        <th scope="col">Fecha Configuracion</th>
+        <th scope="col">Identificacion del Aliado</th>
+        <th scope="col">Estado del servicio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of companyConfigCollection">
+        <!-- <td scope="row">{{ item?.id }}</td>
+          <td> <input class="form-check-input" type="checkbox" value="{{ item?.id }}"> </td>
+          <td> {{ item?.allied_id }}</td>
+          <td> {{ item?.company_code }}</td>
+          <td> {{ item?.identification }}</td>
+          <td> {{ item?.companyName }}</td>
+          <td> {{ item?.configurationnDate | date: 'd/MMM/y HH:mm' }}</td>
+          <td>{{ item?.state }}</td> -->
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Socio comercial -->
+<div *ngIf="tableNumber === 3">
+  <div class="btn-wrapper">
+    <button class="btn btn-primary"><i class="bi bi-arrow-left-circle"></i>Volver</button>
+    <button class="btn btn-primary">Continuar <i class="bi bi-arrow-right-circle"></i></button>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr class="bg-primary text-white">
+        <th scope="col">ID Socio Comercial</th>
+        <th scope="col">EAN Socio Comercial</th>
+        <th scope="col">Socio Comercial</th>
+        <th scope="col">Seleccionar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr *ngFor="let item of companyConfigCollection">
+            <td scope="row">{{ item?.id }}</td>
+            <td> <input class="form-check-input" type="checkbox" value="{{ item?.id }}"> </td>
+            <td> {{ item?.allied_id }}</td>
+            <td> {{ item?.company_code }}</td>
+            <td> {{ item?.identification }}</td>
+            <td> {{ item?.companyName }}</td>
+            <td> {{ item?.configurationnDate | date: 'd/MMM/y HH:mm' }}</td>
+            <td>{{ item?.state }}</td>
+          </tr> -->
+    </tbody>
+  </table>
+</div>
+
+
+<!-- Producto -->
+<div *ngIf="tableNumber === 4">
+
+  <div class="btn-wrapper">
+    <button class="btn btn-primary"><i class="bi bi-arrow-left-circle"></i>Volver</button>
+    <button class="btn btn-primary">Descargar Maestro<i class="bi bi-file-earmark-arrow-down"></i></button>
+  </div>
+  <div class="input-group field">
+    <label class="input-group-text"><span class="red">*</span>Maestro</label>
+    <select class="form-control">
+      <option selected>Seleccionar</option>
+    </select>
+
+  </div>
+  <app-upload-master-file></app-upload-master-file>
+  <div class="d-flex justify-content-center middle-box">
+    <ngb-pagination class="paginator" [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+      (pageChange)="refreshCountries()">
+    </ngb-pagination>
+    <select class="custom-select" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+      <option [ngValue]="2">2</option>
+      <option [ngValue]="4">4</option>
+      <option [ngValue]="10">10</option>
+      <option [ngValue]="20">20</option>
+      <option [ngValue]="50">50</option>
+      <option [ngValue]="100">100</option>
+    </select>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr class="bg-primary text-white">
+        <th scope="col">ID</th>
+        <th scope="col">Fecha Inicio Cargue</th>
+        <th scope="col">Usuario</th>
+        <th scope="col">Maestro</th>
+        <th scope="col">Archivo Cargado</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Detalle Errores</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr *ngFor="let item of companyConfigCollection">
+            <td scope="row">{{ item?.id }}</td>
+            <td> <input class="form-check-input" type="checkbox" value="{{ item?.id }}"> </td>
+            <td> {{ item?.allied_id }}</td>
+            <td> {{ item?.company_code }}</td>
+            <td> {{ item?.identification }}</td>
+            <td> {{ item?.companyName }}</td>
+            <td> {{ item?.configurationnDate | date: 'd/MMM/y HH:mm' }}</td>
+            <td>{{ item?.state }}</td>
+          </tr> -->
+    </tbody>
+  </table>
+</div>
+<div *ngIf="tableNumber === 5">
+  
+  <table class="table table-hover">
+    <thead>
+      <tr class="bg-primary text-white">
+        <th scope="col">Codigo Empresa</th>
+        <th scope="col">Nombre Empresa</th>
+        <th scope="col">Nombre del Archivo</th>
+        <th scope="col">Fecha de Generacion del Archivo</th>
+        <th scope="col">Fecha Envio del Archivo</th>
+        <th scope="col">Nro. Socios Comerciales Incluidos</th>
+        <th scope="col">Nro. Pto Vta Incluidos</th>
+        <th scope="col">Nro. de Registros</th>
+        <th> Tipo de Archivo</th>
+        <th> Detalle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr *ngFor="let item of companyConfigCollection">
+            <td scope="row">{{ item?.id }}</td>
+            <td> <input class="form-check-input" type="checkbox" value="{{ item?.id }}"> </td>
+            <td> {{ item?.allied_id }}</td>
+            <td> {{ item?.company_code }}</td>
+            <td> {{ item?.identification }}</td>
+            <td> {{ item?.companyName }}</td>
+            <td> {{ item?.configurationnDate | date: 'd/MMM/y HH:mm' }}</td>
+            <td>{{ item?.state }}</td>
+          </tr> -->
+    </tbody>
+  </table>
+</div>

@@ -20,11 +20,21 @@ export class ConfigurarAliadosComponent implements OnInit {
   private audit: any;
   private auditSub: Subscription;
   /**
+   * tableNumber define desde que componente se va a reutilizar la tabla de display de informacion
+   */
+  tableNumber = 1;
+  /**
    * Mensajes para textBox component
    * TODO: Ponerlos en archivo aparte como mock
    */
-  descriptionBoxText: String = "Herramienta que permite  Habilitar en inhabilitar tanto comercio como un fabricante y sobre este ultimo, activar los socios Comerciales y las referencisa del catalogo de productos para el envio de la Meta Data de ventar para inventarios al aliado";
-  descriptionAudit = "El ultimo cambio efectuado sobre la informacion de Aliado";
+  descriptionBoxText: String = 'Herramienta que permite crear y/o editar informacion de los Aliados';
+  descriptionAudit = 'El ultimo cambio efectuado sobre la informacion de Aliado';
+
+  /**
+   * Config envio de aliados
+  */
+  private configInfoSending  = false;
+
 
   constructor(
     private aliadoService: AliadoService,
