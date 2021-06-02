@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalFormComponent } from '../modal-form/modal-form.component';
 
 @Component({
   selector: 'app-search-create-ally',
@@ -9,32 +11,31 @@ export class SearchCreateAllyComponent {
   @Input() isConfiginfoSending: boolean;
   @Input() allies;
 
-  @Output() allySearched: EventEmitter<any> = new EventEmitter();
+  @Output() chosenCountry: EventEmitter<any> = new EventEmitter();
+  @Output() chosenAlly: EventEmitter<any> = new EventEmitter();
 
-  selectedCountry = '';
-  selectedAlly = '';
+  selectedCountry;
+  selectedAlly;
 
-  constructor() { }
+  constructor(
+    private modalService: NgbModal
+  ) { }
 
+  open() {
+    const modalRef = this.modalService.open(ModalFormComponent);
+    modalRef.componentInstance.name = 'World';
+  }
   /**
-   * TODO: hacer que filtre el array basado en la seleccion del ID
-   * @param country
+   * @param country pais seleccionado en la busqueda de aliados
    */
   filterCountry(country) {
-    this.selectedCountry = country;
-    console.log(country);
-    const result = this.allies.allies.filter(ally => ally.countryId === this.selectedCountry);
-    // this.allies = result;
-    // Aca empezar el llamado a la base de datos con el parametros country
+    this.chosenCountry.emit(country);
   }
-
-  filterAlly(allyName) {
-    this.selectedAlly = allyName;
-  }
-
-  searchAlly() {
-    console.log('search');
-    // this.allySearched.emit(this.selectedAlly);
+  /**
+   * @param name nombre de aliado seleccionado despues de filtrar por pais
+   */
+  filterAlly(name) {
+    this.chosenAlly.emit(name);
   }
 
   saveAlly() {
@@ -44,6 +45,6 @@ export class SearchCreateAllyComponent {
   cancel() {
     console.log('cancel');
 
-   }
+  }
 
 }

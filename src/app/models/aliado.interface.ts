@@ -1,13 +1,14 @@
 export interface Aliado {
-    id: string;
-    creationDate: Date;
+    idAllied: number;
+    idChannel: number;
+    idRoute: number;
+    idCountry: string;
+    identification: string;
     name: string;
-    channelType: string;
-    route: string;
-    contactName: string;
-    contactEmail: string;
-    contactPhoneNumber: string;
-    description:string;
-    carvajalContact:string;
-    countryId:string;
+    contact: string;
+    email: string;
+    phone: string;
+    description: string;
+    carvajalContact: string;
+    creationDate: Date;
 }

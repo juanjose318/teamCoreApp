@@ -14,6 +14,11 @@ export class ConfigurarAliadosComponent implements OnInit {
    */
   private allies: any;
   private allySub: Subscription;
+
+  /**
+   * Check para ver que pais esta seleccionado
+   */
+  private selectedCountry: string;
   /**
    * Auditoria
    */
@@ -33,7 +38,7 @@ export class ConfigurarAliadosComponent implements OnInit {
   /**
    * Config envio de aliados
   */
-  private configInfoSending  = false;
+  private configInfoSending = false;
 
 
   constructor(
@@ -46,23 +51,30 @@ export class ConfigurarAliadosComponent implements OnInit {
     this.allySub = this.aliadoService.getAllyListener()
       .subscribe((allyData) => {
         this.allies = allyData.allies;
-        console.log(allyData.allies);
       });
 
     this.auditService.getAudit();
     this.auditSub = this.auditService.getAuditListener()
       .subscribe((auditData) => {
         this.audit = auditData;
-        console.log(auditData);
       });
   }
 
-  /**
-   * TODO: Abrir modal con inputs para creacion de usuario
-   */
   handleNewAlly() { }
 
-  handleSearch(parameters) {
-    console.log(parameters);
+  handleSearchAlly(allyId) {
+    // tslint:disable-next-line: triple-equals
+    const searchedByAlly = this.allies.allies.filter(ally => ally.idAllied == allyId );
+    this.allies = { allies : searchedByAlly };
+  }
+
+  handleSearchCountry(country) {
+    console.log(country);
+    this.aliadoService.getAllyByCountry(country);
+    this.allySub = this.aliadoService.getAllyListener()
+    .subscribe((allyData) => {
+      this.allies = allyData;
+      console.log(allyData);
+    });
   }
 }

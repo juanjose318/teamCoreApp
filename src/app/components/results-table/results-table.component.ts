@@ -1,19 +1,19 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges} from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-results-table',
   templateUrl: './results-table.component.html',
   styleUrls: ['./results-table.component.scss'],
 })
-export class ResultsTableComponent implements OnChanges {
-
+export class ResultsTableComponent implements OnChanges{
   /**
   * Fetch aliados como input
   */
-  @Input() allies: any = [];
+  @Input()  allies;
+
   allyCollection;
   companyConfigCollection = [];
-
   /**
    * Para condicionar de que componenente se trata
    * 1 = Configuracion aliado
@@ -36,14 +36,12 @@ export class ResultsTableComponent implements OnChanges {
    */
   ngOnChanges() {
     if (this.tableNumber === 1 && this.allies) {
-      this.collectionSize = this.allies.allies.length;
       this.allyCollection = this.allies.allies;
-      console.log(this.allyCollection);
+      this.collectionSize = this.allyCollection.length;
     }
   }
 
   refreshCountries() {
-    console.log(this.allyCollection);
     this.allyCollection
       .map((ally, i) => ({ id: i + 1, ...ally }))
       .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);

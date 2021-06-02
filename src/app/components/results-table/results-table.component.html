@@ -5,9 +5,11 @@
     </ngb-pagination>
     <select class="custom-select" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
       <option [ngValue]="2">2</option>
-      <option [ngValue]="4">4</option>
+      <option [ngValue]="3">3</option>
       <option [ngValue]="10">10</option>
       <option [ngValue]="20">20</option>
+      <option [ngValue]="30">30</option>
+      <option [ngValue]="40">40</option>
       <option [ngValue]="50">50</option>
       <option [ngValue]="100">100</option>
     </select>
@@ -32,16 +34,16 @@
     </thead>
     <tbody>
       <tr *ngFor="let ally of allyCollection">
-        <td scope="row">{{ ally?.id }}</td>
+        <td scope="row">{{ ally?.idAllied }}</td>
         <td scope="row">{{ ally?.creationDate | date: 'd/MMM/y HH:mm' }}</td>
-        <td> {{ ally?.channelType }}</td>
-        <td> {{ ally?.route }}</td>
-        <td>{{ ally?.countryId }}</td>
+        <td> {{ ally?.channel.channel }}</td>
+        <td> {{ ally?.route.route }}</td>
+        <td>{{ ally?.idCountry }}</td>
         <td> {{ ally?.name }}</td>
         <td> {{ ally?.identification }}</td>
-        <td> {{ ally?.contactName }}</td>
-        <td> {{ ally?.contactEmail }}</td>
-        <td> {{ ally?.contactPhoneNumber }}</td>
+        <td> {{ ally?.contact }}</td>
+        <td> {{ ally?.mail }}</td>
+        <td> {{ ally?.phone }}</td>
         <td> {{ ally?.description }}</td>
         <td (select)='activar(ally)'> {{ ally?.carvajalContact }}</td>
         <td> <i class="bi bi-pencil action-icon"></i> <i class="bi bi-trash action-icon"></i></td>

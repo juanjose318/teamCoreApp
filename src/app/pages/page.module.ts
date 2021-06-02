@@ -16,6 +16,8 @@ import { AuditConfigComponent } from '../components/audit-config/audit-config.co
 import { UploadMasterFileComponent } from '../components/upload-master-file/upload-master-file.component';
 import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
 import { SerchCompanyComponent } from '../components/serch-company/serch-company.component';
+import { NavigationComponent } from '../components/navigation/navigation.component';
+import { ModalFormComponent } from '../components/modal-form/modal-form.component';
 
 
 @NgModule({
@@ -31,6 +33,11 @@ import { SerchCompanyComponent } from '../components/serch-company/serch-company
     UploadMasterFileComponent,
     TrazabilidadComponent,
     SerchCompanyComponent,
+    NavigationComponent,
+    ModalFormComponent
+  ],
+  entryComponents: [
+    ModalFormComponent
   ],
   imports: [
     CommonModule,

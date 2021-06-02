@@ -3,11 +3,12 @@
     <div class="input-group">
       <div class="input-group field">
         <label class="input-group-text"><span class="red">*</span>Pais</label>
-        <select class="form-control" id="inputGroupSelect01" [(ngModel)]="selectedCountry"
+        <select class="form-control" [(ngModel)]="selectedCountry"
           (ngModelChange)="filterCountry($event)">
           <option selected>Seleccionar</option>
           <option value="CO">Colombia</option>
-          <option value="TO">Todos</option>
+          <option value="CO">Todos</option>
+          <option value="AR">Argentina</option>
         </select>
       </div>
       <div class="input-group field">
@@ -17,10 +18,10 @@
         <div *ngIf="isConfiginfoSending === true">
           <label class="input-group-text">*Nombre Aliado</label>
         </div>
-        <select class="form-control" id="inputGroupSelect01" [(ngModel)]="selectedAlly"
+        <select class="form-control" [(ngModel)]="selectedAlly"
           (ngModelChange)="filterAlly($event)">
           <option selected>Seleccionar</option>
-          <option *ngFor="let ally of allies?.allies" [value]="ally.id">
+          <option *ngFor="let ally of allies?.allies" [value]="ally.idAllied">
             {{ ally?.name }}
           </option>
         </select>
@@ -54,7 +55,7 @@
     <!--- Si esta desde la pagina de configuracion del Aliado -->
     <div *ngIf="isConfiginfoSending === false" class="input-group">
       <div class="btn-wrapper">
-        <button class="btn btn-primary" type="submit">Nuevo <i class="bi bi-plus-circle"></i></button>
+        <button class="btn btn-primary" type="submit" (click)="open()">Nuevo <i class="bi bi-plus-circle"></i></button>
         <button class="btn btn-primary" type="submit" (click)="searchAlly($event)">Buscar<i
             class="bi bi-search"></i></button>
       </div>
