@@ -55,7 +55,7 @@
     <!--- Si esta desde la pagina de configuracion del Aliado -->
     <div *ngIf="isConfiginfoSending === false" class="input-group">
       <div class="btn-wrapper">
-        <button class="btn btn-primary" type="submit" (click)="open()">Nuevo <i class="bi bi-plus-circle"></i></button>
+        <button class="btn btn-primary" type="submit" (click)="openDialog()">Nuevo <i class="bi bi-plus-circle"></i></button>
         <button class="btn btn-primary" type="submit" (click)="searchAlly($event)">Buscar<i
             class="bi bi-search"></i></button>
       </div>

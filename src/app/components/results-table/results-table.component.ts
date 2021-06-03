@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges} from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -6,11 +6,12 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './results-table.component.html',
   styleUrls: ['./results-table.component.scss'],
 })
-export class ResultsTableComponent implements OnChanges{
+
+export class ResultsTableComponent implements OnChanges {
   /**
   * Fetch aliados como input
   */
-  @Input()  allies;
+  @Input() allies;
 
   allyCollection;
   companyConfigCollection = [];
@@ -34,6 +35,9 @@ export class ResultsTableComponent implements OnChanges{
   /**
    * Atribuir variable esperando input
    */
+  /**
+   * TODO pagination
+   */
   ngOnChanges() {
     if (this.tableNumber === 1 && this.allies) {
       this.allyCollection = this.allies.allies;
@@ -45,6 +49,8 @@ export class ResultsTableComponent implements OnChanges{
     this.allyCollection
       .map((ally, i) => ({ id: i + 1, ...ally }))
       .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+      console.log(this.allyCollection);
+
   }
 
 }

@@ -1,59 +1,82 @@
-<div class="modal-header">
-  <h4 class="modal-title">{{ title }}</h4>
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-    <span aria-hidden="true">&times;</span>
+<div class="mat-dialog-header">
+  <h1 mat-dialog-title class="text-primary">Crear Aliado</h1>
+  <button class="btn btn-primary" (click)="close()"><i class="bi bi-x"></i>
   </button>
 </div>
-<div class="modal-body">
+<div mat-dialog-content>
   <div class="" [formGroup]="formGroup">
     <div class="row">
-    <div class="input-group col-sm">
-      <label class="input-group-text" >Nombre</label>
-      <input type="text" class="form-control" formControlName="name">
+      <div class="input-group col-sm">
+        <label class="input-group-text">Nombre</label>
+        <input type="text" class="form-control" formControlName="name">
+      </div>
     </div>
-  </div>
     <div class="row">
-    <div class="input-group col-sm">
-      <label class="input-group-text">Pais</label>
-        <select 
-        class="form-control-select"
-        formControlName="countryId">
-        <option selected>Seleccionar</option>
-        <option value="CO">Colombia</option>
-        <option value="CO">Todos</option>
-        <option value="AR">Argentina</option>
-      </select>
+      <div class="input-group col-sm">
+        <label class="input-group-text">Pais</label>
+        <select class="form-control-select" formControlName="countryId">
+          <option selected>Seleccionar</option>
+          <option value="CO">Colombia</option>
+          <option value="CO">Todos</option>
+          <option value="AR">Argentina</option>
+        </select>
+      </div>
+      <div class="input-group col-sm">
+        <label class="input-group-text">Telefono</label>
+        <input type="text" class="form-control" formControlName="phone" (keydown.space)="$event.preventDefault()">
+      </div>
     </div>
-    <div class="input-group col-sm">
-      <label class="input-group-text">Telefono</label>
-      <input type="text" class="form-control" formControlName="phone" (keydown.space)="$event.preventDefault()">
-    </div>
-  </div>
     <div class="row">
-      <div class="input-group col-sm"><label class="input-group-text">Ruta</label><input type="text" class="form-control" formControlName="routeId"></div>
-      <div class="input-group col-sm"><label class="input-group-text">Canal</label><input type="text"  class="form-control" formControlName="channelId"></div>
-    </div>
-   
-    <div class="row">
-      <div class="input-group col-sm"><label class="input-group-text">Contacto</label><input type="text" class="form-control" formControlName="contact"></div>
-      <div class="input-group col-sm"><label class="input-group-text">Email</label><input type="text"  class="form-control" formControlName="mail"></div>
+      <div class="col-sm" formGroupName="route">
+        <div class="input-group "><label class="input-group-text">Ruta</label><input type="text" class="form-control"
+            formControlName="routeId"></div>
+      </div>
+      <div class="col-sm" formGroupName="channel">
+        <div class="input-group "><label class="input-group-text">Canal</label><input type="text" class="form-control"
+            formControlName="channelId"></div>
+      </div>
     </div>
 
     <div class="row">
-      <div class="input-group col-sm"><label class="input-group-text">Email Contacto Carvajal</label><input type="text" class="form-control" formControlName="carvajalContact"></div>
+      <div class="col-sm">
+        <div class="input-group "><label class="input-group-text">Identificacion</label><input type="text"
+            class="form-control" formControlName="identification"></div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
+        <div class="input-group "><label class="input-group-text">Contacto</label><input type="text"
+            class="form-control" formControlName="contact"></div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
+        <div class="input-group"><label class="input-group-text">Email</label><input type="text" class="form-control"
+            formControlName="mail"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-group col-sm"><label class="input-group-text">Email Contacto Carvajal</label><input type="text"
+          class="form-control" formControlName="carvajalContact"></div>
     </div>
 
     <div class="row">
       <div class="input-group col-sm">
-        <label class="input-group-text" >Descripcion de Aliado</label>
+        <label class="input-group-text">Descripcion </label>
         <textarea formControlName="description" class="form-control" rows="3"></textarea>
       </div>
     </div>
-    
- 
+
+
   </div>
 </div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-outline-primary" (click)="activeModal.close('Close click')">Guardar</button>
-  <button type="button" class="btn btn-outline-primary" (click)="activeModal.close('Close click')">Close</button>
+
+<div mat-dialog-actions>
+  <button type="button" class="btn btn-outline-primary" (click)="save()">Guardar</button>
+
 </div>

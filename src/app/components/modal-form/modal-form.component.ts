@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-modal-form',
   templateUrl: './modal-form.component.html',
-  styleUrls: ['./modal-form.component.scss']
+  styleUrls: ['./modal-form.component.scss'],
 })
 
 export class ModalFormComponent implements OnInit {
@@ -13,13 +13,16 @@ export class ModalFormComponent implements OnInit {
   @Input() title;
 
   constructor(
-    activeModal: NgbActiveModal,
     private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data,
+    private dialogRef: MatDialogRef<ModalFormComponent>,
+
+
   ) { }
 
   formGroup: FormGroup;
   idAlly: string;
-  channeldId: string;
+  channelId: string;
   routeId: string;
   identification: string;
   name: string;
@@ -31,11 +34,27 @@ export class ModalFormComponent implements OnInit {
   carvajalContact: string;
   creationDate: Date = new Date();
 
+
+  save() {
+    if (this.formGroup.invalid) {
+      return;
+    }
+    this.dialogRef.close(this.formGroup.value);
+  }
+
+  close() {
+    this.dialogRef.close();
+  }
+
   ngOnInit() {
     this.formGroup = this.fb.group({
       id: new FormControl(this.idAlly),
-      channelId: new FormControl(this.channeldId),
-      routeId: new FormControl(this.routeId),
+      channel: new FormGroup ({
+        channelId: new FormControl(this.channelId),
+      }),
+      route: new FormGroup ({
+        routeId: new FormControl(this.routeId),
+      }),
       identification: new FormControl(this.identification, [Validators.maxLength(30), alphaNumericValidator]),
       name: new FormControl(this.name, [Validators.maxLength(50), alphaNumericValidator]),
       countryId: new FormControl(this.countryId, [Validators.required, Validators.maxLength(2), alphaNumericValidator]),
@@ -47,7 +66,9 @@ export class ModalFormComponent implements OnInit {
       creationDate: new FormControl(this.creationDate)
     });
   }
+ 
 }
+
 
 /**
  * Custom Validator para chequear si es alfanumerico

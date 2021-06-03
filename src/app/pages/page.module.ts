@@ -18,6 +18,9 @@ import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
 import { SerchCompanyComponent } from '../components/serch-company/serch-company.component';
 import { NavigationComponent } from '../components/navigation/navigation.component';
 import { ModalFormComponent } from '../components/modal-form/modal-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 @NgModule({
@@ -36,17 +39,19 @@ import { ModalFormComponent } from '../components/modal-form/modal-form.componen
     NavigationComponent,
     ModalFormComponent
   ],
-  entryComponents: [
-    ModalFormComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
     NgbModule,
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    PageRoutingModule
+    PageRoutingModule,
+    MatDialogModule
+  ],
+  entryComponents: [
+    ModalFormComponent
   ],
 })
 export class PageModule { }

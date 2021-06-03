@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog } from '@angular/material/dialog';
 import { ModalFormComponent } from '../modal-form/modal-form.component';
 
 @Component({
@@ -13,24 +13,40 @@ export class SearchCreateAllyComponent {
 
   @Output() chosenCountry: EventEmitter<any> = new EventEmitter();
   @Output() chosenAlly: EventEmitter<any> = new EventEmitter();
+  @Output() createdAlly: EventEmitter<any> = new EventEmitter();
 
   selectedCountry;
   selectedAlly;
 
-  constructor(
-    private modalService: NgbModal
-  ) { }
+  closeModal;
 
-  open() {
-    const modalRef = this.modalService.open(ModalFormComponent);
-    modalRef.componentInstance.name = 'World';
-  }
+  constructor(
+    public dialog: MatDialog
+  ) { }
+  // modalRef.componentInstance.title = 'Crear Aliado';
   /**
    * @param country pais seleccionado en la busqueda de aliados
    */
   filterCountry(country) {
     this.chosenCountry.emit(country);
   }
+
+  /**
+   * Modal
+   */
+  openDialog(): void {
+    const dialogRef = this.dialog.open(ModalFormComponent, {
+      width: '30%',
+      id: 'a-create-ally-modal'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!!result) {
+        console.log(result);
+        this.createdAlly.emit(result);
+      }
+    });
+  }
+
   /**
    * @param name nombre de aliado seleccionado despues de filtrar por pais
    */
@@ -41,10 +57,4 @@ export class SearchCreateAllyComponent {
   saveAlly() {
     console.log('save');
   }
-
-  cancel() {
-    console.log('cancel');
-
-  }
-
 }

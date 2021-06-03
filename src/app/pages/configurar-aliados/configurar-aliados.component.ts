@@ -32,9 +32,8 @@ export class ConfigurarAliadosComponent implements OnInit {
    * Mensajes para textBox component
    * TODO: Ponerlos en archivo aparte como mock
    */
-  descriptionBoxText: String = 'Herramienta que permite crear y/o editar informacion de los Aliados';
+  descriptionBoxText = 'Herramienta que permite crear y/o editar informacion de los Aliados';
   descriptionAudit = 'El ultimo cambio efectuado sobre la informacion de Aliado';
-
   /**
    * Config envio de aliados
   */
