@@ -21,12 +21,12 @@ export class ModalFormComponent implements OnInit {
   ) { }
 
   formGroup: FormGroup;
-  idAlly: string;
-  channelId: string;
-  routeId: string;
+  idAlly: number;
+  idChannel: number;
+  idRoute: number;
   identification: string;
   name: string;
-  countryId: string;
+  idCountry: string;
   contact: string;
   mail: string;
   phone: number;
@@ -48,27 +48,25 @@ export class ModalFormComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this.fb.group({
-      id: new FormControl(this.idAlly),
+      idAllied: new FormControl(this.idAlly),
       channel: new FormGroup ({
-        channelId: new FormControl(this.channelId),
+        idChannel: new FormControl(this.idChannel),
       }),
       route: new FormGroup ({
-        routeId: new FormControl(this.routeId),
+        idRoute: new FormControl(this.idRoute),
       }),
       identification: new FormControl(this.identification, [Validators.maxLength(30), alphaNumericValidator]),
       name: new FormControl(this.name, [Validators.maxLength(50), alphaNumericValidator]),
-      countryId: new FormControl(this.countryId, [Validators.required, Validators.maxLength(2), alphaNumericValidator]),
+      idCountry: new FormControl(this.idCountry, [Validators.required, Validators.maxLength(2), alphaNumericValidator]),
       contact: new FormControl(this.contact, [Validators.required, Validators.maxLength(100)]),
-      mail: new FormControl(this.mail, [Validators.required, alphaNumericValidator]),
+      mail: new FormControl(this.mail, [Validators.required]),
       phone: new FormControl(this.phone, [Validators.required]),
       description: new FormControl(this.description, [Validators.required, Validators.maxLength(400)]),
       carvajalContact: new FormControl(this.carvajalContact, [Validators.required, Validators.maxLength(320)]),
       creationDate: new FormControl(this.creationDate)
     });
   }
- 
 }
-
 
 /**
  * Custom Validator para chequear si es alfanumerico

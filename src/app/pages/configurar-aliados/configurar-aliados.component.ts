@@ -59,7 +59,10 @@ export class ConfigurarAliadosComponent implements OnInit {
       });
   }
 
-  handleNewAlly() { }
+  handleNewAlly(newAlly) {
+    console.log(newAlly);
+    this.aliadoService.createAlly(newAlly).subscribe();
+  }
 
   handleSearchAlly(allyId) {
     // tslint:disable-next-line: triple-equals

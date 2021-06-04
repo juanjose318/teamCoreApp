@@ -1,11 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Aliado } from 'src/app/models/aliado.interface';
 
 import { environment } from '../../../environments/environment';
 
+const httpOptions =  {
+    headers: new HttpHeaders ({
+        'Content-Type': 'application/json'
+    })
+};
 
 @Injectable({ providedIn: 'root' })
 export class AliadoService {
@@ -28,6 +32,13 @@ export class AliadoService {
             });
     }
 
+    createAlly(newAlly) {
+        // console.log(newAlly);
+        console.log(JSON.stringify(newAlly));
+        const convertedAlly = JSON.stringify(newAlly);
+        return this.http.post(`${environment.apiUrl}/allies`, convertedAlly, httpOptions);
+    }
+
     getAllyListener() {
         return this.allyListener.asObservable();
     }
@@ -35,7 +46,6 @@ export class AliadoService {
     /**
      * Country by letter CO, AR, EC
      */
-
     getAllyByCountry(country) {
         return this.http.get<{ allies: any[] }>(`${environment.apiUrl}/allies/countries/` + country
         ).pipe(
@@ -47,4 +57,4 @@ export class AliadoService {
             });
         });
     }
-}
+};

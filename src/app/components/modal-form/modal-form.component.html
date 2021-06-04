@@ -11,29 +11,32 @@
         <input type="text" class="form-control" formControlName="name">
       </div>
     </div>
+
     <div class="row">
       <div class="input-group col-sm">
         <label class="input-group-text">Pais</label>
-        <select class="form-control-select" formControlName="countryId">
+        <select class="form-control-select" formControlName="idCountry">
           <option selected>Seleccionar</option>
           <option value="CO">Colombia</option>
           <option value="CO">Todos</option>
           <option value="AR">Argentina</option>
         </select>
       </div>
+
       <div class="input-group col-sm">
         <label class="input-group-text">Telefono</label>
         <input type="text" class="form-control" formControlName="phone" (keydown.space)="$event.preventDefault()">
       </div>
     </div>
+
     <div class="row">
       <div class="col-sm" formGroupName="route">
-        <div class="input-group "><label class="input-group-text">Ruta</label><input type="text" class="form-control"
-            formControlName="routeId"></div>
+        <div class="input-group "><label class="input-group-text">Ruta</label><input type="number" class="form-control"
+            formControlName="idRoute"></div>
       </div>
       <div class="col-sm" formGroupName="channel">
-        <div class="input-group "><label class="input-group-text">Canal</label><input type="text" class="form-control"
-            formControlName="channelId"></div>
+        <div class="input-group "><label class="input-group-text">Canal</label><input type="number" class="form-control"
+            formControlName="idChannel"></div>
       </div>
     </div>
 
@@ -42,7 +45,6 @@
         <div class="input-group "><label class="input-group-text">Identificacion</label><input type="text"
             class="form-control" formControlName="identification"></div>
       </div>
-
     </div>
 
     <div class="row">
@@ -50,7 +52,6 @@
         <div class="input-group "><label class="input-group-text">Contacto</label><input type="text"
             class="form-control" formControlName="contact"></div>
       </div>
-
     </div>
 
     <div class="row">
@@ -71,7 +72,6 @@
         <textarea formControlName="description" class="form-control" rows="3"></textarea>
       </div>
     </div>
-
 
   </div>
 </div>

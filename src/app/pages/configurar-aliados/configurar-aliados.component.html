@@ -8,7 +8,10 @@
       <p><small>*Campos obligatorios</small></p>
       <app-text-box [text]="descriptionBoxText"></app-text-box>
       <app-search-create-ally [allies]="allies" [isConfiginfoSending]="configInfoSending"
-        (chosenCountry)="handleSearchCountry($event)" (chosenAlly)="handleSearchAlly($event)"></app-search-create-ally>
+        (chosenCountry)="handleSearchCountry($event)" 
+        (chosenAlly)="handleSearchAlly($event)"
+        (createdAlly)="handleNewAlly($event)"
+        ></app-search-create-ally>
       <div *ngIf="allies">
         <app-results-table [allies]="allies" [tableNumber]="tableNumber">
         </app-results-table>
