@@ -5,8 +5,8 @@ import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 
-const httpOptions =  {
-    headers: new HttpHeaders ({
+const httpOptions = {
+    headers: new HttpHeaders({
         'Content-Type': 'application/json'
     })
 };
@@ -33,8 +33,6 @@ export class AliadoService {
     }
 
     createAlly(newAlly) {
-        // console.log(newAlly);
-        console.log(JSON.stringify(newAlly));
         const convertedAlly = JSON.stringify(newAlly);
         return this.http.post(`${environment.apiUrl}/allies`, convertedAlly, httpOptions);
     }
@@ -43,6 +41,16 @@ export class AliadoService {
         return this.allyListener.asObservable();
     }
 
+    updateAlly(ally) {
+        const updatedAlly = JSON.stringify(ally);
+        return this.http.put(`${environment.apiUrl}/allies`, updatedAlly, httpOptions);
+    }
+
+    deleteAlly(idAllied) {
+        return this.http.delete(
+            `${environment.apiUrl}/allies/` + idAllied, httpOptions
+        );
+    }
     /**
      * Country by letter CO, AR, EC
      */
@@ -57,4 +65,4 @@ export class AliadoService {
             });
         });
     }
-};
+}

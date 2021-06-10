@@ -1,21 +1,49 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
 input {
-    text-transform:uppercase;
+  text-transform: uppercase;
 }
 
 textarea {
-    resize: none;
+  resize: none;
+}
+
+input.ng-dirty.ng-invalid {
+  border-color: red;
 }
 
 .mat-dialog-header {
-    margin-bottom: 4%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
+  margin-bottom: 4%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 
-  .row {
-      margin-bottom: 2%;
-  }
+.error-msg {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 15px;
+  margin: 5px 0 0;
+}
+
+.label {
+  background-color: none;
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.label-small {
+  width: 100px;
+  background-color: #0d6efd !important;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cdk-global-scrollblock {
+  overflow-y: hidden;
+}

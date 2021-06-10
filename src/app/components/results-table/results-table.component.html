@@ -1,20 +1,5 @@
 <div *ngIf="tableNumber === 1">
-  <div class="d-flex justify-content-center middle-box">
-    <ngb-pagination class="paginator" [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
-      (pageChange)="refreshCountries()">
-    </ngb-pagination>
-    <select class="custom-select" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
-      <option [ngValue]="2">2</option>
-      <option [ngValue]="3">3</option>
-      <option [ngValue]="10">10</option>
-      <option [ngValue]="20">20</option>
-      <option [ngValue]="30">30</option>
-      <option [ngValue]="40">40</option>
-      <option [ngValue]="50">50</option>
-      <option [ngValue]="100">100</option>
-    </select>
-  </div>
-  <table class="table table-hover">
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover">
     <thead>
       <tr class="bg-primary text-white">
         <th scope="col">ID Aliado</th>
@@ -40,13 +25,14 @@
         <td> {{ ally?.route.route }}</td>
         <td>{{ ally?.idCountry }}</td>
         <td> {{ ally?.name }}</td>
-        <td> {{ ally?.identification }}</td>
+        <td> {{ ally?.identification }} </td>
         <td> {{ ally?.contact }}</td>
         <td> {{ ally?.mail }}</td>
         <td> {{ ally?.phone }}</td>
-        <td> {{ ally?.description }}</td>
+        <td class="description" (click)="openDialog(ally?.description)"> Ver Detalle</td>
         <td (select)='activar(ally)'> {{ ally?.carvajalContact }}</td>
-        <td> <i class="bi bi-pencil action-icon"></i> <i class="bi bi-trash action-icon"></i></td>
+        <td> <i (click)="editAlly(ally)" class="bi bi-pencil action-icon"></i> <i (click)="deleteAlly(ally)"
+            class="bi bi-trash action-icon"></i></td>
       </tr>
     </tbody>
   </table>
@@ -189,7 +175,7 @@
   </table>
 </div>
 <div *ngIf="tableNumber === 5">
-  
+
   <table class="table table-hover">
     <thead>
       <tr class="bg-primary text-white">

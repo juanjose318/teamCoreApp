@@ -1,0 +1,24 @@
+<div *ngIf="data.description">
+  <div mat-dialog-header>
+    <h1 mat-dialog-title class="text-primary">Descripcion de Aliado</h1>
+  </div>
+  <div mat-dialog-content>
+    <p> {{ data.description }}</p>
+  </div>
+  <div mat-dialog-actions>
+    <button class="btn btn-primary" (click)="close()">Cerrar</button>
+  </div>
+</div>
+
+<div *ngIf="!!data.deleting">
+  <div mat-dialog-header>
+    <h1 mat-dialog-title class="text-primary">Borrar Aliado</h1>
+  </div>
+  <div mat-dialog-content>
+    <p>Esta Seguro de Eliminar el Registro?</p>
+  </div>
+  <div mat-dialog-actions class="btn-wrapper">
+    <button class="btn btn-primary" [mat-dialog-close]="data.deleting">Confirmar</button>
+    <button class="btn btn-primary" [mat-dialog-close]="data.cancelling">Cancelar</button>
+  </div>
+</div>

@@ -14,19 +14,15 @@ export class ConfigTabsComponent implements OnInit {
     switch ($event.nextId) {
       case 'tab-2':
         this.tableNumber = 2;
-        console.log(this.tableNumber);
         break;
       case 'tab-3':
         this.tableNumber = 3;
-        console.log(this.tableNumber);
         break;
       case 'tab-4':
         this.tableNumber = 4;
-        console.log(this.tableNumber);
         break;
       default:
         this.tableNumber = 2;
-        console.log(this.tableNumber);
     }
   }
 

@@ -4,26 +4,7 @@
       <h5>Auditoria</h5>
     </div>
     <div class="card-body">
-      <div class="d-flex justify-content-center middle-box">
-        <div class="left">
-          <ngb-pagination class="paginator" [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
-            (pageChange)="refreshAudit()">
-          </ngb-pagination>
-          <select class="custom-select" [(ngModel)]="pageSize" (ngModelChange)="refreshAudit()">
-            <option [ngValue]="2">2</option>
-            <option [ngValue]="4">4</option>
-            <option [ngValue]="10">10</option>
-            <option [ngValue]="20">20</option>
-            <option [ngValue]="50">50</option>
-            <option [ngValue]="100">100</option>
-          </select>
-        </div>
-        <div class="right">
-          <button class="btn btn-outline-primary"> Descargar archivo
-            <i class="bi bi-file-earmark-arrow-down black-text"></i></button>
-        </div>
-      </div>
-      <table class="table table-hover">
+      <table class="table table-hover" datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead>
           <tr class="bg-primary text-white">
             <th scope="col">Id Aliado</th>
@@ -38,14 +19,14 @@
         </thead>
         <tbody>
           <tr *ngFor="let audit of auditCollection">
-            <td scope="row">{{ audit?.id }}</td>
+            <td scope="row">{{ audit?.idAllied }}</td>
             <td scope="row">{{ audit?.creationDate | date: 'd/MMM/y HH:mm' }}</td>
+            <td scope="row">{{ audit?.actionExecuted }}</td>
             <td scope="row">{{ audit?.updateDate | date: 'd/MMM/y HH:mm' }}</td>
-            <td scope="row">{{ audit?.action }}</td>
-            <td scope="row">{{ audit?.ipOrigen }}</td>
-            <td scope="row">{{ audit?.actionField }}</td>
-            <td scope="row">{{ audit?.beforeField }}</td>
-            <td scope="row">{{ audit?.afterField }}</td>
+            <td scope="row">{{ audit?.ipOrigin }}</td>
+            <td scope="row">{{ audit?.affectedField }}</td>
+            <td scope="row">{{ audit?.valueBefore }}</td>
+            <td scope="row">{{ audit?.valueAfter }}</td>
           </tr>
         </tbody>
       </table>

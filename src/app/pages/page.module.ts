@@ -20,8 +20,11 @@ import { NavigationComponent } from '../components/navigation/navigation.compone
 import { ModalFormComponent } from '../components/modal-form/modal-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {MatDialogModule} from '@angular/material/dialog';
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ModalDescriptionComponent } from '../components/modal-description/modal-description.component';
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     TrazabilidadComponent,
     SerchCompanyComponent,
     NavigationComponent,
-    ModalFormComponent
+    ModalFormComponent,
+    ModalDescriptionComponent
   ],
   imports: [
     CommonModule,
@@ -48,10 +52,14 @@ import {MatDialogModule} from '@angular/material/dialog';
     HttpClientModule,
     ReactiveFormsModule,
     PageRoutingModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule,
+    MatSnackBarModule,
+    DataTablesModule
   ],
   entryComponents: [
-    ModalFormComponent
+    ModalFormComponent,
+    ModalDescriptionComponent
   ],
 })
 export class PageModule { }

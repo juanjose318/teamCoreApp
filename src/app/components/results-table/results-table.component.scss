@@ -21,19 +21,12 @@ td {
   margin-bottom: 2%;
 }
 
-.paginator {
-  padding-top: 2%;
-}
-
 .custom-select {
   margin-left: 4%;
 }
 
-.middle-box {
-  display: flex;
-  flex-flow: row;
-  align-items: baseline;
-  justify-content: flex-start !important;
+#DataTables_Table_1 {
+  margin: 2% 0;
 }
 
 .action-icon {
@@ -49,6 +42,13 @@ td {
 .btn-wrapper {
   display: flex;
   flex-flow: row nowrap;
-  justify-content:space-around;
+  justify-content: space-around;
   margin: 2% 0;
+}
+
+.description {
+  color: rgb(0, 17, 248);
+  cursor: pointer;
+  font-weight: 600;
+
 }

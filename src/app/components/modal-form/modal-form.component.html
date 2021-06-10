@@ -1,82 +1,290 @@
-<div class="mat-dialog-header">
-  <h1 mat-dialog-title class="text-primary">Crear Aliado</h1>
-  <button class="btn btn-primary" (click)="close()"><i class="bi bi-x"></i>
-  </button>
-</div>
-<div mat-dialog-content>
-  <div class="" [formGroup]="formGroup">
-    <div class="row">
-      <div class="input-group col-sm">
-        <label class="input-group-text">Nombre</label>
-        <input type="text" class="form-control" formControlName="name">
+<div *ngIf="!data; else editMode">
+  <div class="mat-dialog-header">
+    <h1 mat-dialog-title class="text-primary">Crear Aliado</h1>
+    <button class="btn btn-primary" (click)="close()"><i class="bi bi-x"></i>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <div [formGroup]="formGroup">
+      <div class="row">
+        <div class="mb-3">
+          <label class="label form-label">Nombre</label>
+          <input [class.is-invalid]="nameField.invalid && nameField.touched" type="text" class="form-control"
+            formControlName="name" id="name" required>
+
+          <div *ngIf="(nameField.invalid && nameField.touched) || nameField.dirty" class="error-msg">
+            <small *ngIf="nameField.errors?.required" class="text-danger">
+              Nombre es requerido
+            </small>
+            <small *ngIf="nameField.errors?.maxlength || nameField.errors?.pattern" class="text-danger">
+              La información ingresada no es correcta
+            </small>
+          </div>
+        </div>
       </div>
+      <div class="row">
+        <div class="mb-3 col-sm">
+          <label class="form-label">Pais</label>
+          <select class="form-select" formControlName="idCountry" required>
+            <option selected>Seleccionar</option>
+            <option value="CO">Colombia</option>
+            <option value="CO">Todos</option>
+            <option value="AR">Argentina</option>
+          </select>
+        </div>
+
+        <div class="mb-3 col-sm">
+          <label class="label form-label">Telefono</label>
+          <input [class.is-invalid]="phoneField.invalid && phoneField.touched" type="text" class="form-control"
+            formControlName="phone" (keydown.space)="$event.preventDefault()" required>
+          <div *ngIf="(phoneField.invalid && phoneField.touched) || phoneField.dirty" class="error-msg">
+            <small *ngIf="phoneField.errors?.required" class="text-danger">
+              Telefono es requerido
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm" formGroupName="route">
+          <div class="mb-3"><label class="form-label">Ruta</label><input type="text" class="form-control"
+              formControlName="idRoute" disabled></div>
+        </div>
+        <div class="col-sm" formGroupName="channel">
+          <div class="mb-3"><label class="form-label">Canal</label><input type="text" class="form-control"
+              formControlName="idChannel" disabled></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3"><label class="form-label label">Identificacion</label><input
+            [class.is-invalid]="identificationField.invalid && identificationField.touched" type="text"
+            class="form-control" formControlName="identification" required>
+        </div>
+        <div *ngIf="(identificationField.invalid && identificationField.touched) || identificationField.dirty"
+          class="error-msg">
+          <small *ngIf="identificationField.errors?.required" class="text-danger">
+            Identificacion es requerido
+          </small>
+          <small *ngIf="identificationField.errors?.maxlength || identificationField.errors.pattern"
+            class="text-danger">
+            La información ingresada no es correcta
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3"><label class="form-label label">Contacto</label><input
+            [class.is-invalid]="contactField.invalid && contactField.touched" type="text" class="form-control"
+            formControlName="contact" required required></div>
+        <div *ngIf="(contactField.invalid && contactField.touched) || contactField.dirty" class="error-msg">
+          <small *ngIf="contactField.errors?.required" class="text-danger">
+            Contacto es requerido
+          </small>
+          <small *ngIf="identificationField.errors?.maxlength || identificationField.errors.pattern"
+            class="text-danger">
+            La información ingresada no es correcta
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <div class="mb-3"><label class="form-label label">Email</label><input
+              [class.is-invalid]="mailField.invalid && mailField.touched" type="email" class="form-control"
+              formControlName="mail"></div>
+          <div *ngIf="(mailField.invalid && mailField.touched) || mailField.dirty" class="error-msg">
+            <small *ngIf="mailField.errors?.required" class="text-danger">
+              Email es requerido
+            </small>
+            <small *ngIf="mailField.errors?.pattern" class="text-danger">
+              Formato de dirección de correo electrónico no válido.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3"><label class="form-label label">Contacto Carvajal</label><input
+            [class.is-invalid]="carvajalContactField.invalid && carvajalContactField.touched" type="email"
+            class="form-control" formControlName="carvajalContact"></div>
+        <div *ngIf="(carvajalContactField.invalid && carvajalContactField.touched) || carvajalContactField.dirty"
+          class="error-msg">
+          <small *ngIf="carvajalContactField.errors?.required" class="text-danger">
+            Contacto Carvajal es requerido
+          </small>
+          <small *ngIf="carvajalContactField.errors?.pattern" class="text-danger">
+            Formato de dirección de correo electrónico no válido.
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-sm">
+          <label class="form-label label">Descripcion</label>
+          <textarea formControlName="description" class="form-control" rows="3"
+            [class.is-invalid]="descriptionField.invalid && descriptionField.touched"></textarea>
+        </div>
+        <div *ngIf="(descriptionField.invalid && descriptionField.touched) || descriptionField.dirty" class="error-msg">
+          <small *ngIf="descriptionField.errors?.required" class="text-danger">
+            Descripcion es requerida
+          </small>
+          <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors.pattern" class="text-danger">
+            La información ingresada no es correcta
+          </small>
+        </div>
+      </div>
+
+      <div mat-dialog-actions>
+        <button type="button" class="btn btn-outline-primary" (click)="save()">Guardar</button>
+      </div>
+
     </div>
-
-    <div class="row">
-      <div class="input-group col-sm">
-        <label class="input-group-text">Pais</label>
-        <select class="form-control-select" formControlName="idCountry">
-          <option selected>Seleccionar</option>
-          <option value="CO">Colombia</option>
-          <option value="CO">Todos</option>
-          <option value="AR">Argentina</option>
-        </select>
-      </div>
-
-      <div class="input-group col-sm">
-        <label class="input-group-text">Telefono</label>
-        <input type="text" class="form-control" formControlName="phone" (keydown.space)="$event.preventDefault()">
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm" formGroupName="route">
-        <div class="input-group "><label class="input-group-text">Ruta</label><input type="number" class="form-control"
-            formControlName="idRoute"></div>
-      </div>
-      <div class="col-sm" formGroupName="channel">
-        <div class="input-group "><label class="input-group-text">Canal</label><input type="number" class="form-control"
-            formControlName="idChannel"></div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm">
-        <div class="input-group "><label class="input-group-text">Identificacion</label><input type="text"
-            class="form-control" formControlName="identification"></div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm">
-        <div class="input-group "><label class="input-group-text">Contacto</label><input type="text"
-            class="form-control" formControlName="contact"></div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm">
-        <div class="input-group"><label class="input-group-text">Email</label><input type="text" class="form-control"
-            formControlName="mail"></div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="input-group col-sm"><label class="input-group-text">Email Contacto Carvajal</label><input type="text"
-          class="form-control" formControlName="carvajalContact"></div>
-    </div>
-
-    <div class="row">
-      <div class="input-group col-sm">
-        <label class="input-group-text">Descripcion </label>
-        <textarea formControlName="description" class="form-control" rows="3"></textarea>
-      </div>
-    </div>
-
   </div>
 </div>
+<!-- Edit mode -->
+<ng-template #editMode>
+  <div>
+    <div class="mat-dialog-header">
+      <h1 mat-dialog-title class="text-primary">Editar Aliado</h1>
+      <button class="btn btn-primary" (click)="close()"><i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div mat-dialog-content>
+      <div [formGroup]="formGroup">
+        <div class="row">
+          <div class="mb-3">
+            <label class="label form-label">Nombre</label>
+            <input [class.is-invalid]="nameField.invalid && nameField.touched" type="text" class="form-control"
+              formControlName="name" id="name" required>
 
-<div mat-dialog-actions>
-  <button type="button" class="btn btn-outline-primary" (click)="save()">Guardar</button>
+            <div *ngIf="(nameField.invalid && nameField.touched) || nameField.dirty" class="error-msg">
+              <small *ngIf="nameField.errors?.required" class="text-danger">
+                Nombre es requerido
+              </small>
+              <small *ngIf="nameField.errors?.maxlength || nameField.errors?.pattern" class="text-danger">
+                La información ingresada no es correcta
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="mb-3 col-sm">
+            <label class="form-label">Pais</label>
+            <select class="form-select" formControlName="idCountry" required>
+              <option selected>Seleccionar</option>
+              <option value="CO">Colombia</option>
+              <option value="CO">Todos</option>
+              <option value="AR">Argentina</option>
+            </select>
+          </div>
 
-</div>
+          <div class="mb-3 col-sm">
+            <label class="label form-label">Telefono</label>
+            <input [class.is-invalid]="phoneField.invalid && phoneField.touched" type="text" class="form-control"
+              formControlName="phone" (keydown.space)="$event.preventDefault()" required>
+            <div *ngIf="(phoneField.invalid && phoneField.touched) || phoneField.dirty" class="error-msg">
+              <small *ngIf="phoneField.errors?.required" class="text-danger">
+                Telefono es requerido
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm" formGroupName="route">
+            <div class="mb-3"><label class="form-label">Ruta</label><input type="text" class="form-control"
+                formControlName="idRoute" disabled></div>
+          </div>
+          <div class="col-sm" formGroupName="channel">
+            <div class="mb-3"><label class="form-label">Canal</label><input type="text" class="form-control"
+                formControlName="idChannel" disabled></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3"><label class="form-label label">Contacto</label><input
+              [class.is-invalid]="contactField.invalid && contactField.touched" type="text" class="form-control"
+              formControlName="contact" required required></div>
+          <div *ngIf="(contactField.invalid && contactField.touched) || contactField.dirty" class="error-msg">
+            <small *ngIf="contactField.errors?.required" class="text-danger">
+              Contacto es requerido
+            </small>
+            <small *ngIf="identificationField.errors?.maxlength || identificationField.errors.pattern"
+              class="text-danger">
+              La información ingresada no es correcta
+            </small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm">
+            <div class="mb-3"><label class="form-label label">Email</label><input
+                [class.is-invalid]="mailField.invalid && mailField.touched" type="email" class="form-control"
+                formControlName="mail"></div>
+            <div *ngIf="(mailField.invalid && mailField.touched) || mailField.dirty" class="error-msg">
+              <small *ngIf="mailField.errors?.required" class="text-danger">
+                Email es requerido
+              </small>
+              <small *ngIf="mailField.errors?.pattern" class="text-danger">
+                Formato de dirección de correo electrónico no válido.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3"><label class="form-label label">Contacto Carvajal</label><input
+              [class.is-invalid]="carvajalContactField.invalid && carvajalContactField.touched" type="email"
+              class="form-control" formControlName="carvajalContact"></div>
+          <div *ngIf="(carvajalContactField.invalid && carvajalContactField.touched) || carvajalContactField.dirty"
+            class="error-msg">
+            <small *ngIf="carvajalContactField.errors?.required" class="text-danger">
+              Contacto Carvajal es requerido
+            </small>
+            <small *ngIf="carvajalContactField.errors?.pattern" class="text-danger">
+              Formato de dirección de correo electrónico no válido.
+            </small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3"><label class="form-label label">Contacto Carvajal</label><input
+              [class.is-invalid]="carvajalContactField.invalid && carvajalContactField.touched" type="email"
+              class="form-control" formControlName="carvajalContact"></div>
+          <div *ngIf="(carvajalContactField.invalid && carvajalContactField.touched) || carvajalContactField.dirty"
+            class="error-msg">
+            <small *ngIf="carvajalContactField.errors?.required" class="text-danger">
+              Contacto Carvajal es requerido
+            </small>
+            <small *ngIf="carvajalContactField.errors?.pattern" class="text-danger">
+              Formato de dirección de correo electrónico no válido.
+            </small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-sm">
+            <label class="form-label label">Descripcion</label>
+            <textarea formControlName="description" class="form-control" rows="3"
+              [class.is-invalid]="descriptionField.invalid && descriptionField.touched"></textarea>
+          </div>
+          <div *ngIf="(descriptionField.invalid && descriptionField.touched) || descriptionField.dirty"
+            class="error-msg">
+            <small *ngIf="descriptionField.errors?.required" class="text-danger">
+              Descripcion es requerida
+            </small>
+            <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors.pattern" class="text-danger">
+              La información ingresada no es correcta
+            </small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div mat-dialog-actions>
+      <button type="button" class="btn btn-outline-primary" (click)="save()">Guardar</button>
+    </div>
+  </div>
+</ng-template>

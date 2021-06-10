@@ -1,26 +1,59 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AuditService } from 'src/app/services/audit/audit.service';
 
 @Component({
   selector: 'app-audit-ally',
   templateUrl: './audit-ally.component.html',
   styleUrls: ['./audit-ally.component.scss']
 })
-export class AuditAllyComponent implements OnChanges {
+export class AuditAllyComponent implements OnChanges, OnInit {
   @Input() textAudit: string;
   @Input() audit: any;
 
   auditCollection;
 
-  page: number = 1;
-  pageSize: number = 4;
-  collectionSize: number;
+  /**
+ * Opciones para tabla de datos tipo datatable
+ */
+  dtOptions: any = {};
+  dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor() { }
+  constructor(
+    public auditService: AuditService
+  ) { }
 
   ngOnChanges() {
-    if (this.audit) {
-      this.collectionSize = this.audit.audit.length;
+    if (!!this.audit) {
       this.auditCollection = this.audit.audit;
     }
+  }
+
+  ngOnInit() {
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 5,
+      lengthMenu: [[5, 10, 20, 30, 40, 50], [5, 10, 20, 30, 40, 50]],
+      searching: false,
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+      },
+      dom: 'Blfrtip',
+      buttons: [
+        {
+          extend: 'excel',
+          text: 'Descargar Archivo',
+          className: 'btn-download',
+          titleAttr: 'Copy'
+        }
+      ]
+    };
+    this.auditService.getAuditListener().pipe(
+      takeUntil(this.dtTrigger)
+    ).subscribe((data) => {
+      this.auditCollection = data.audit;
+      this.dtTrigger.next();
+    });
   }
 }

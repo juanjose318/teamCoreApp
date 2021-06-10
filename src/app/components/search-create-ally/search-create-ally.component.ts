@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ModalFormComponent } from '../modal-form/modal-form.component';
 
 @Component({
@@ -21,7 +22,8 @@ export class SearchCreateAllyComponent {
   closeModal;
 
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) { }
   // modalRef.componentInstance.title = 'Crear Aliado';
   /**
@@ -36,12 +38,24 @@ export class SearchCreateAllyComponent {
    */
   openDialog(): void {
     const dialogRef = this.dialog.open(ModalFormComponent, {
-      width: '30%',
+      width: '50%',
+      maxHeight: '90vh',
       id: 'a-create-ally-modal'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (!!result) {
         this.createdAlly.emit(result);
+        /**
+         * |TOOD
+         * quitar resultado.channel
+         */
+        this._snackBar.open('La informacion se almaceno satisfactoriamente', 'cerrar', {
+          duration: 2000,
+        });
+      } else {
+        this._snackBar.open('Operacion cancelada', 'cerrar', {
+          duration: 2000,
+        });
       }
     });
   }
@@ -53,7 +67,4 @@ export class SearchCreateAllyComponent {
     this.chosenAlly.emit(name);
   }
 
-  saveAlly() {
-    console.log('save');
-  }
 }
