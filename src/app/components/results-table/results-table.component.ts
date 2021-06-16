@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AliadoService } from 'src/app/services/ally/ally.service';
 import { ModalDescriptionComponent } from '../modal-description/modal-description.component';
@@ -13,21 +14,36 @@ import { ModalFormComponent } from '../modal-form/modal-form.component';
   styleUrls: ['./results-table.component.scss'],
 })
 
-export class ResultsTableComponent implements OnInit {
+export class ResultsTableComponent implements OnInit, OnChanges {
   /**
-  * Fetch aliados como input
+  * Allies es el pais del que se tiene que hacer el fetch
   */
   @Input() allies;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @Input() filteredAlly;
+  @Input() everyAlly;
+
+  @ViewChild(DataTableDirective) dtElement: DataTableDirective;
 
   @Output() deletedAlly: EventEmitter<any> = new EventEmitter();
   @Output() editedAlly: EventEmitter<any> = new EventEmitter();
 
+  private allySub: Subscription;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  /**
+   * Fuente de informacion de la tabla para paginacion, filtrado y sorteado
+   */
+  dataSource: MatTableDataSource<any>;
+
+  displayedColumns: string[] = [ 'idAllied', 'creationDate', 'channel', 'route', 'idCountry',
+  'identification', 'contact', 'mail', 'phone', 'description', 'carvajalContact',
+'actions'];
+
   /**
    * Opciones para tabla de datos tipo datatable
    */
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
 
   allyCollection;
   companyConfigCollection = [];
@@ -51,36 +67,36 @@ export class ResultsTableComponent implements OnInit {
 
 
   ngOnChanges() {
-    if (this.tableNumber === 1 && this.allies) {
-      this.allyCollection = this.allies.allies;
+    if (this.tableNumber === 1 && !!this.allies) {
+      this.allyService.getAllyByCountry(this.allies);
+      this.allySub = this.allyService.getAllyListener()
+        .subscribe((allyData) => {
+          this.allyCollection = allyData.allies;
+          this.dataSource = new MatTableDataSource<any>(this.allyCollection);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        });
     }
+
+    if (!!this.filteredAlly) {
+    // this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+    //   dtInstance.destroy();
+    //   this.allyCollection = this.filteredAlly.allies;
+    //   this.dtTrigger.next();
+    // });
+      this.allyCollection = this.filteredAlly.allies;
+    }
+
   }
   /**
    * Opciones de tabla + asignacion de data a la tabla
    */
   ngOnInit() {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 5,
-      language: {
-        url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-      },
-      lengthMenu: [[5, 10, 20, 30, 40, 50], [5, 10, 20, 30, 40, 50]],
-      // searching: false
-    };
     if (this.tableNumber === 1 && this.allies) {
-      this.allyService.getAllyListener().pipe(
-        takeUntil(this.dtTrigger)
-      ).subscribe((data) => {
-        this.allyCollection = data.allies;
-        console.log(this.allyCollection);
-        this.dtTrigger.next();
-      });
+      this.dataSource = new MatTableDataSource<any>(this.allyCollection);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     }
-  }
-
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
   }
 
   /**
@@ -93,6 +109,17 @@ export class ResultsTableComponent implements OnInit {
       data: { description: description }
     });
   }
+
+/**
+ * @param filterValue Palabra que se escribe la barra de busqueda
+ */
+  applyFilter(filterValue) {
+    console.log(filterValue.target.value);
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+    }
+}
 
   editAlly(selectedAlly): void {
     const dialogRef = this.dialog.open(ModalFormComponent, {

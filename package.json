@@ -43,6 +43,7 @@
     "datatables.net-buttons-dt": "^1.7.1",
     "datatables.net-dt": "^1.10.19",
     "events": "^3.0.0",
+    "file-saver": "^2.0.5",
     "gojs": "^2.0.11",
     "intl": "^1.2.5",
     "jquery": "^3.6.0",
@@ -60,6 +61,7 @@
     "sweetalert2": "^8.11.5",
     "tslib": "^2.2.0",
     "url-search-params-polyfill": "^6.0.0",
+    "xlsx": "^0.17.0",
     "zone.js": "^0.8.29"
   },
   "styles": [

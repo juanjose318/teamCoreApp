@@ -19,7 +19,7 @@
         </div>
         <select class="form-control" [(ngModel)]="selectedAlly" (ngModelChange)="filterAlly($event)">
           <option selected>Seleccionar</option>
-          <option *ngFor="let ally of allies?.allies" [value]="ally.idAllied">
+          <option *ngFor="let ally of allyCollection" [value]="ally.idAllied">
             {{ ally?.name }}
           </option>
         </select>

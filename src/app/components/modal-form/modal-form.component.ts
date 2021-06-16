@@ -27,10 +27,10 @@ export class ModalFormComponent implements OnInit {
   idCountry: string;
   contact: string;
   mail: string;
-  phone: number
+  phone: number;
   description: string;
   carvajalContact: string;
-  creationDate: Date = new Date();
+  creationDate: Date = new Date('d/MMM/y HH:mm');
 
 
   save() {
@@ -81,10 +81,10 @@ export class ModalFormComponent implements OnInit {
     this.formGroup = this.fb.group({
       idAllied: new FormControl(this.idAlly),
       channel: new FormGroup({
-        idChannel: new FormControl({ value: this.idChannel, disabled: true }),
+        idChannel: new FormControl({ value: this.idChannel }),
       }),
       route: new FormGroup({
-        idRoute: new FormControl({ value: this.idRoute, disabled: true }),
+        idRoute: new FormControl({ value: this.idRoute }),
       }),
       identification: new FormControl(this.identification, [
         Validators.required,

@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuditService } from 'src/app/services/audit/audit.service';
@@ -8,7 +9,7 @@ import { AuditService } from 'src/app/services/audit/audit.service';
   templateUrl: './audit-ally.component.html',
   styleUrls: ['./audit-ally.component.scss']
 })
-export class AuditAllyComponent implements OnChanges, OnInit {
+export class AuditAllyComponent implements OnInit, OnDestroy, OnChanges {
   @Input() textAudit: string;
   @Input() audit: any;
 
@@ -17,16 +18,18 @@ export class AuditAllyComponent implements OnChanges, OnInit {
   /**
  * Opciones para tabla de datos tipo datatable
  */
+  @ViewChild(DataTableDirective) dtElement: DataTableDirective;
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
   constructor(
-    public auditService: AuditService
+    public auditService: AuditService,
   ) { }
+
 
   ngOnChanges() {
     if (!!this.audit) {
-      this.auditCollection = this.audit.audit;
+    this.auditCollection = this.audit.audit;
     }
   }
 
@@ -47,7 +50,7 @@ export class AuditAllyComponent implements OnChanges, OnInit {
           className: 'btn-download',
           titleAttr: 'Copy'
         }
-      ]
+      ],
     };
     this.auditService.getAuditListener().pipe(
       takeUntil(this.dtTrigger)
@@ -55,5 +58,8 @@ export class AuditAllyComponent implements OnChanges, OnInit {
       this.auditCollection = data.audit;
       this.dtTrigger.next();
     });
+  }
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
   }
 }

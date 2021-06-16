@@ -18,6 +18,7 @@ export class ConfigurarAliadosComponent implements OnInit {
   private selectedAlly;
   private allies: any;
   private allySub: Subscription;
+  private everyAlly: any;
   /**
    * Check para ver que pais esta seleccionado
    */
@@ -49,11 +50,13 @@ export class ConfigurarAliadosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.aliadoService.getAllies();
-    this.allySub = this.aliadoService.getAllyListener()
-      .subscribe((allyData) => {
-        this.allies = allyData.allies;
-      });
+    // console.log("hi");
+    // this.aliadoService.getAllies();
+    // this.allySub = this.aliadoService.getAllyListener()
+    //   .subscribe((allyData) => {
+    //     this.everyAlly = allyData.allies;
+    //     console.log(this.everyAlly);
+    //   });
   }
   /**
    * Creacion de Aliado
@@ -70,6 +73,7 @@ export class ConfigurarAliadosComponent implements OnInit {
    * @param allyId Id de aliado
    */
   handleSearchAlly(allyId) {
+    this.selectedAlly = [];
     const searchedByAlly = this.allies.allies.filter(ally => ally.idAllied == allyId);
     this.selectedAlly = { allies: searchedByAlly };
   }
@@ -161,15 +165,7 @@ export class ConfigurarAliadosComponent implements OnInit {
    */
   handleSearchCountry(country) {
     console.log(country);
-    this.aliadoService.getAllyByCountry(country);
-    this.allySub = this.aliadoService.getAllyListener()
-      .subscribe((allyData) => {
-        this.allies = allyData;
-      });
-    this.auditService.getAuditByCountry(country);
-    this.auditSub = this.auditService.getAuditListener()
-      .subscribe((filteredAudit) => {
-        this.audit = filteredAudit;
-      });
+    this.allies = country;
+    this.audit = country;
   }
 }

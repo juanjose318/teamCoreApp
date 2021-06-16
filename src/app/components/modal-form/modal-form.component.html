@@ -48,16 +48,17 @@
       <div class="row">
         <div class="col-sm" formGroupName="route">
           <div class="mb-3"><label class="form-label">Ruta</label><input type="text" class="form-control"
-              formControlName="idRoute" disabled></div>
+              formControlName="idRoute" ></div>
         </div>
         <div class="col-sm" formGroupName="channel">
           <div class="mb-3"><label class="form-label">Canal</label><input type="text" class="form-control"
-              formControlName="idChannel" disabled></div>
+              formControlName="idChannel"></div>
         </div>
       </div>
 
       <div class="row">
-        <div class="mb-3"><label class="form-label label">Identificacion</label><input
+        <div class="mb-3">
+          <label class="form-label label">Identificacion</label><input
             [class.is-invalid]="identificationField.invalid && identificationField.touched" type="text"
             class="form-control" formControlName="identification" required>
         </div>
@@ -66,7 +67,7 @@
           <small *ngIf="identificationField.errors?.required" class="text-danger">
             Identificacion es requerido
           </small>
-          <small *ngIf="identificationField.errors?.maxlength || identificationField.errors.pattern"
+          <small *ngIf="identificationField.errors?.maxlength || identificationField.errors?.pattern"
             class="text-danger">
             La información ingresada no es correcta
           </small>
@@ -81,7 +82,7 @@
           <small *ngIf="contactField.errors?.required" class="text-danger">
             Contacto es requerido
           </small>
-          <small *ngIf="identificationField.errors?.maxlength || identificationField.errors.pattern"
+          <small *ngIf="identificationField.errors?.maxlength || identificationField.errors?.pattern"
             class="text-danger">
             La información ingresada no es correcta
           </small>
@@ -129,7 +130,7 @@
           <small *ngIf="descriptionField.errors?.required" class="text-danger">
             Descripcion es requerida
           </small>
-          <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors.pattern" class="text-danger">
+          <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors?.pattern" class="text-danger">
             La información ingresada no es correcta
           </small>
         </div>
@@ -194,11 +195,11 @@
         <div class="row">
           <div class="col-sm" formGroupName="route">
             <div class="mb-3"><label class="form-label">Ruta</label><input type="text" class="form-control"
-                formControlName="idRoute" disabled></div>
+                formControlName="idRoute"></div>
           </div>
           <div class="col-sm" formGroupName="channel">
             <div class="mb-3"><label class="form-label">Canal</label><input type="text" class="form-control"
-                formControlName="idChannel" disabled></div>
+                formControlName="idChannel" ></div>
           </div>
         </div>
 
@@ -274,7 +275,7 @@
             <small *ngIf="descriptionField.errors?.required" class="text-danger">
               Descripcion es requerida
             </small>
-            <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors.pattern" class="text-danger">
+            <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors?.pattern" class="text-danger">
               La información ingresada no es correcta
             </small>
           </div>

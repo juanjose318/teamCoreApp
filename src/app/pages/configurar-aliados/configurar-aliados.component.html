@@ -6,17 +6,30 @@
     </div>
     <div class="card-body">
       <p><small>*Campos obligatorios</small></p>
-      <app-text-box [text]="descriptionBoxText"></app-text-box>
-      <app-search-create-ally [allies]="allies" [isConfiginfoSending]="configInfoSending"
-        (chosenCountry)="handleSearchCountry($event)" (chosenAlly)="handleSearchAlly($event)"
-        (createdAlly)="handleNewAlly($event)"></app-search-create-ally>
-      <div *ngIf="allies">
-        <app-results-table [allies]="allies" (deletedAlly)="handleDeleteAlly($event)"
-          (editedAlly)="handleEditedAlly($event)" [tableNumber]="tableNumber">
+      <app-text-box 
+      [text]="descriptionBoxText"
+      ></app-text-box>
+      <app-search-create-ally
+        [allies]="allies" 
+        [isConfiginfoSending]="configInfoSending"
+        (chosenCountry)="handleSearchCountry($event)" 
+        (chosenAlly)="handleSearchAlly($event)"
+        (createdAlly)="handleNewAlly($event)">
+      </app-search-create-ally>
+      <div *ngIf="!!allies">
+        <app-results-table 
+        [allies]="allies" 
+        [everyAlly]="everyAlly"
+        [filteredAlly]="selectedAlly" 
+        [tableNumber]="tableNumber"
+        (deletedAlly)="handleDeleteAlly($event)"
+        (editedAlly)="handleEditedAlly($event)">
         </app-results-table>
       </div>
     </div>
-    <app-audit-ally [audit]="audit" [textAudit]="descriptionAudit">
-    </app-audit-ally>
+    <mat-divider></mat-divider>
+    <div *ngIf="audit">
+      <app-table-overview-example [audit]="audit"></app-table-overview-example>
+    </div>
   </div>
 </div>

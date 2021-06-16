@@ -25,6 +25,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ModalDescriptionComponent } from '../components/modal-description/modal-description.component';
 import { DataTablesModule } from 'angular-datatables';
+import { TableOverviewExampleComponent } from '../components/table/table.component';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDividerModule } from '@angular/material/divider';
+
+
 
 @NgModule({
   declarations: [
@@ -41,7 +49,8 @@ import { DataTablesModule } from 'angular-datatables';
     SerchCompanyComponent,
     NavigationComponent,
     ModalFormComponent,
-    ModalDescriptionComponent
+    ModalDescriptionComponent,
+    TableOverviewExampleComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +64,12 @@ import { DataTablesModule } from 'angular-datatables';
     MatDialogModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    DataTablesModule
+    DataTablesModule,
+    MatSortModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDividerModule
   ],
   entryComponents: [
     ModalFormComponent,
