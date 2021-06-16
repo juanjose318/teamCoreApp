@@ -7,7 +7,7 @@
   </div>
 
   <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource" matSort id="excel-table">
+    <table mat-table [dataSource]="dataSource" matSort id="excel-table" (matSortChange)="sortData($event)" matSortActive="updateDate" matSortDirection="desc" matSortDisableClear>
 
       <ng-container matColumnDef="idAllied">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Id Aliado </th>
@@ -62,7 +62,7 @@
       </tr>
     </table>
 
-    <mat-paginator [length]="dataSource?.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator [length]="dataSource?.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 30, 40]"></mat-paginator>
   </div>
 
 </div>

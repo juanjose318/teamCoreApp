@@ -36,6 +36,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
+import { sidebarComponent } from '../shared/sidebar/sidebar.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     NavigationComponent,
     ModalFormComponent,
     ModalDescriptionComponent,
-    TableOverviewComponent
+    TableOverviewComponent,
+    sidebarComponent
   ],
   imports: [
     CommonModule,

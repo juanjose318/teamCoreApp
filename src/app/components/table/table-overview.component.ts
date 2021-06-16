@@ -37,11 +37,9 @@ export class TableOverviewComponent implements OnInit, OnChanges {
 
     ngOnChanges(): void {
         if (this.audit) {
-            console.log(this.audit);
         this.auditService.getAuditByCountry(this.audit);
         this.auditSub = this.auditService.getAuditListener()
           .subscribe((filteredAudit) => {
-            console.log(filteredAudit);
             this.auditCollection = filteredAudit.audit;
             this.dataSource = new MatTableDataSource<any>(filteredAudit.audit);
             this.dataSource.paginator = this.paginator;
@@ -58,7 +56,6 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     }
 
     applyFilter(filterValue) {
-        console.log(filterValue.target.value);
         this.dataSource.filter = filterValue.trim().toLowerCase();
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();

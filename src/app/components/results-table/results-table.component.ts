@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
 import { Subscription } from 'rxjs';
@@ -19,7 +19,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   */
   @Input() allies;
   @Input() filteredAlly;
-  @Input() everyAlly;
 
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
 
@@ -38,14 +37,12 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    */
   dataSource: MatTableDataSource<any>;
 
-  displayedColumns: string[] = [ 'idAllied', 'creationDate', 'channel', 'route', 'idCountry',
-  'identification', 'contact', 'mail', 'phone', 'description', 'carvajalContact',
-'actions'];
-
+  displayedColumns: string[] = ['idAllied', 'creationDate', 'channel', 'route', 'idCountry', 'name',
+    'identification', 'contact', 'mail', 'phone', 'description', 'carvajalContact',
+    'actions'];
   /**
    * Opciones para tabla de datos tipo datatable
    */
-
   allyCollection;
   companyConfigCollection = [];
   /**
@@ -57,21 +54,21 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    * 5 = Trazabilidad
    */
   @Input() tableNumber: number;
-
   /**
    * Depedencia de modal
    * @param dialog modal
    */
   constructor(
     public dialog: MatDialog,
-    public allyService: AliadoService) { }
-
-/**
- * Si es tabla uno y hay un objeto de aliados como input revisar si es de un solo pais o de todos
- */
+    public allyService: AliadoService,
+    private _snackBar: MatSnackBar
+    ) { }
+  /**
+   * Si es tabla uno y hay un objeto de aliados como input revisar si es de un solo pais o de todos
+   */
   ngOnChanges() {
-    if (this.tableNumber === 1 && !!this.allies) {
-      if(this.allies === 'ALL') {
+    if (this.tableNumber === 1 && !!this.allies && !this.filteredAlly) {
+      if (this.allies === 'ALL') {
         this.allyService.getAllies();
         this.allySub = this.allyService.getAllyListener().subscribe((allyData) => {
           this.isLoading.emit(false);
@@ -79,12 +76,13 @@ export class ResultsTableComponent implements OnInit, OnChanges {
           this.dataSource = new MatTableDataSource<any>(this.allyCollection);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-        })
+          })
       }
       else {
         this.allyService.getAllyByCountry(this.allies);
         this.allySub = this.allyService.getAllyListener()
           .subscribe((allyData) => {
+            this.filteredAlly = null;
             this.isLoading.emit(false);
             this.allyCollection = allyData.allies;
             this.dataSource = new MatTableDataSource<any>(this.allyCollection);
@@ -93,11 +91,13 @@ export class ResultsTableComponent implements OnInit, OnChanges {
           });
       }
     }
-
-    if (!!this.filteredAlly) {
-      this.allyCollection = this.filteredAlly.allies;
+    if (this.tableNumber === 1 && !!this.filteredAlly) {
+      const filtered = this.allyCollection.filter(ally => ally.idAllied == this.filteredAlly);
+      this.dataSource = new MatTableDataSource<any>(filtered);
+      this.filteredAlly = null;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     }
-
   }
   /**
    * Opciones de tabla + asignacion de data a la tabla
@@ -109,29 +109,29 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       this.dataSource.sort = this.sort;
     }
   }
-
   /**
   * Abrir Modal para ver descripcion de aliado
   * @param description Descripcion de aliado
   */
   openDialog(description): void {
     const dialogRef = this.dialog.open(ModalDescriptionComponent, {
-      width: '50%',
+      width: '25%',
       data: { description: description }
     });
   }
-
-/**
- * @param filterValue Palabra que se escribe la barra de busqueda
- */
+  /**
+   * @param filterValue Palabra que se escribe la barra de busqueda
+   */
   applyFilter(filterValue) {
-    console.log(filterValue.target.value);
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
+      this.dataSource.paginator.firstPage();
     }
-}
-
+  }
+  /**
+   * Emite como output el aliado modificado y sin modificar para hacer comparacion en configuracion de aliados
+   * @param selectedAlly Aliado a modificar
+   */
   editAlly(selectedAlly): void {
     const dialogRef = this.dialog.open(ModalFormComponent, {
       width: '50%',
@@ -140,7 +140,17 @@ export class ResultsTableComponent implements OnInit, OnChanges {
 
     dialogRef.afterClosed().subscribe((modifiedAlly) => {
       if (!!modifiedAlly) {
+        modifiedAlly = {
+          ...modifiedAlly,
+          channel: { idChannel : selectedAlly.channel.idChannel },
+          route: { idRoute: selectedAlly.route.idRoute }
+        };
         this.editedAlly.emit({ modifiedAlly, selectedAlly });
+      }
+      else {
+        this._snackBar.open('Operacion Cancelada', 'cerrar', {
+          duration: 2000,
+        });
       }
     });
   }

@@ -42,7 +42,6 @@ export class SearchCreateAllyComponent implements OnChanges {
       });
     }
   }
-  // modalRef.componentInstance.title = 'Crear Aliado';
   /**
    * @param country pais seleccionado en la busqueda de aliados
    */
@@ -51,7 +50,14 @@ export class SearchCreateAllyComponent implements OnChanges {
   }
 
   /**
-   * Modal
+ * @param name nombre de aliado seleccionado despues de filtrar por pais
+ */
+  filterAlly(name): void {
+    this.chosenAlly.emit(name);
+  }
+
+  /**
+   * Modal para creacion de nuevo aliado
    */
   openDialog(): void {
     const dialogRef = this.dialog.open(ModalFormComponent, {
@@ -61,9 +67,11 @@ export class SearchCreateAllyComponent implements OnChanges {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (!!result) {
-        result.channel = { idChannel: '' };
-        result.route = { idRoute: '' };
-
+        result = {
+          ...result,
+          channel: { idChannel: 1 },
+          route: { idRoute: 1 }
+        }
         this.createdAlly.emit(result);
         this._snackBar.open('La informacion se almaceno satisfactoriamente', 'cerrar', {
           duration: 2000,
@@ -74,13 +82,6 @@ export class SearchCreateAllyComponent implements OnChanges {
         });
       }
     });
-  }
-
-  /**
-   * @param name nombre de aliado seleccionado despues de filtrar por pais
-   */
-  filterAlly(name): void {
-    this.chosenAlly.emit(name);
   }
 
 }

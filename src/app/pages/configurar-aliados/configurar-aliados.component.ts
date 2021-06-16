@@ -56,12 +56,10 @@ export class ConfigurarAliadosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // console.log("hi");
     // this.aliadoService.getAllies();
     // this.allySub = this.aliadoService.getAllyListener()
     //   .subscribe((allyData) => {
     //     this.everyAlly = allyData.allies;
-    //     console.log(this.everyAlly);
     //   });
   }
   /**
@@ -69,20 +67,16 @@ export class ConfigurarAliadosComponent implements OnInit {
    * @param newAlly Id de aliado
    */
   handleNewAlly(newAlly) {
-    this.aliadoService.createAlly(newAlly).subscribe((allyData) => {
-      this.handleSearchCountry(newAlly.idCountry);
-      this.allies.allies.push(allyData);
+    this.aliadoService.createAlly(newAlly).subscribe(() => {
+      this.aliadoService.getAllyByCountry(newAlly.idCountry);
     });
   }
   /**
-   * Busqueda de aliado especifico despues de filtro de pais
+   * Busqueda de aliado especifico despues de filtro de pais, se manda el id del aliado a filtrar
    * @param allyId Id de aliado
-   * TODO: cambiar tipo de filtrado a pasar como input el aliado a filtrar hacia los componentes tabla
    */
   handleSearchAlly(allyId) {
-    this.selectedAlly = [];
-    const searchedByAlly = this.allies.allies.filter(ally => ally.idAllied == allyId);
-    this.selectedAlly = { allies: searchedByAlly };
+    this.selectedAlly = allyId;
   }
   /**
    * Confirmar o cancelar eliminacion de Aliado
@@ -98,7 +92,6 @@ export class ConfigurarAliadosComponent implements OnInit {
         const updateDate: Date = new Date();
 
         this.aliadoService.deleteAlly(toDeleteAlly.idAllied).subscribe(() => {
-          const collectionAfterDelete = this.allies.allies.filter(ally => ally.idAllied !== toDeleteAlly.idAllied);
           this.aliadoService.getAllyByCountry(toDeleteAlly.idCountry);
           const allyAudit = [{
             'idAlliedAudit': null,
@@ -112,16 +105,18 @@ export class ConfigurarAliadosComponent implements OnInit {
             'valueAfter': ' ',
             'ipOrigin': '10.20.32.141',
             'creationDate': toDeleteAlly.creationDate,
-            'updateDate': ''
+            'updateDate': toDeleteAlly.updateDate
           }];
-          this.auditService.createAuditAlly(allyAudit).subscribe();
-          this.allies = { allies: collectionAfterDelete };
-          this._snackBar.open('Operacion exitosa, El registro se Elimino Satisfactoriamente', 'cerrar', {
-            duration: 2000,
+          this.auditService.createAuditAlly(allyAudit).subscribe(() => {
+            this._snackBar.open('Operacion exitosa, El registro se elimino satisfactoriamente', 'cerrar', {
+              duration: 2000,
+            });
+            this.auditService.getAuditByCountry(toDeleteAlly.idCountry);
+            this.isLoading = false;
           });
         });
       } else {
-        this._snackBar.open('Operacion Cancelada', 'cerrar', {
+        this._snackBar.open('Operacion cancelada', 'cerrar', {
           duration: 2000,
         });
       }
@@ -160,9 +155,13 @@ export class ConfigurarAliadosComponent implements OnInit {
     });
     this.aliadoService.updateAlly(ally.modifiedAlly).subscribe(() => {
       this.auditService.createAuditAlly(alliesAudit).subscribe(() => {
-        this.audit.push(alliesAudit);
+        this._snackBar.open('Operacion exitosa, El registro se edito satisfactoriamente', 'Cerrar', {
+          duration: 2000,
+        });
+        this.isLoading = false;
+        this.aliadoService.getAllyByCountry(ally.modifiedAlly.idCountry);
+        this.auditService.getAuditByCountry(ally.modifiedAlly.idCountry);
       });
-      this.handleSearchCountry(ally.modifiedAlly.idCountry);
     });
   }
 
@@ -172,7 +171,6 @@ export class ConfigurarAliadosComponent implements OnInit {
    */
   handleSearchCountry(country) {
     this.isLoading = true;
-    console.log(country);
     switch (country) {
       case 'CO':
         this.allies = country;

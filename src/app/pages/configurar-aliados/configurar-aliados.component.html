@@ -1,5 +1,6 @@
-<div class="container">
-  <div class="card border-secondary">
+<app-sidebar></app-sidebar>
+<div class="container content-container ">
+  <div class="border-secondary mat-elevation-z8">
     <div class="card-header bg-primary text-white ">
       <h5 class="head-title"> Configurar > Servicios > Analiticos > CENc > Configurar un Aliado
       </h5>
@@ -24,7 +25,6 @@
       <div *ngIf="!!allies">
         <app-results-table 
         [allies]="allies" 
-        [everyAlly]="everyAlly"
         [filteredAlly]="selectedAlly" 
         [tableNumber]="tableNumber"
         (isLoading)="handleIsloading($event)"

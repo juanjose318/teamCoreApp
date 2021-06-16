@@ -27,11 +27,11 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.aliadoService.getAllies();
-    this.allySub = this.aliadoService.getAllyListener()
-      .subscribe((allyData) => {
-        this.allies = allyData.allies;
-      });
+    // this.aliadoService.getAllies();
+    // this.allySub = this.aliadoService.getAllyListener()
+    //   .subscribe((allyData) => {
+    //     this.allies = allyData.allies;
+    //   });
   }
 
 }

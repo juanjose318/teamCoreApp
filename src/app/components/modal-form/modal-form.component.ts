@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -30,8 +30,7 @@ export class ModalFormComponent implements OnInit {
   phone: number;
   description: string;
   carvajalContact: string;
-  creationDate: Date = new Date('d/MMM/y HH:mm');
-
+  creationDate: Date = new Date ();
 
   save() {
     if (this.formGroup.invalid) {
@@ -47,7 +46,6 @@ export class ModalFormComponent implements OnInit {
   /**
    * Getters para manejo dentro del html
    */
-
   get nameField() {
     return this.formGroup.get('name');
   }
@@ -76,15 +74,14 @@ export class ModalFormComponent implements OnInit {
     return this.formGroup.get('carvajalContact');
   }
 
-
   ngOnInit() {
     this.formGroup = this.fb.group({
       idAllied: new FormControl(this.idAlly),
       channel: new FormGroup({
-        idChannel: new FormControl({ value: this.idChannel }),
+        idChannel: new FormControl(this.idChannel),
       }),
       route: new FormGroup({
-        idRoute: new FormControl({ value: this.idRoute }),
+        idRoute: new FormControl(this.idRoute),
       }),
       identification: new FormControl(this.identification, [
         Validators.required,
