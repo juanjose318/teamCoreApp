@@ -16,20 +16,28 @@
         (chosenAlly)="handleSearchAlly($event)"
         (createdAlly)="handleNewAlly($event)">
       </app-search-create-ally>
+
+      <!-- Spinner -->
+      <mat-spinner *ngIf="isLoading === true"></mat-spinner>
+
+      <!-- Tabla aliados -->
       <div *ngIf="!!allies">
         <app-results-table 
         [allies]="allies" 
         [everyAlly]="everyAlly"
         [filteredAlly]="selectedAlly" 
         [tableNumber]="tableNumber"
+        (isLoading)="handleIsloading($event)"
         (deletedAlly)="handleDeleteAlly($event)"
         (editedAlly)="handleEditedAlly($event)">
         </app-results-table>
       </div>
     </div>
     <mat-divider></mat-divider>
+    
+    <!-- Tabla Auditoria -->
     <div *ngIf="audit">
-      <app-table-overview-example [audit]="audit"></app-table-overview-example>
+      <app-table-overview [audit]="audit"></app-table-overview>
     </div>
   </div>
 </div>

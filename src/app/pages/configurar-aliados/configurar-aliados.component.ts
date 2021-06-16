@@ -14,11 +14,12 @@ import { AuditService } from 'src/app/services/audit/audit.service';
 export class ConfigurarAliadosComponent implements OnInit {
   /**
    * Aliado
+   * allies : Pais a filtrar
+   * selectedAlly: Aliado a filtrar
    */
   private selectedAlly;
   private allies: any;
   private allySub: Subscription;
-  private everyAlly: any;
   /**
    * Check para ver que pais esta seleccionado
    */
@@ -42,6 +43,11 @@ export class ConfigurarAliadosComponent implements OnInit {
    * Config envio de aliados
   */
   private configInfoSending = false;
+  /**
+   * Spinner condicional por medio de variable boolean
+   */
+  isLoading: boolean;
+
   constructor(
     private aliadoService: AliadoService,
     private auditService: AuditService,
@@ -71,6 +77,7 @@ export class ConfigurarAliadosComponent implements OnInit {
   /**
    * Busqueda de aliado especifico despues de filtro de pais
    * @param allyId Id de aliado
+   * TODO: cambiar tipo de filtrado a pasar como input el aliado a filtrar hacia los componentes tabla
    */
   handleSearchAlly(allyId) {
     this.selectedAlly = [];
@@ -164,8 +171,26 @@ export class ConfigurarAliadosComponent implements OnInit {
    * @param country Id de pais por el cual se quiere filtrar
    */
   handleSearchCountry(country) {
+    this.isLoading = true;
     console.log(country);
-    this.allies = country;
-    this.audit = country;
+    switch (country) {
+      case 'CO':
+        this.allies = country;
+        this.audit = country;
+        break;
+      case 'ALL':
+        this.allies = country;
+        break;
+      case 'AR':
+        this.allies = country;
+        this.audit = country;
+        break;
+      case 'EMPTY':
+        break;
+    }
+  }
+
+  handleIsloading(loading) {
+    (loading === true) ? this.isLoading = true : this.isLoading = false
   }
 }

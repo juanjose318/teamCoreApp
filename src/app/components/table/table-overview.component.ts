@@ -8,11 +8,11 @@ import { AuditService } from 'src/app/services/audit/audit.service';
  * @title Data table with sorting, pagination, and filtering.
  */
 @Component({
-    selector: 'app-table-overview-example',
-    styleUrls: ['table-overview-example.scss'],
-    templateUrl: 'table-overview-example.html',
+    selector: 'app-table-overview',
+    styleUrls: ['table-overview.scss'],
+    templateUrl: 'table-overview.html',
 })
-export class TableOverviewExampleComponent implements OnInit, OnChanges {
+export class TableOverviewComponent implements OnInit, OnChanges {
     displayedColumns: string[] = ['idAllied', 'actionExecuted', 'updateDate', 'creationDate', 'executor',
         'ipOrigin', 'affectedField', 'valueBefore', 'valueAfter'];
     dataSource: MatTableDataSource<any>;

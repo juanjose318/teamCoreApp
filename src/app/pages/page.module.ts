@@ -20,18 +20,22 @@ import { NavigationComponent } from '../components/navigation/navigation.compone
 import { ModalFormComponent } from '../components/modal-form/modal-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
+/**
+ * Angular material Nodules
+ */
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ModalDescriptionComponent } from '../components/modal-description/modal-description.component';
 import { DataTablesModule } from 'angular-datatables';
-import { TableOverviewExampleComponent } from '../components/table/table.component';
+import { TableOverviewComponent } from '../components/table/table-overview.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
 
 
 @NgModule({
@@ -50,7 +54,7 @@ import { MatDividerModule } from '@angular/material/divider';
     NavigationComponent,
     ModalFormComponent,
     ModalDescriptionComponent,
-    TableOverviewExampleComponent
+    TableOverviewComponent
   ],
   imports: [
     CommonModule,
@@ -69,7 +73,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDividerModule
+    MatDividerModule,
+    MatProgressSpinnerModule
   ],
   entryComponents: [
     ModalFormComponent,

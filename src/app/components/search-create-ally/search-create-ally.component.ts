@@ -35,7 +35,7 @@ export class SearchCreateAllyComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
-      if( !!this.allies ) {
+    if (!!this.allies) {
       this.allyService.getAllyByCountry(this.allies);
       this.allySub = this.allyService.getAllyListener().subscribe((alliesByCountry) => {
         this.allyCollection = alliesByCountry.allies;
@@ -79,7 +79,7 @@ export class SearchCreateAllyComponent implements OnChanges {
   /**
    * @param name nombre de aliado seleccionado despues de filtrar por pais
    */
-  filterAlly(name) {
+  filterAlly(name): void {
     this.chosenAlly.emit(name);
   }
 

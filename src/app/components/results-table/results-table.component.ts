@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, V
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
 import { ModalDescriptionComponent } from '../modal-description/modal-description.component';
 import { ModalFormComponent } from '../modal-form/modal-form.component';
@@ -26,6 +25,8 @@ export class ResultsTableComponent implements OnInit, OnChanges {
 
   @Output() deletedAlly: EventEmitter<any> = new EventEmitter();
   @Output() editedAlly: EventEmitter<any> = new EventEmitter();
+  @Output() isLoading: EventEmitter<boolean> = new EventEmitter();
+
 
   private allySub: Subscription;
 
@@ -65,25 +66,35 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     public dialog: MatDialog,
     public allyService: AliadoService) { }
 
-
+/**
+ * Si es tabla uno y hay un objeto de aliados como input revisar si es de un solo pais o de todos
+ */
   ngOnChanges() {
     if (this.tableNumber === 1 && !!this.allies) {
-      this.allyService.getAllyByCountry(this.allies);
-      this.allySub = this.allyService.getAllyListener()
-        .subscribe((allyData) => {
+      if(this.allies === 'ALL') {
+        this.allyService.getAllies();
+        this.allySub = this.allyService.getAllyListener().subscribe((allyData) => {
+          this.isLoading.emit(false);
           this.allyCollection = allyData.allies;
           this.dataSource = new MatTableDataSource<any>(this.allyCollection);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-        });
+        })
+      }
+      else {
+        this.allyService.getAllyByCountry(this.allies);
+        this.allySub = this.allyService.getAllyListener()
+          .subscribe((allyData) => {
+            this.isLoading.emit(false);
+            this.allyCollection = allyData.allies;
+            this.dataSource = new MatTableDataSource<any>(this.allyCollection);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          });
+      }
     }
 
     if (!!this.filteredAlly) {
-    // this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-    //   dtInstance.destroy();
-    //   this.allyCollection = this.filteredAlly.allies;
-    //   this.dtTrigger.next();
-    // });
       this.allyCollection = this.filteredAlly.allies;
     }
 

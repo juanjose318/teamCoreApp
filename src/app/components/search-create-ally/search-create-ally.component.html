@@ -4,9 +4,9 @@
       <div class="input-group field">
         <label class="input-group-text"><span class="red">*</span>Pais</label>
         <select class="form-control" [(ngModel)]="selectedCountry" (ngModelChange)="filterCountry($event)">
-          <option selected>Seleccionar</option>
+          <option selected value="EMPTY">Seleccionar</option>
           <option value="CO">Colombia</option>
-          <option value="CO">Todos</option>
+          <option value="ALL">Todos</option>
           <option value="AR">Argentina</option>
         </select>
       </div>
