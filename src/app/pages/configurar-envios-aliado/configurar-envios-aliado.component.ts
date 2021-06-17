@@ -11,6 +11,7 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
   /**
  * Aliado
  */
+  private selectedAlly;
   private allies: any;
   private allySub: Subscription;
   /**
@@ -19,19 +20,56 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
 */
   descriptionText: String = 'Herramienta que permite  Habilitar en inhabilitar tanto comercio como un fabricante y sobre este ultimo, activar los socios Comerciales y las referencisa del catalogo de productos para el envio de la Meta Data de ventar para inventarios al aliado';
 
+  /**
+   * Conficional para Saber si se trata de la pantalla configurar envios de aliado
+   */
   private configInfoSending = true;
+
+  /**
+  * tableNumber define desde que componente se va a reutilizar la tabla de display de informacion
+  */
+  tableNumber = 1;
+
+ /**
+ * Auditoria
+ */
+  private audit: any;
+  private auditSub: Subscription;
+
+  isLoading: boolean;
+
+  handleSearchAlly(allyId) {
+    this.selectedAlly = allyId;
+  }
 
   constructor(
     private aliadoService: AliadoService,
-
   ) { }
 
   ngOnInit() {
-    // this.aliadoService.getAllies();
-    // this.allySub = this.aliadoService.getAllyListener()
-    //   .subscribe((allyData) => {
-    //     this.allies = allyData.allies;
-    //   });
+
+  }
+
+  handleSearchCountry(country) {
+    this.isLoading = true;
+    console.log(country);
+    switch (country) {
+      case 'CO':
+        this.allies = country;
+
+        this.audit = country;
+        break;
+      case 'ALL':
+        this.allies = country;
+        break;
+      case 'AR':
+        this.allies = country;
+        this.audit = country;
+        break;
+      case 'EMPTY':
+        this.isLoading= false;
+        break;
+    }
   }
 
 }

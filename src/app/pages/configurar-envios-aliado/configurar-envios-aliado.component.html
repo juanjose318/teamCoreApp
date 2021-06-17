@@ -11,8 +11,12 @@
       <app-text-box [text]="descriptionText"></app-text-box>
     </div>
     <div class="container">
-      <app-search-create-ally [allies]="allies" [isConfiginfoSending]="configInfoSending"
-        (allySearched)="handleSearch($event)"></app-search-create-ally>
+      <app-search-create-ally 
+        [allies]="allies" 
+        [isConfiginfoSending]="configInfoSending"
+        (chosenCountry)="handleSearchCountry($event)" 
+        (allySearched)="handleSearch($event)">
+      </app-search-create-ally>
       <div class="card">
         <div class="card-body">
           <app-config-tabs></app-config-tabs>

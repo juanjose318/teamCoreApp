@@ -3,11 +3,13 @@
     <div class="input-group">
       <div class="input-group field">
         <label class="input-group-text"><span class="red">*</span>Pais</label>
-        <select class="form-control" [(ngModel)]="selectedCountry" (ngModelChange)="filterCountry($event)">
-          <option selected value="EMPTY">Seleccionar</option>
+        <select class="form-control" [(ngModel)]="selectedCountry" (ngModelChange)="filterCountry($event)" >
+          <option selected value="EMPTY" disabled>Seleccionar</option>
           <option value="CO">Colombia</option>
           <option value="ALL">Todos</option>
           <option value="AR">Argentina</option>
+          <option value="PE">Peru</option>
+          <option value="MX">Mexico</option>
         </select>
       </div>
       <div class="input-group field">
@@ -18,7 +20,7 @@
           <label class="input-group-text">*Nombre Aliado</label>
         </div>
         <select class="form-control" [(ngModel)]="selectedAlly" (ngModelChange)="filterAlly($event)">
-          <option selected>Seleccionar</option>
+          <option selected disabled>Seleccionar</option>
           <option *ngFor="let ally of allyCollection" [value]="ally.idAllied">
             {{ ally?.name }}
           </option>
@@ -33,7 +35,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="">Nombre</span>
             </div>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" value readonly>
           </div>
           <div class="input-group allyField">
             <div class="input-group-prepend">

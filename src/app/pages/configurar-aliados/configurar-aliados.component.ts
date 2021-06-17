@@ -76,7 +76,9 @@ export class ConfigurarAliadosComponent implements OnInit {
    * @param allyId Id de aliado
    */
   handleSearchAlly(allyId) {
-    this.selectedAlly = allyId;
+    if (!!allyId) {
+      this.selectedAlly = allyId;
+    }
   }
   /**
    * Confirmar o cancelar eliminacion de Aliado
@@ -183,7 +185,16 @@ export class ConfigurarAliadosComponent implements OnInit {
         this.allies = country;
         this.audit = country;
         break;
+      case 'MX':
+        this.allies = country;
+        this.audit = country;
+        break;
+      case 'PE':
+        this.allies = country;
+        this.audit = country;
+        break;
       case 'EMPTY':
+        this.isLoading = false;
         break;
     }
   }

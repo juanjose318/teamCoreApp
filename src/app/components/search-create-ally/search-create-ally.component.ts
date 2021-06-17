@@ -35,10 +35,13 @@ export class SearchCreateAllyComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
+    console.log(this.allyCollection)
+
     if (!!this.allies) {
       this.allyService.getAllyByCountry(this.allies);
       this.allySub = this.allyService.getAllyListener().subscribe((alliesByCountry) => {
         this.allyCollection = alliesByCountry.allies;
+
       });
     }
   }
@@ -46,6 +49,7 @@ export class SearchCreateAllyComponent implements OnChanges {
    * @param country pais seleccionado en la busqueda de aliados
    */
   filterCountry(country) {
+    console.log(country);
     this.chosenCountry.emit(country);
   }
 

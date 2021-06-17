@@ -22,7 +22,7 @@
       <mat-spinner *ngIf="isLoading === true"></mat-spinner>
 
       <!-- Tabla aliados -->
-      <div *ngIf="!!allies">
+      <div *ngIf="!!allies; else notAvailable"  >
         <app-results-table 
         [allies]="allies" 
         [filteredAlly]="selectedAlly" 
@@ -32,6 +32,14 @@
         (editedAlly)="handleEditedAlly($event)">
         </app-results-table>
       </div>
+
+      <ng-template #notAvailable>
+        <div class="card">
+          <div class="card-body">
+            No existe información para visualizar
+          </div>
+        </div>
+      </ng-template>
     </div>
     <mat-divider></mat-divider>
     
