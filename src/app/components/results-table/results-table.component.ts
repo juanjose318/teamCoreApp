@@ -17,7 +17,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   /**
   * Allies es el pais del que se tiene que hacer el fetch
   */
-  @Input() allies;
+@Input() allies;
   @Input() filteredAlly;
 
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
@@ -118,15 +118,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       width: '25%',
       data: { description: description }
     });
-  }
-  /**
-   * @param filterValue Palabra que se escribe la barra de busqueda
-   */
-  applyFilter(filterValue) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
   /**
    * Emite como output el aliado modificado y sin modificar para hacer comparacion en configuracion de aliados

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
+import { CompanyService } from 'src/app/services/company/company.service';
 import { ModalFormComponent } from '../modal-form/modal-form.component';
 
 @Component({
@@ -11,39 +12,70 @@ import { ModalFormComponent } from '../modal-form/modal-form.component';
   styleUrls: ['./search-create-ally.component.scss']
 })
 export class SearchCreateAllyComponent implements OnChanges {
-
+  /**
+   * Inputs
+   */
   @Input() isConfiginfoSending: boolean;
   @Input() allies;
-
-  allyCollection;
-
-  private allySub: Subscription;
-
+  /**
+   * Outputs
+   */
   @Output() chosenCountry: EventEmitter<any> = new EventEmitter();
   @Output() chosenAlly: EventEmitter<any> = new EventEmitter();
   @Output() createdAlly: EventEmitter<any> = new EventEmitter();
-
+  /**
+   * Colleciones iterables
+   */
+  allyCollection;
+  companyCollection;
+  /**
+   * Subscripciones
+   */
+  private allySub: Subscription;
+  private companySub: Subscription;
+  /**
+  * Filtros
+  */
   selectedCountry;
   selectedAlly;
-
-  closeModal;
+  /**
+   * Autofill empresa
+   */
+  companyName: string;
+  companyEan: number;
+  companyId: number;
 
   constructor(
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private allyService: AliadoService
+    private allyService: AliadoService,
+    private companyService: CompanyService
   ) { }
 
+  /**
+   * Verificar si la variable objeto tiene contenido y luego si es el filtro es TODOS
+   */
   ngOnChanges() {
-    console.log(this.allyCollection)
 
     if (!!this.allies) {
-      this.allyService.getAllyByCountry(this.allies);
-      this.allySub = this.allyService.getAllyListener().subscribe((alliesByCountry) => {
-        this.allyCollection = alliesByCountry.allies;
-
-      });
+      if (this.allies === 'ALL') {
+        this.allyService.getAllies();
+        this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
+          this.allyCollection = alliesData.allies;
+        })
+      } else {
+        this.allyService.getAllyByCountry(this.allies);
+        this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
+          this.allyCollection = alliesData.allies;
+        });
+      }
     }
+    this.companyService.getCompanies();
+    this.companySub = this.companyService.getCompanyListener()
+      .subscribe((companyData) => {
+        this.companyCollection = companyData.companies;
+        console.log(this.companyCollection);
+      })
   }
   /**
    * @param country pais seleccionado en la busqueda de aliados
@@ -54,12 +86,24 @@ export class SearchCreateAllyComponent implements OnChanges {
   }
 
   /**
- * @param name nombre de aliado seleccionado despues de filtrar por pais
+ * @param name id de aliado seleccionado despues de filtrar por pais
  */
-  filterAlly(name): void {
-    this.chosenAlly.emit(name);
+  filterAlly(idAllied) {
+    this.chosenAlly.emit(idAllied);
   }
 
+  filterByCompanyEan() {
+
+  }
+
+  filterByCompanyId() {
+
+  }
+
+  filterByCompanyName(company) {
+    this.companyEan = company.companyEan;
+    this.companyId = company.companyId;
+  }
   /**
    * Modal para creacion de nuevo aliado
    */

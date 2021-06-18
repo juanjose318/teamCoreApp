@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AllyService } from './ally.service';
+import { AliadoService } from './ally.service';
 
 describe('AllyService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AllyService = TestBed.get(AllyService);
+    const service: AliadoService = TestBed.get(AliadoService);
     expect(service).toBeTruthy();
   });
 });
