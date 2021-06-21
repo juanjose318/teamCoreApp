@@ -9,6 +9,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatStepperModule } from '@angular/material/stepper';
+import {MatCheckboxModule} from '@angular/material/checkbox'; 
 
 @NgModule({
     imports: [
@@ -21,7 +23,9 @@ import { MatTableModule } from '@angular/material/table';
         MatInputModule,
         MatDividerModule,
         MatSelectModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatStepperModule,
+        MatCheckboxModule,
     ],
     exports: [
         MatDialogModule,
@@ -33,7 +37,10 @@ import { MatTableModule } from '@angular/material/table';
         MatInputModule,
         MatDividerModule,
         MatSelectModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatStepperModule,
+        MatCheckboxModule,
+
     ],
     declarations: [],
     providers: [],

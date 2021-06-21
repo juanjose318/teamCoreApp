@@ -12,23 +12,41 @@ const httpOptions = {
 
 @Injectable({providedIn: 'root'})
 export class ConfigService {
-    private companyListener = new Subject<{ companies: any}>();
+    private companyConfigListener = new Subject<{ companyConfig: any}>();
     private traderListener = new Subject<{ traders: any}>();
-    private companies: any;
+    private companyConfig: any;
     private traders;
 
     constructor(
         private http: HttpClient,
     ) { }
 
-    getCompanies() {
-        this.http.get(`${environment.apiUrl}/configurations/companies`).subscribe((data) => {
-            this.companies = data;
-            this.companyListener.next({
-                companies: this.companies
+    getAllyCompanyConfiguration(allyId){
+       return  this.http.get(`${environment.apiUrl}/configurations/companies/allies/` + allyId).subscribe((data)=> {
+            this.companyConfig = data;
+            this.companyConfigListener.next({
+                companyConfig: this.companyConfig
             });
-        });
+        })
     }
+
+    getAllyCompanyConfigurationByCompanyAndAlly(allyId,companyId){
+        return this.http.get(`${environment.apiUrl}/configurations/companies/` + companyId + '/allies/' + allyId).subscribe((data)=> {
+            this.companyConfig = data;
+            this.companyConfigListener.next({
+                companyConfig: this.companyConfig
+            });
+        })
+    }
+
+    // getCompanies() {
+    //     this.http.get(`${environment.apiUrl}/configurations/companies`).subscribe((data) => {
+    //         this.companies = data;
+    //         this.companyListener.next({
+    //             companies: this.companies
+    //         });
+    //     });
+    // }
 
     getTraders() {
         this.http.get(`${environment.apiUrl}/configurations/traders`).subscribe((data) => {
@@ -39,8 +57,8 @@ export class ConfigService {
         });
     }
 
-    getCompanyListener() {
-        return this.companyListener.asObservable();
+    getAllyCompanyConfigListener() {
+        return this.companyConfigListener.asObservable();
     }
 
     getTraderListener() {

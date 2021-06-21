@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatStepper } from '@angular/material';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -7,23 +8,35 @@ import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./config-tabs.component.scss']
 })
 export class ConfigTabsComponent implements OnInit {
+  @Input() selectedAlly;
+  @Input() selectedCompany;
+
+  @ViewChild(MatStepper) stepper: MatStepper; 
+
+  registryToConfigure;
+  
   tableNumber = 2;
   constructor() { }
 
-  beforeChange($event: NgbTabChangeEvent) {
-    switch ($event.nextId) {
-      case 'tab-2':
+  changeStep(step){
+    switch (step.selectedIndex) {
+      case 0:
         this.tableNumber = 2;
         break;
-      case 'tab-3':
+      case 1:
         this.tableNumber = 3;
         break;
-      case 'tab-4':
+      case 2:
         this.tableNumber = 4;
         break;
       default:
         this.tableNumber = 2;
     }
+  }
+
+  continueToSecondStep(registry){
+    this.registryToConfigure = registry;
+    this.stepper.next();
   }
 
   ngOnInit() {

@@ -30,12 +30,8 @@
 
 .btn-wrapper {
   display: flex;
-  flex-flow: column;
-}
-
-.btn-wrapper-2 {
-  display: flex;
-  flex-flow: row wrap;
+  flex-flow: row;
+  justify-content: space-between;
 }
 
 .btn-wrapper>button {

@@ -15,11 +15,15 @@
         [allies]="allies" 
         [isConfiginfoSending]="configInfoSending"
         (chosenCountry)="handleSearchCountry($event)" 
-        (allySearched)="handleSearch($event)">
+        (chosenAlly)="handleSearchAlly($event)"
+        (chosenCompany)="handleSearchCompany($event)">
       </app-search-create-ally>
       <div class="card">
         <div class="card-body">
-          <app-config-tabs></app-config-tabs>
+          <app-config-tabs 
+          [selectedAlly]="selectedAlly"
+          [selectedCompany]="selectedCompany">
+        </app-config-tabs>
         </div>
       </div>
       <div class="card audit">

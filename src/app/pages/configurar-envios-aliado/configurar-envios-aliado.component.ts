@@ -16,6 +16,7 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
  */
   private selectedAlly;
   private allies: any;
+  private selectedCompany;
   /**
    * Suscripciones
    */
@@ -42,7 +43,9 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
   isLoading: boolean;
 
   handleSearchAlly(allyId) {
+    if (!!allyId) {
     this.selectedAlly = allyId;
+    }
   }
 
   constructor(
@@ -52,12 +55,16 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
- 
+
+  }
+
+  handleSearchCompany(companyId) {
+    console.log(companyId);
+    this.selectedCompany = companyId;
   }
 
   handleSearchCountry(country) {
     this.isLoading = true;
-    console.log(country);
     switch (country) {
       case 'CO':
         this.allies = country;

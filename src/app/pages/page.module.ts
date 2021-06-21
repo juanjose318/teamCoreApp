@@ -18,7 +18,6 @@ import { TextBoxComponent } from '../components/text-box/text-box.component';
 import { ConfigurarAliadosComponent } from './configurar-aliados/configurar-aliados.component';
 import { SearchCreateAllyComponent } from '../components/search-create-ally/search-create-ally.component';
 import { ResultsTableComponent } from '../components/results-table/results-table.component';
-import { SerchCompanyComponent } from '../components/serch-company/serch-company.component';
 import { ModalDescriptionComponent } from '../components/modal-description/modal-description.component';
 import { TableOverviewComponent } from '../components/table/table-overview.component';
 import { ConfigurarEnviosAliadoComponent } from './configurar-envios-aliado/configurar-envios-aliado.component';
@@ -41,7 +40,6 @@ import { SidebarComponent } from '../shared/components/sidebar/sidebar.component
     ConfigTabsComponent,
     UploadMasterFileComponent,
     TrazabilidadComponent,
-    SerchCompanyComponent,
     NavigationComponent,
     ModalFormComponent,
     ModalDescriptionComponent,

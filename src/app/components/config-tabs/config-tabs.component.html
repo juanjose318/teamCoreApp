@@ -1,22 +1,18 @@
 <!--Asignar valor de tabla para definir como distribuir la informacion 
   y condicionar el layout -->
-<ngb-tabset [destroyOnHide]="false" (tabChange)="beforeChange($event)">
-  <ngb-tab id="tab-2">
-    <ng-template ngbTabTitle><b>Paso 1 - Empresas</b></ng-template>
-    <ng-template ngbTabContent>
-      <app-results-table [tableNumber]="tableNumber"></app-results-table>
-    </ng-template>
-  </ngb-tab>
-  <ngb-tab  id="tab-3">
-    <ng-template ngbTabTitle><b>Paso 2 - Socio Comercial</b></ng-template>
-    <ng-template ngbTabContent>
-      <app-results-table [tableNumber]="tableNumber"></app-results-table>
-    </ng-template>
-  </ngb-tab>
-  <ngb-tab  id="tab-4">
-    <ng-template ngbTabTitle><b>Paso 3 - Productos</b></ng-template>
-    <ng-template ngbTabContent>
-      <app-results-table [tableNumber]="tableNumber"></app-results-table>
-    </ng-template>
-  </ngb-tab>
-</ngb-tabset>
+
+<mat-horizontal-stepper (selectionChange)="changeStep($event)">
+  <mat-step label="Paso 1 - Empresas">
+    <app-results-table 
+    [tableNumber]="tableNumber" 
+    [filteredAlly]="selectedAlly" 
+    [filteredCompany]="selectedCompany"
+    (nextStepWithRegistry)="continueToSecondStep($event)"></app-results-table>
+  </mat-step>
+  <mat-step label="Paso 2 - Socio Comercial">
+    <app-results-table [tableNumber]="tableNumber" [registry]="registryToConfigure"></app-results-table>
+  </mat-step>
+  <mat-step label="Paso 3 - Productos">
+    <app-results-table [tableNumber]="tableNumber"></app-results-table>
+  </mat-step>
+</mat-horizontal-stepper>

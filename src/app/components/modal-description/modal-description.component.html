@@ -22,3 +22,18 @@
     <button class="btn btn-primary" [mat-dialog-close]="data.cancelling">Cancelar</button>
   </div>
 </div>
+
+<div *ngIf="!!data.configurating">
+  <div mat-dialog-header>
+    <h1 mat-dialog-title class="text-primary">Confirmacion
+    </h1>
+  </div>
+  <div mat-dialog-content>
+    <p>Al activar esta configuracion, iniciara el envio de informacion (Ventas e Inventarios) del cliente {{ data.registry.company.companyName }} al {{ data.registry.allied.name }}. Desea Continuar?</p>
+  </div>
+  <div mat-dialog-actions class="btn-wrapper">
+    <button class="btn btn-primary" [mat-dialog-close]="data">Confirmar</button>
+    <button class="btn btn-primary" [mat-dialog-close]="data.cancelling">Cancelar</button>
+  </div>
+</div>
+
