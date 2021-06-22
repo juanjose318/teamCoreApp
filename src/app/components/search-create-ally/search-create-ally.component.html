@@ -29,7 +29,7 @@
     <div class="input-group" *ngIf="isConfiginfoSending === true">
 
       <mat-form-field appearance="fill">
-        <mat-label>Nombre</mat-label>
+        <mat-label>Empresa</mat-label>
         <mat-select [(ngModel)]="companyName" (ngModelChange)="filterByCompanyName($event)">
           <mat-option *ngFor="let company of companyCollection" [value]="company.companyName">
             {{ company?.companyName }}
@@ -59,7 +59,6 @@
     </div>
     <!--- Si esta desde la pagina de configuracion de envio de informacion al aliado -->
       <div class="btn-wrapper"  *ngIf="isConfiginfoSending === true" >
-        <button class="btn btn-primary" type="submit" (click)="searchAlly($event)">Buscar</button>
         <button class="btn btn-primary" type="submit" (click)="saveAlly($event)">Guardar</button>
         <button class="btn btn-primary" type="submit" (click)="cancel($event)">Cancelar</button>
       </div>

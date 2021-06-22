@@ -26,8 +26,9 @@ import { AuditConfigComponent } from '../components/audit-config/audit-config.co
 import { UploadMasterFileComponent } from '../components/upload-master-file/upload-master-file.component';
 import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
 import { NavigationComponent } from '../components/navigation/navigation.component';
-import { ModalFormComponent } from '../components/modal-form/modal-form.component';
+import { ModalAllyFormComponent } from '../components/modal-ally-form/modal-ally-form.component';
 import { SidebarComponent } from '../shared/components/sidebar/sidebar.component';
+import { ModalConfigFormComponent } from '../components/modal-config-form/modal-config-form.component';
 
 @NgModule({
   declarations: [
@@ -41,10 +42,11 @@ import { SidebarComponent } from '../shared/components/sidebar/sidebar.component
     UploadMasterFileComponent,
     TrazabilidadComponent,
     NavigationComponent,
-    ModalFormComponent,
+    ModalAllyFormComponent,
     ModalDescriptionComponent,
     TableOverviewComponent,
-    SidebarComponent
+    SidebarComponent,
+    ModalConfigFormComponent
   ],
   imports: [
     CommonModule,
@@ -59,8 +61,9 @@ import { SidebarComponent } from '../shared/components/sidebar/sidebar.component
 
   ],
   entryComponents: [
-    ModalFormComponent,
-    ModalDescriptionComponent
+    ModalAllyFormComponent,
+    ModalDescriptionComponent,
+    ModalConfigFormComponent
   ],
 })
 export class PageModule { }

@@ -1,4 +1,4 @@
-<div *ngIf="tableNumber === 1" class="mat-elevation-z8">
+<div *ngIf="tableNumber === 1">
   <div *ngIf="allyCollection?.length === 0; else dataTable" class="card">
     <div class="card-body">
       No existe información para visualizar
@@ -86,19 +86,22 @@
 </div>
 
 <!-- Empresa -->
-<div *ngIf="tableNumber === 2" class="mat-elevation-z8">
+<div *ngIf="tableNumber === 2">
+  <div class="btn-wrapper">
+    <button class="btn btn-primary" *ngIf="companyConfigCollection?.length > 0; else active" >Activar/Desactivar<i class="bi bi-patch-check"></i></button>
+    <ng-template #active>
+      <button class="btn btn-primary" #active disabled>Activar/Desactivar<i class="bi bi-patch-check"></i></button>
+    </ng-template>
+    <button class="btn btn-primary" (click)="addComercialRelation()">Agregar<i class="bi bi-plus-circle"></i></button>
+    <button class="btn btn-primary">Configurar<i class="bi bi-arrow-right-circle"></i></button>
+  </div>
   <div *ngIf="companyConfigCollection?.length === 0 || !companyConfigCollection ; else dataTable" class="card">
     <div class="card-body">
       No existe información para visualizar
     </div>
   </div>
   <ng-template #dataTable>
-    <div class="btn-wrapper">
-      <button class="btn btn-primary">Activar/Desactivar<i class="bi bi-patch-check"></i></button>
-      <button class="btn btn-primary">Agregar<i class="bi bi-plus-circle"></i></button>
-      <button class="btn btn-primary">Configurar<i class="bi bi-arrow-right-circle"></i></button>
 
-    </div>
     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)"
       matSortActive="configurationDate" matSortDirection="desc" matSortDisableClear #dataTable>
       <ng-container matColumnDef="idAlliedCompanyConfig">

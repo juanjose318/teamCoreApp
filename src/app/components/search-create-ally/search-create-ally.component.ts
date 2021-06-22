@@ -4,8 +4,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
 import { CompanyService } from 'src/app/services/company/company.service';
-import { ModalFormComponent } from '../modal-form/modal-form.component';
+import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
 
+/**
+ * TODO reemplazar EAN por CODIGO
+ */
 @Component({
   selector: 'app-search-create-ally',
   templateUrl: './search-create-ally.component.html',
@@ -142,7 +145,7 @@ export class SearchCreateAllyComponent implements OnChanges {
    * Modal para creacion de nuevo aliado
    */
   openDialog(): void {
-    const dialogRef = this.dialog.open(ModalFormComponent, {
+    const dialogRef = this.dialog.open(ModalAllyFormComponent, {
       width: '50%',
       maxHeight: '90vh',
       id: 'a-create-ally-modal'

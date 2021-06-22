@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModalFormComponent } from './modal-form.component';
+import { ModalAllyFormComponent } from './modal-ally-form.component';
 
-describe('ModalFormComponent', () => {
-  let component: ModalFormComponent;
-  let fixture: ComponentFixture<ModalFormComponent>;
+describe('ModalAllyFormComponent', () => {
+  let component: ModalAllyFormComponent;
+  let fixture: ComponentFixture<ModalAllyFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalFormComponent ]
+      declarations: [ ModalAllyFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModalFormComponent);
+    fixture = TestBed.createComponent(ModalAllyFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

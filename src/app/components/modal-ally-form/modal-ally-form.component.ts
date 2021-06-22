@@ -4,33 +4,33 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-modal-form',
-  templateUrl: './modal-form.component.html',
-  styleUrls: ['./modal-form.component.scss'],
+  templateUrl: './modal-ally-form.component.html',
+  styleUrls: ['./modal-ally-form.component.scss'],
 })
 
-export class ModalFormComponent implements OnInit {
+export class ModalAllyFormComponent implements OnInit {
   @Input() ally;
   @Input() title;
 
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data,
-    private dialogRef: MatDialogRef<ModalFormComponent>,
+    private dialogRef: MatDialogRef<ModalAllyFormComponent>,
   ) { }
 
-  formGroup: FormGroup;
-  idAlly: number;
-  idChannel: number;
-  idRoute: number;
-  identification: string;
-  name: string;
-  idCountry: string;
-  contact: string;
-  mail: string;
-  phone: number;
-  description: string;
-  carvajalContact: string;
-  creationDate: Date = new Date ();
+  private formGroup: FormGroup;
+  private idAlly: number;
+  private idChannel: number;
+  private idRoute: number;
+  private identification: string;
+  private name: string;
+  private idCountry: string;
+  private contact: string;
+  private mail: string;
+  private phone: number;
+  private description: string;
+  private carvajalContact: string;
+  private creationDate: Date = new Date ();
 
   save() {
     if (this.formGroup.invalid) {

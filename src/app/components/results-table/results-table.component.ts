@@ -7,7 +7,8 @@ import { AliadoService } from 'src/app/services/ally/ally.service';
 import { CompanyService } from 'src/app/services/company/company.service';
 import { ConfigService } from 'src/app/services/config/config.service';
 import { ModalDescriptionComponent } from '../modal-description/modal-description.component';
-import { ModalFormComponent } from '../modal-form/modal-form.component';
+import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
+import { ModalConfigFormComponent } from '../modal-config-form/modal-config-form.component';
 
 @Component({
   selector: 'app-results-table',
@@ -125,7 +126,19 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       this.displayedColumns = this.allyConfigColumns;
     }
     // Configuracion de Envio de informacion paso 1
-    if (this.tableNumber === 2 && !!this.filteredAlly && !this.filteredCompany) {
+    if (this.tableNumber === 2 && !this.filteredAlly && !this.filteredCompany) {
+      // Fetch de aliados y empresas para creacion de configuraciones
+      this.allyService.getAllies();
+      this.allySub = this.allyService.getAllyListener().subscribe((data) => {
+        this.allyCollection = data.allies;
+        // Companies
+        this.companyService.getCompanies();
+        this.companySub = this.companyService.getCompanyListener().subscribe((data) => {
+          this.companyCollection = data.companies;
+        });
+      });
+    }
+    else if (this.tableNumber === 2 && !!this.filteredAlly && !this.filteredCompany) {
       this.companyConfigService.getAllyCompanyConfiguration(this.filteredAlly);
       this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
         this.companyConfigCollection = data.companyConfig
@@ -147,7 +160,8 @@ export class ResultsTableComponent implements OnInit, OnChanges {
         this.dataSource.sort = this.sort;
         this.displayedColumns = this.firstConfigColumns;
         this.isLoading.emit(false);
-      })
+      });
+
     }
     // Configuracion de empresa 2 con registro seleccionado en paso 1
     if (this.tableNumber === 3) {
@@ -179,7 +193,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    * @param selectedAlly Aliado a modificar
    */
   editAlly(selectedAlly): void {
-    const dialogRef = this.dialog.open(ModalFormComponent, {
+    const dialogRef = this.dialog.open(ModalAllyFormComponent, {
       width: '50%',
       data: { ally: selectedAlly }
     });
@@ -198,6 +212,18 @@ export class ResultsTableComponent implements OnInit, OnChanges {
           duration: 2000,
         });
       }
+    });
+  }
+  /**
+   * Modal para agregar configuracion de envio de la informacion
+   */
+  addComercialRelation() {
+    const dialogRef = this.dialog.open(ModalConfigFormComponent, {
+      width: '50%',
+      data: { allyCollection: this.allyCollection, companyCollection: this.companyCollection }
+    });
+    dialogRef.afterClosed().subscribe((configRelation) => {
+
     });
   }
   /**
@@ -228,7 +254,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   deleteAlly(ally) {
     this.deletedAlly.emit(ally);
   }
-
   /**
    * Registra objectos chequeados en objeto que se guarda en memoria local hasta que se active el registro
    * @param registry array de registros de la tabla seleccionados
