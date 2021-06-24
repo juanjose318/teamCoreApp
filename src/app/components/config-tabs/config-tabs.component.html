@@ -8,11 +8,17 @@
     [filteredAlly]="selectedAlly" 
     [filteredCompany]="selectedCompany"
     (nextStepWithRegistry)="continueToSecondStep($event)"></app-results-table>
+    <app-table-overview [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
   </mat-step>
   <mat-step label="Paso 2 - Socio Comercial">
-    <app-results-table [tableNumber]="tableNumber" [registry]="registryToConfigure"></app-results-table>
+    <app-results-table 
+    [tableNumber]="tableNumber" 
+    [registry]="registryToConfigure"></app-results-table>
+    <app-table-overview [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
+
   </mat-step>
   <mat-step label="Paso 3 - Productos">
     <app-results-table [tableNumber]="tableNumber"></app-results-table>
+    <app-table-overview [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
   </mat-step>
 </mat-horizontal-stepper>

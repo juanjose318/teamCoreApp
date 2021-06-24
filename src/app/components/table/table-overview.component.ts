@@ -13,7 +13,8 @@ import { AuditService } from 'src/app/services/audit/audit.service';
     templateUrl: 'table-overview.html',
 })
 export class TableOverviewComponent implements OnInit, OnChanges {
-    displayedColumns: string[] = ['idAllied', 'actionExecuted', 'updateDate', 'creationDate', 'executor',
+    displayedColumns = [];
+    allyAuditColumns: string[] = ['idAllied', 'actionExecuted', 'updateDate', 'creationDate', 'executor',
         'ipOrigin', 'affectedField', 'valueBefore', 'valueAfter'];
     dataSource: MatTableDataSource<any>;
     fileName = 'ExcelSheet.xlsx';
@@ -22,6 +23,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     @Input() audit;
+    @Input() allyAuditTableNumber;
 
     auditCollection;
 
@@ -36,15 +38,16 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(): void {
-        if (this.audit) {
-        this.auditService.getAuditByCountry(this.audit);
-        this.auditSub = this.auditService.getAuditListener()
-          .subscribe((filteredAudit) => {
-            this.auditCollection = filteredAudit.audit;
-            this.dataSource = new MatTableDataSource<any>(filteredAudit.audit);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-          });
+        if (this.audit && this.allyAuditTableNumber === 1) {
+            this.auditService.getAuditByCountry(this.audit);
+            this.auditSub = this.auditService.getAuditListener()
+                .subscribe((filteredAudit) => {
+                    this.auditCollection = filteredAudit.audit;
+                    this.dataSource = new MatTableDataSource<any>(filteredAudit.audit);
+                    this.dataSource.paginator = this.paginator;
+                    this.dataSource.sort = this.sort;
+                    this.displayedColumns = this.allyAuditColumns;
+                });
         }
     }
 
@@ -55,11 +58,11 @@ export class TableOverviewComponent implements OnInit, OnChanges {
         XLSX.writeFile(wb, this.fileName);
     }
 
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-        if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
-        }
-    }
+    // applyFilter(filterValue) {
+    //     this.dataSource.filter = filterValue.trim().toLowerCase();
+    //     if (this.dataSource.paginator) {
+    //         this.dataSource.paginator.firstPage();
+    //     }
+    // }
 }
 

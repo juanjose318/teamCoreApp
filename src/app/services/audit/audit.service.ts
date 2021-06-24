@@ -31,6 +31,18 @@ export class AuditService {
       ));
   }
 
+  // getAuditConfigAllyCompany(){
+  //       return this.http.get(`${environment.apiUrl}/allies/audits/countries/` + country).pipe(
+  //     map((data) => data))
+  //     .subscribe((data => {
+  //       this.audit = data;
+  //       this.auditListener.next({
+  //         audit: this.audit
+  //       });
+  //     }
+  //     ));
+  // }
+
   createAuditAlly(audit) {
     return this.http.post(`${environment.apiUrl}/allies/audits`, audit);
   }

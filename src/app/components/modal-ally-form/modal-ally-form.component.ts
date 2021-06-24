@@ -30,7 +30,7 @@ export class ModalAllyFormComponent implements OnInit {
   private phone: number;
   private description: string;
   private carvajalContact: string;
-  private creationDate: Date = new Date ();
+private creationDate: Date = new Date ();
 
   save() {
     if (this.formGroup.invalid) {

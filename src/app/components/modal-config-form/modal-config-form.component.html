@@ -1,38 +1,62 @@
+<div class="mat-dialog-header">
+    <h1 mat-dialog-title class="text-primary">Crear Alianza</h1>
+    <button class="btn btn-primary" (click)="close()"><i class="bi bi-x"></i></button>
+</div>
+
+
 <div class="form">
-    <mat-form-field appearance="fill">
+
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field appearance="fill">
         <mat-label>ID Aliado</mat-label>
-        <mat-select [(ngModel)]="idAlly" (ngModelChange)="filterByAllyId($event)">
-            <mat-option *ngFor="let ally of data?.allyCollection" [value]="ally.idAllied">
-                {{ ally?.idAllied }}
-            </mat-option>
-          </mat-select>
+        <mat-select [(ngModel)]="idAlly" (ngModelChange)="filterByAllyId($event)" required>
+          <mat-option *ngFor="let ally of data?.allyCollection" [value]="ally.idAllied">
+            {{ ally?.idAllied }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
+    </div>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Nombre Aliado</mat-label>
-        <mat-select [(ngModel)]="allyName" (ngModelChange)="filterByAllyName($event)">
-            <mat-option *ngFor="let ally of data?.allyCollection" [value]="ally.name">
-                {{ ally?.name }}
-            </mat-option>
-          </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Nombre Empresa</mat-label>
-        <mat-select [(ngModel)]="companyName" (ngModelChange)="filterByCompanyName($event)">
-            <mat-option *ngFor="let company of data?.companyCollection" [value]="company.companyName">
-                {{ company?.companyName }}
-            </mat-option>
-          </mat-select>
-      </mat-form-field>
-
+    <div class="col-sm">
       <mat-form-field appearance="fill">
         <mat-label>Código Empresa</mat-label>
-        <mat-select [(ngModel)]="companyCode" (ngModelChange)="filterByCompanyCode($event)">
-            <mat-option *ngFor="let company of data?.companyCollection" [value]="company.companyCode">
-                {{ company?.companyCode }}
-            </mat-option>
-          </mat-select>
+        <mat-select [(ngModel)]="companyCode" (ngModelChange)="filterByCompanyCode($event)" required>
+          <mat-option *ngFor="let company of data?.companyCollection" [value]="company.companyCode">
+            {{ company?.companyCode }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
-      
+    </div>
+  </div>
+  
+</div>
+
+<div class="row">
+  <div class="col-sm">
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre Aliado</mat-label>
+      <mat-select [(ngModel)]="allyName" (ngModelChange)="filterByAllyName($event)" required>
+        <mat-option *ngFor="let ally of data?.allyCollection" [value]="ally.name">
+          {{ ally?.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="col-sm">
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre Empresa</mat-label>
+      <mat-select [(ngModel)]="companyName" (ngModelChange)="filterByCompanyName($event)" required>
+        <mat-option *ngFor="let company of data?.companyCollection" [value]="company.companyName">
+          {{ company?.companyName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+<div class="btn-wrapper">
+    <button class="btn btn-outline-primary" (click)="save()">Confirmar</button>
+</div>
+
 </div>

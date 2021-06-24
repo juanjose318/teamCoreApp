@@ -60,28 +60,37 @@ export class SearchCreateAllyComponent implements OnChanges {
    * Verificar si la variable objeto tiene contenido y luego si es el filtro es TODOS
    */
   ngOnChanges() {
-
-    if (!!this.allies) {
-      if (this.allies === 'ALL') {
-        this.allyService.getAllies();
-        this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
-          this.allyCollection = alliesData.allies;
-        })
-      } else {
-        this.allyService.getAllyByCountry(this.allies);
-        this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
-          this.allyCollection = alliesData.allies;
+    // console.log(this.allies);
+    if (this.allies === 'ALL') {
+      this.allyService.getAllies();
+      this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
+        this.allyCollection = alliesData.allies;
+        this.companyService.getCompanies();
+        this.companySub = this.companyService.getCompanyListener().subscribe((company) => {
+          if (this.companyCollection.length === 0) {
+            this.companyName = null;
+            this.companyEan = null;
+            this.companyId = null;
+          } this.companyCollection = company.companies;
         });
-      }
+      });
+    } else {
+      // console.log(this.allies);
+      this.allyService.getAllyByCountry(this.allies);
+      this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
+        this.allyCollection = alliesData.allies;
+        this.companyService.getCompaniesByCountry(this.allies);
+        this.companySub = this.companyService.getCompanyListener().subscribe((companyData) => {
+          // console.log(companyData);
+          this.companyCollection = companyData.companies;
+          if (this.companyCollection.length === 0) {
+            this.companyName = null;
+            this.companyEan = null;
+            this.companyId = null;
+          }
+        });
+      });
     }
-    this.companyService.getCompanies();
-    this.companySub = this.companyService.getCompanyListener()
-      .subscribe((companyData) => {
-        this.companyCollection = companyData.companies;
-      })
-
-      this.allyCollection;
-      this.companyCollection;
   }
   /**
    * @param country pais seleccionado en la busqueda de aliados
@@ -102,12 +111,12 @@ export class SearchCreateAllyComponent implements OnChanges {
    * @param companyEan Codigo de empresa
    */
   filterByCompanyEan(companyEan) {
-    console.log(companyEan);
+    // console.log(companyEan);
     const filtered = this.companyCollection.filter(company => company.companyCode == companyEan);
     filtered.forEach(item => {
       this.companyId = item.idCompany;
       this.companyName = item.companyName;
-      if(this.companyId === item.idCompany){
+      if (this.companyId === item.idCompany) {
         this.chosenCompany.emit(this.companyId);
       }
     });
@@ -122,7 +131,7 @@ export class SearchCreateAllyComponent implements OnChanges {
     filtered.forEach(item => {
       this.companyEan = item.companyCode;
       this.companyName = item.companyName;
-      if(this.companyId === item.idCompany){
+      if (this.companyId === item.idCompany) {
         this.chosenCompany.emit(this.companyId);
       }
     });
@@ -132,11 +141,16 @@ export class SearchCreateAllyComponent implements OnChanges {
    * @param companyArray array de objeto iterado en el momento de la seleccion de empresa
    */
   filterByCompanyName(companyName) {
+    // console.log(companyName);
+    if (!companyName) {
+      this.companyEan = null;
+      this.companyId = null;
+    }
     const filtered = this.companyCollection.filter(company => company.companyName == companyName);
     filtered.forEach(item => {
       this.companyEan = item.companyCode;
       this.companyId = item.idCompany;
-      if(this.companyId === item.idCompany){
+      if (this.companyId === item.idCompany) {
         this.chosenCompany.emit(this.companyId);
       }
     });
@@ -167,6 +181,11 @@ export class SearchCreateAllyComponent implements OnChanges {
         });
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.allySub.unsubscribe();
+    this.companySub.unsubscribe();
   }
 
 }

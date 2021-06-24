@@ -22,7 +22,7 @@ export class ConfigService {
     ) { }
 
     getAllyCompanyConfiguration(allyId){
-       return  this.http.get(`${environment.apiUrl}/configurations/companies/allies/` + allyId).subscribe((data)=> {
+       return  this.http.get(`${environment.apiUrl}/configurations/companies/allies/` + allyId, httpOptions).subscribe((data)=> {
             this.companyConfig = data;
             this.companyConfigListener.next({
                 companyConfig: this.companyConfig
@@ -31,7 +31,7 @@ export class ConfigService {
     }
 
     getAllyCompanyConfigurationByCompanyAndAlly(allyId,companyId){
-        return this.http.get(`${environment.apiUrl}/configurations/companies/` + companyId + '/allies/' + allyId).subscribe((data)=> {
+        return this.http.get(`${environment.apiUrl}/configurations/companies/` + companyId + '/allies/' + allyId, httpOptions).subscribe((data)=> {
             this.companyConfig = data;
             this.companyConfigListener.next({
                 companyConfig: this.companyConfig
@@ -39,14 +39,11 @@ export class ConfigService {
         })
     }
 
-    // getCompanies() {
-    //     this.http.get(`${environment.apiUrl}/configurations/companies`).subscribe((data) => {
-    //         this.companies = data;
-    //         this.companyListener.next({
-    //             companies: this.companies
-    //         });
-    //     });
-    // }
+    activateOrDeactivateComercialRelation(relation){
+        const convertedRelation = JSON.stringify(relation);
+        console.log(convertedRelation);
+        return this.http.put(`${environment.apiUrl}/configurations/companies`, convertedRelation, httpOptions).subscribe();
+    }
 
     getTraders() {
         this.http.get(`${environment.apiUrl}/configurations/traders`).subscribe((data) => {

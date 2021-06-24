@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
-import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
+import { MatCheckboxChange, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
 import { Subscription } from 'rxjs';
@@ -46,7 +46,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   dataSource: MatTableDataSource<any>;
 
   displayedColumns: string[];
-
   /**
    * Columnas para tabla de configuracion de aliados
    */
@@ -58,11 +57,17 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    */
   firstConfigColumns = ['idAlliedCompanyConfig', 'selectField', 'allied.idAllied', 'allied.name', 'company.idCompany', 'company.companyCode', 'company.companyName', 'configurationDate', 'state']
   /**
-   * Opciones para tabla de datos tipo datatable
+   * Colecciones 
    */
   allyCollection;
   companyCollection;
-  companyConfigCollection;
+  companyCollectionToCreateAlliance;
+  configAllyCompanyToActivateOrDeactivate = [];
+  companyConfigCollection = [];
+  /**
+   * Collecion de configuraciones
+   */
+  configOne;
   /**
    * Para condicionar de que componenente se trata
    * 1 = Configuracion aliado
@@ -131,8 +136,8 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       this.allyService.getAllies();
       this.allySub = this.allyService.getAllyListener().subscribe((data) => {
         this.allyCollection = data.allies;
-        // Companies
-        this.companyService.getCompanies();
+        console.log(this.allies);
+        this.companyService.getCompaniesByCountry(this.allies);
         this.companySub = this.companyService.getCompanyListener().subscribe((data) => {
           this.companyCollection = data.companies;
         });
@@ -142,7 +147,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       this.companyConfigService.getAllyCompanyConfiguration(this.filteredAlly);
       this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
         this.companyConfigCollection = data.companyConfig
-        console.log(this.companyConfigCollection);
         this.dataSource = new MatTableDataSource<any>(this.companyConfigCollection);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -154,7 +158,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       this.companyConfigService.getAllyCompanyConfigurationByCompanyAndAlly(this.filteredAlly, this.filteredCompany);
       this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
         this.companyConfigCollection = data.companyConfig
-        console.log(this.companyConfigCollection);
         this.dataSource = new MatTableDataSource<any>(this.companyConfigCollection);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -223,8 +226,65 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       data: { allyCollection: this.allyCollection, companyCollection: this.companyCollection }
     });
     dialogRef.afterClosed().subscribe((configRelation) => {
-
+      if (!!configRelation) {
+        this.configOne = configRelation.configOne;
+        this.companyConfigCollection.push(configRelation.registryToPush);
+        this.dataSource = new MatTableDataSource<any>(this.companyConfigCollection);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.displayedColumns = this.firstConfigColumns;
+        console.log(this.configOne);
+      }
     });
+  }
+  /**
+ * Registra objectos chequeados en objeto que se guarda en memoria local hasta que se active el registro
+ * @param registry array de registros de la tabla seleccionados
+ */
+  handleCheck(event: MatCheckboxChange, registry) {
+    if (event.checked) {
+      this.configAllyCompanyToActivateOrDeactivate.push(registry);
+    }
+    else {
+      this.configAllyCompanyToActivateOrDeactivate.forEach(registryInCollection => {
+        this.configAllyCompanyToActivateOrDeactivate.splice(registryInCollection,1)
+      });
+    }
+  }
+
+  /**
+   * Activar alianza comercial
+   */
+  activateOrDeactivateComercialRelation() {
+
+    const registry = this.configAllyCompanyToActivateOrDeactivate;
+    registry.forEach(configAllyCompany => {
+
+      if (configAllyCompany.state.idState === 1) {
+        const deactivateRelations = {
+          idAlliedCompanyConfig: configAllyCompany.idAlliedCompanyConfig,
+          allied: { idAllied: configAllyCompany.allied.idAllied },
+          state: { idState: 2 },
+          company: { idCompany: configAllyCompany.company.idCompany },
+          configurationDate: configAllyCompany.configurationDate
+        }
+
+        this.companyConfigService.activateOrDeactivateComercialRelation(deactivateRelations);
+
+      } else {
+        const activateRelations = {
+          idAlliedCompanyConfig: configAllyCompany.idAlliedCompanyConfig,
+          allied: { idAllied: configAllyCompany.allied.idAllied },
+          state: { idState: 1 },
+          company: { idCompany: configAllyCompany.company.idCompany },
+          configurationDate: configAllyCompany.configurationDate
+        }
+        this.companyConfigService.activateOrDeactivateComercialRelation(activateRelations);
+      }
+    });
+
+    this.companyConfigService.getAllyCompanyConfigListener();
+    
   }
   /**
    * Abre modal para confirmar que se quiere confirmar registro y permite pasar al siguiente paso de configuracion
@@ -254,11 +314,5 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   deleteAlly(ally) {
     this.deletedAlly.emit(ally);
   }
-  /**
-   * Registra objectos chequeados en objeto que se guarda en memoria local hasta que se active el registro
-   * @param registry array de registros de la tabla seleccionados
-   */
-  handleCheck(...registry) {
-    console.log(registry);
-  }
+
 }

@@ -16,13 +16,47 @@ export class ModalConfigFormComponent implements OnInit {
     private idCompany;
     private companyCode;
     private companyName;
-    
+    private configurationDate: Date = new Date();;
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public data,
         private dialogRef: MatDialogRef<ModalConfigFormComponent>,
     ) { }
 
     ngOnInit() { }
+
+    save() {
+        // Registro para guardar en memoria local
+        const configOne = {
+            idAlliedCompanyConfig: null,
+            allied: { 
+                idAllied: this.idAlly 
+            },
+            company: { 
+                idCompany: this.idCompany 
+            },
+            state: { 
+                idState: 2 
+            },
+            configurationDate: this.configurationDate
+        }
+        // Registro para seguir a paso 2 
+        const registryToPush = {
+            allied: {
+                idAllied: this.idAlly,
+                name: this.allyName
+            },
+            company: {
+                idCompany: this.idCompany,
+                companyName: this.companyName,
+                companyCode: this.companyCode
+            },
+            state: { idState: 2 },
+            // configurationDate: this.configurationDate
+        }
+        // Pasar ambos objetos a componente tabla
+        this.dialogRef.close({configOne, registryToPush});
+    }
 
     close() {
         this.dialogRef.close();

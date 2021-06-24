@@ -33,6 +33,7 @@ export class ConfigurarAliadosComponent implements OnInit {
    * tableNumber define desde que componente se va a reutilizar la tabla de display de informacion
    */
   tableNumber = 1;
+  allyAuditTableNumber = 1;
   /**
    * Mensajes para textBox component
    * TODO: Ponerlos en archivo aparte como mock
