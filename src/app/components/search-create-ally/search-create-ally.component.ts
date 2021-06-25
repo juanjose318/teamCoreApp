@@ -157,7 +157,6 @@ export class SearchCreateAllyComponent {
         this.companyEan = null;
         this.companyId = null;
         this.companyCollection = company.companies;
-        this.selectedAlly = null;
       });
     } else {
       this.companyService.getCompaniesByCountry(country);
@@ -167,7 +166,6 @@ export class SearchCreateAllyComponent {
           this.companyName = null;
           this.companyEan = null;
           this.companyId = null;
-          this.selectedAlly = null;
         }
       });
     }

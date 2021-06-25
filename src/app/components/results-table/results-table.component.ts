@@ -97,9 +97,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
         this.allySub = this.allyService.getAllyListener().subscribe((allyData) => {
           this.isLoading.emit(false);
           this.allyCollection = allyData.allies;
-          this.dataSource = new MatTableDataSource<any>(this.allyCollection);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.updateDatable(this.allyCollection);
           this.displayedColumns = this.allyConfigColumns;
         })
       }
@@ -111,9 +109,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
             this.filteredAlly = null;
             this.isLoading.emit(false);
             this.allyCollection = allyData.allies;
-            this.dataSource = new MatTableDataSource<any>(this.allyCollection);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+            this.updateDatable(this.allyCollection);
             this.displayedColumns = this.allyConfigColumns;
           });
       }
@@ -121,10 +117,8 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     // Configuracion de aliado si hay un aliado filtrado
     else if (this.tableNumber === 1 && !!this.filteredAlly) {
       const filtered = this.allyCollection.filter(ally => ally.idAllied == this.filteredAlly);
-      this.dataSource = new MatTableDataSource<any>(filtered);
+      this.updateDatable(filtered);
       this.filteredAlly = null;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
       this.displayedColumns = this.allyConfigColumns;
     }
     // Configuracion de Envio de informacion paso 1
@@ -139,7 +133,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
         });
         this.companyConfigService.getAllAllyCompanyConfig();
         this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data)=> {
-          console.log("hit all");
           this.companyCollection = data.companyConfig;          
           this.updateDatable(this.companyCollection);
           this.displayedColumns = this.firstConfigColumns;
@@ -151,9 +144,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       this.companyConfigService.getAllyCompanyConfiguration(this.filteredAlly);
       this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
         this.companyConfigCollection = data.companyConfig
-        this.dataSource = new MatTableDataSource<any>(data.companyConfig);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.updateDatable(data.companyConfig)
         this.displayedColumns = this.firstConfigColumns;
         this.isLoading.emit(false);
       })
