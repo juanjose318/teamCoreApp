@@ -5,10 +5,12 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
 import { CompanyService } from 'src/app/services/company/company.service';
+import { ProductService } from 'src/app/services/products/products.service';
 import { ConfigService } from 'src/app/services/config/config.service';
 import { ModalDescriptionComponent } from '../modal-description/modal-description.component';
 import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
 import { ModalConfigFormComponent } from '../modal-config-form/modal-config-form.component';
+import { AngularCsv } from 'angular7-csv';
 
 @Component({
   selector: 'app-results-table',
@@ -64,10 +66,12 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   companyCollectionToCreateAlliance;
   configAllyCompanyToActivateOrDeactivate = [];
   companyConfigCollection = [];
+  ProductCollection = [];
   /**
    * Collecion de configuraciones
    */
   configOne;
+  companyId = 626;
   /**
    * Para condicionar de que componenente se trata
    * 1 = Configuracion aliado
@@ -85,9 +89,11 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     public dialog: MatDialog,
     private allyService: AliadoService,
     private companyService: CompanyService,
+    private productService: ProductService,
     private companyConfigService: ConfigService,
     private _snackBar: MatSnackBar
   ) { }
+  
   /**
    * Si es tabla uno y hay un objeto de aliados como input revisar si es de un solo pais o de todos
    */
@@ -168,7 +174,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     }
     // Configuracion de empresa 2 con registro seleccionado en paso 1
     if (this.tableNumber === 3) {
-      console.log(this.registry);
+      console.log(this.allies);
     }
   }
   /**
@@ -247,7 +253,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     }
     else {
       this.configAllyCompanyToActivateOrDeactivate.forEach(registryInCollection => {
-        this.configAllyCompanyToActivateOrDeactivate.splice(registryInCollection,1)
+        this.configAllyCompanyToActivateOrDeactivate.splice(registryInCollection, 1)
       });
     }
   }
@@ -284,7 +290,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     });
 
     this.companyConfigService.getAllyCompanyConfigListener();
-    
+
   }
   /**
    * Abre modal para confirmar que se quiere confirmar registro y permite pasar al siguiente paso de configuracion
@@ -313,6 +319,15 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    */
   deleteAlly(ally) {
     this.deletedAlly.emit(ally);
+  }
+  
+  exportCsv() {
+    this.productService.getProductsByCompany(this.companyId);
+    this.productService.getProductListener().subscribe((data) => {
+      console.info(data.products);
+      new AngularCsv(data.products, 'Reporte Productos');
+    });
+
   }
 
 }
