@@ -55,14 +55,18 @@ export class AliadoService {
      * Country by letter CO, AR, EC
      */
     getAllyByCountry(country) {
-        return this.http.get<{ allies: any[] }>(`${environment.apiUrl}/allies/countries/` + country
-        ).pipe(
-            map((data => data))
-        ).subscribe((transformedData) => {
-            this.allies = transformedData;
-            this.allyListener.next({
-                allies: this.allies
+        if (!country) {
+            return;
+        } else {
+            return this.http.get<{ allies: any[] }>(`${environment.apiUrl}/allies/countries/` + country
+            ).pipe(
+                map((data => data))
+            ).subscribe((transformedData) => {
+                this.allies = transformedData;
+                this.allyListener.next({
+                    allies: this.allies
+                });
             });
-        });
+        }
     }
 }

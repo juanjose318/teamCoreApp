@@ -22,6 +22,9 @@ export class ConfigService {
     ) { }
 
     getAllyCompanyConfiguration(allyId){
+        if(!allyId) {
+            return;
+        }
        return  this.http.get(`${environment.apiUrl}/configurations/companies/allies/` + allyId, httpOptions).subscribe((data)=> {
             this.companyConfig = data;
             this.companyConfigListener.next({
@@ -31,6 +34,9 @@ export class ConfigService {
     }
 
     getAllyCompanyConfigurationByCompanyAndAlly(allyId,companyId){
+        if(!allyId || !companyId) {
+            return;
+        }
         return this.http.get(`${environment.apiUrl}/configurations/companies/` + companyId + '/allies/' + allyId, httpOptions).subscribe((data)=> {
             this.companyConfig = data;
             this.companyConfigListener.next({
@@ -39,6 +45,14 @@ export class ConfigService {
         })
     }
 
+    getAllAllyCompanyConfig(){
+        return this.http.get(`${environment.apiUrl}/configurations/companies/`, httpOptions).subscribe((data)=> {
+            this.companyConfig = data;
+            this.companyConfigListener.next({
+                companyConfig: this.companyConfig
+            });
+        })
+    }
     activateOrDeactivateComercialRelation(relation){
         const convertedRelation = JSON.stringify(relation);
         console.log(convertedRelation);

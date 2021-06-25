@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
@@ -12,9 +12,10 @@ import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.compo
 @Component({
   selector: 'app-search-create-ally',
   templateUrl: './search-create-ally.component.html',
-  styleUrls: ['./search-create-ally.component.scss']
+  styleUrls: ['./search-create-ally.component.scss'],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SearchCreateAllyComponent implements OnChanges {
+export class SearchCreateAllyComponent {
   /**
    * Inputs
    */
@@ -32,6 +33,7 @@ export class SearchCreateAllyComponent implements OnChanges {
    */
   allyCollection;
   companyCollection;
+  @Input() testCollection;
   /**
    * Subscripciones
    */
@@ -53,50 +55,21 @@ export class SearchCreateAllyComponent implements OnChanges {
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private allyService: AliadoService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    // private cd: ChangeDetectorRef
   ) { }
 
-  /**
-   * Verificar si la variable objeto tiene contenido y luego si es el filtro es TODOS
-   */
-  ngOnChanges() {
-    // console.log(this.allies);
-    if (this.allies === 'ALL') {
-      this.allyService.getAllies();
-      this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
-        this.allyCollection = alliesData.allies;
-        this.companyService.getCompanies();
-        this.companySub = this.companyService.getCompanyListener().subscribe((company) => {
-          if (this.companyCollection.length === 0) {
-            this.companyName = null;
-            this.companyEan = null;
-            this.companyId = null;
-          } this.companyCollection = company.companies;
-        });
-      });
-    } else {
-      // console.log(this.allies);
-      this.allyService.getAllyByCountry(this.allies);
-      this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
-        this.allyCollection = alliesData.allies;
-        this.companyService.getCompaniesByCountry(this.allies);
-        this.companySub = this.companyService.getCompanyListener().subscribe((companyData) => {
-          // console.log(companyData);
-          this.companyCollection = companyData.companies;
-          if (this.companyCollection.length === 0) {
-            this.companyName = null;
-            this.companyEan = null;
-            this.companyId = null;
-          }
-        });
-      });
-    }
-  }
   /**
    * @param country pais seleccionado en la busqueda de aliados
    */
   filterCountry(country) {
     this.chosenCountry.emit(country);
+    setTimeout(() => {
+      this.handleFetchAllies(country);
+    }, 0.5);
+    setTimeout(() => {
+      this.handleFetchCompanies(country);
+    }, 1);
   }
 
   /**
@@ -156,6 +129,50 @@ export class SearchCreateAllyComponent implements OnChanges {
     });
   }
   /**
+   * Fetch para filtros 
+   */
+  handleFetchAllies(country) {
+    if (country === 'ALL') {
+      console.log(country);
+      this.allyService.getAllies();
+      this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
+        this.allyCollection = alliesData.allies;
+        console.log(this.allyCollection);
+      });
+    }
+    else {
+      this.allyService.getAllyByCountry(country);
+      this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
+        this.allyCollection = alliesData.allies;
+        console.log(this.allyCollection);
+      });
+    }
+  }
+
+  handleFetchCompanies(country) {
+    if (country === 'ALL') {
+      this.companyService.getCompanies();
+      this.companySub = this.companyService.getCompanyListener().subscribe((company) => {
+        this.companyName = null;
+        this.companyEan = null;
+        this.companyId = null;
+        this.companyCollection = company.companies;
+        this.selectedAlly = null;
+      });
+    } else {
+      this.companyService.getCompaniesByCountry(country);
+      this.companySub = this.companyService.getCompanyListener().subscribe((companyData) => {
+        this.companyCollection = companyData.companies;
+        if (this.companyCollection.length === 0) {
+          this.companyName = null;
+          this.companyEan = null;
+          this.companyId = null;
+          this.selectedAlly = null;
+        }
+      });
+    }
+  }
+  /**
    * Modal para creacion de nuevo aliado
    */
   openDialog(): void {
@@ -184,8 +201,8 @@ export class SearchCreateAllyComponent implements OnChanges {
   }
 
   ngOnDestroy(): void {
-    this.allySub.unsubscribe();
-    this.companySub.unsubscribe();
+    // this.allySub.unsubscribe();
+    // this.companySub.unsubscribe();
   }
 
 }

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
-import { DataTableDirective } from 'angular-datatables';
 import { Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
 import { CompanyService } from 'src/app/services/company/company.service';
@@ -24,8 +23,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   @Input() filteredAlly;
   @Input() filteredCompany;
   @Input() registry;
-
-  @ViewChild(DataTableDirective) dtElement: DataTableDirective;
 
   @Output() deletedAlly: EventEmitter<any> = new EventEmitter();
   @Output() editedAlly: EventEmitter<any> = new EventEmitter();
@@ -59,9 +56,9 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   /**
    * Colecciones 
    */
-  allyCollection;
-  companyCollection;
-  companyCollectionToCreateAlliance;
+  allyCollection = [];
+  companyCollection = [];
+  companyCollectionToCreateAlliance = [];
   configAllyCompanyToActivateOrDeactivate = [];
   companyConfigCollection = [];
   /**
@@ -131,23 +128,30 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       this.displayedColumns = this.allyConfigColumns;
     }
     // Configuracion de Envio de informacion paso 1
-    if (this.tableNumber === 2 && !this.filteredAlly && !this.filteredCompany) {
+       if (this.tableNumber === 2 && !this.filteredAlly && !this.filteredCompany) {
       // Fetch de aliados y empresas para creacion de configuraciones
       this.allyService.getAllies();
       this.allySub = this.allyService.getAllyListener().subscribe((data) => {
         this.allyCollection = data.allies;
-        console.log(this.allies);
-        this.companyService.getCompaniesByCountry(this.allies);
+        this.companyService.getCompanies();
         this.companySub = this.companyService.getCompanyListener().subscribe((data) => {
           this.companyCollection = data.companies;
         });
+        this.companyConfigService.getAllAllyCompanyConfig();
+        this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data)=> {
+          console.log("hit all");
+          this.companyCollection = data.companyConfig;          
+          this.updateDatable(this.companyCollection);
+          this.displayedColumns = this.firstConfigColumns;
+
+        })
       });
     }
     else if (this.tableNumber === 2 && !!this.filteredAlly && !this.filteredCompany) {
       this.companyConfigService.getAllyCompanyConfiguration(this.filteredAlly);
       this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
         this.companyConfigCollection = data.companyConfig
-        this.dataSource = new MatTableDataSource<any>(this.companyConfigCollection);
+        this.dataSource = new MatTableDataSource<any>(data.companyConfig);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.displayedColumns = this.firstConfigColumns;
@@ -168,7 +172,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     }
     // Configuracion de empresa 2 con registro seleccionado en paso 1
     if (this.tableNumber === 3) {
-      console.log(this.registry);
+      // console.log(this.registry);
     }
   }
   /**
@@ -180,6 +184,19 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
+    else if (this.tableNumber === 2) {
+    this.dataSource = new MatTableDataSource<any>(this.companyConfigCollection);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+  /**
+   * Actualizar tabla
+   */
+  updateDatable(dataSource) {
+    this.dataSource = new MatTableDataSource<any>(dataSource);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
   /**
   * Abrir Modal para ver descripcion de aliado
@@ -233,7 +250,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.displayedColumns = this.firstConfigColumns;
-        console.log(this.configOne);
       }
     });
   }
@@ -247,7 +263,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     }
     else {
       this.configAllyCompanyToActivateOrDeactivate.forEach(registryInCollection => {
-        this.configAllyCompanyToActivateOrDeactivate.splice(registryInCollection,1)
+        this.configAllyCompanyToActivateOrDeactivate.splice(registryInCollection, 1)
       });
     }
   }
@@ -261,42 +277,43 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     registry.forEach(configAllyCompany => {
 
       if (configAllyCompany.state.idState === 1) {
-        const deactivateRelations = {
+        const deactivateRelations = [{
           idAlliedCompanyConfig: configAllyCompany.idAlliedCompanyConfig,
           allied: { idAllied: configAllyCompany.allied.idAllied },
           state: { idState: 2 },
           company: { idCompany: configAllyCompany.company.idCompany },
           configurationDate: configAllyCompany.configurationDate
-        }
+        }]
 
         this.companyConfigService.activateOrDeactivateComercialRelation(deactivateRelations);
+        this.dataSource.sort = this.sort;
 
       } else {
-        const activateRelations = {
+        const activateRelations = [{
           idAlliedCompanyConfig: configAllyCompany.idAlliedCompanyConfig,
           allied: { idAllied: configAllyCompany.allied.idAllied },
           state: { idState: 1 },
           company: { idCompany: configAllyCompany.company.idCompany },
           configurationDate: configAllyCompany.configurationDate
-        }
+        }]
         this.companyConfigService.activateOrDeactivateComercialRelation(activateRelations);
+        this.dataSource.sort = this.sort;
+
       }
     });
 
-    this.companyConfigService.getAllyCompanyConfigListener();
-    
   }
   /**
    * Abre modal para confirmar que se quiere confirmar registro y permite pasar al siguiente paso de configuracion
    */
   goToConfiguration(registry) {
-    console.log(registry);
+    // console.log(registry);
     const dialogRef = this.dialog.open(ModalDescriptionComponent, {
       width: '30%',
       data: { deleting: false, cancelling: false, configurating: true, registry: registry }
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result.configurating);
+      // console.log(result.configurating);
       if (result.configurating === true) {
         this.nextStepWithRegistry.emit(result.registry);
       }
