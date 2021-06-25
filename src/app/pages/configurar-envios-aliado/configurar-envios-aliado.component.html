@@ -12,7 +12,8 @@
     </div>
     <div class="container">
       <app-search-create-ally 
-        [allies]="allies" 
+        [allies]="selectedCountry" 
+        [testCollection]="allyCollection"
         [isConfiginfoSending]="configInfoSending"
         (chosenCountry)="handleSearchCountry($event)" 
         (chosenAlly)="handleSearchAlly($event)"

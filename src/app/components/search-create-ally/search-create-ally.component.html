@@ -1,5 +1,6 @@
 <div class="card " [ngClass]="{'global-wrapper': isConfiginfoSending === true}">
   <div class="card-body wrapper">
+    
     <div class="input-group">
       <mat-form-field appearance="fill">
         <mat-label><span class="red">*</span>Pais</mat-label>
@@ -38,7 +39,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>Ean</mat-label>
+        <mat-label>Codigo</mat-label>
         <input matInput placeholder="Ean Empresa" [(ngModel)]="companyEan" (ngModelChange)="filterByCompanyEan($event)">
       </mat-form-field>
 

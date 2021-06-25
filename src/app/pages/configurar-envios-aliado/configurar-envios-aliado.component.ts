@@ -15,12 +15,13 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
  * Aliado
  */
   private selectedAlly;
-  private allies: any;
+  private selectedCountry: any;
   private selectedCompany;
   /**
    * Suscripciones
    */
   private allySub: Subscription;
+  private companySub: Subscription;
   /**
   * Mensajes para textBox component
   * TODO: Ponerlos en archivo aparte como mock
@@ -39,55 +40,72 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
   */
   private audit: any;
   private auditSub: Subscription;
+  /**
+   * Coleccion
+   */
+  allyCollection;
+  companyCollection;
+
 
   isLoading: boolean;
 
   handleSearchAlly(allyId) {
     if (!!allyId) {
-    this.selectedAlly = allyId;
+      this.selectedAlly = allyId;
     }
   }
 
   constructor(
     private aliadoService: AliadoService,
     private configService: ConfigService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private allyService: AliadoService,
+
   ) { }
 
   ngOnInit() {
-
+    // this.allyService.getAllies();
+    // this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
+    //   this.allyCollection = alliesData.allies;
+    //   this.companyService.getCompanies();
+    //   this.companySub = this.companyService.getCompanyListener().subscribe((company) => {
+    //     this.companyCollection = company.companies;
+    //     console.log(this.companyCollection);
+    //   });
+    // });
   }
 
   handleSearchCompany(companyId) {
-    console.log(companyId);
-    this.selectedCompany = companyId;
-  }
+      console.log(companyId);
+      this.selectedCompany = companyId;
+    }
 
   handleSearchCountry(country) {
+      console.log(country)
     this.isLoading = true;
-    switch (country) {
+      switch(country) {
       case 'CO':
-        this.allies = country;
-        this.audit = country;
-        break;
+      this.selectedCountry = country;
+      this.audit = country;
+      break;
       case 'ALL':
-        this.allies = country;
-        break;
+      this.selectedCountry = country;
+      break;
       case 'AR':
-        this.allies = country;
-        this.audit = country;
-        break;
+      this.selectedCountry = country;
+      this.audit = country;
+      break;
       case 'EMPTY':
-        this.isLoading = false;
-        break;
+      this.isLoading = false;
+      break;
       case 'MX':
-        this.allies = country;
-        this.audit = country;
-        break;
+      this.selectedCountry = country;
+      this.audit = country;
+      break;
       case 'PE':
-        this.allies = country;
-        this.audit = country;
-        break;
+      this.selectedCountry = country;
+      this.audit = country;
+      break;
     }
   }
 

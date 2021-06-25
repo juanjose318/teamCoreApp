@@ -35,18 +35,23 @@ export class CompanyService {
             });
     }
 
-    
+
     getCompaniesByCountry(countryCode) {
-        return this.http
-            .get<{ companies: any[] }>(`${environment.apiUrl}/companies/countries/`+ countryCode, httpOptions)
-            .pipe(
-                map((data => data))
-            ).subscribe((data) => {
-                this.companies = data;
-                this.companyListener.next({
-                    companies: this.companies
+        if (!countryCode) {
+            return;
+        }
+        else {
+            return this.http
+                .get<{ companies: any[] }>(`${environment.apiUrl}/companies/countries/` + countryCode, httpOptions)
+                .pipe(
+                    map((data => data))
+                ).subscribe((data) => {
+                    this.companies = data;
+                    this.companyListener.next({
+                        companies: this.companies
+                    });
                 });
-            });
+        }
     }
 
     getCompanyListener() {

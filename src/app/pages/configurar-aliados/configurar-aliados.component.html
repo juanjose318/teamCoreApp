@@ -7,14 +7,9 @@
     </div>
     <div class="card-body">
       <p><small>*Campos obligatorios</small></p>
-      <app-text-box 
-      [text]="descriptionBoxText"
-      ></app-text-box>
-      <app-search-create-ally
-        [allies]="allies" 
-        [isConfiginfoSending]="configInfoSending"
-        (chosenCountry)="handleSearchCountry($event)" 
-        (chosenAlly)="handleSearchAlly($event)"
+      <app-text-box [text]="descriptionBoxText"></app-text-box>
+      <app-search-create-ally [allies]="allies" [isConfiginfoSending]="configInfoSending"
+        (chosenCountry)="handleSearchCountry($event)" (chosenAlly)="handleSearchAlly($event)"
         (createdAlly)="handleNewAlly($event)">
       </app-search-create-ally>
 
@@ -22,14 +17,10 @@
       <mat-spinner *ngIf="isLoading === true"></mat-spinner>
 
       <!-- Tabla aliados -->
-      <div *ngIf="!!allies; else notAvailable"  >
-        <app-results-table 
-        [allies]="allies" 
-        [filteredAlly]="selectedAlly" 
-        [tableNumber]="tableNumber"
-        (isLoading)="handleIsloading($event)"
-        (deletedAlly)="handleDeleteAlly($event)"
-        (editedAlly)="handleEditedAlly($event)">
+      <div *ngIf="!!allies; else notAvailable">
+        <app-results-table [allies]="allies" [filteredAlly]="selectedAlly" [tableNumber]="tableNumber"
+          (isLoading)="handleIsloading($event)" (deletedAlly)="handleDeleteAlly($event)"
+          (editedAlly)="handleEditedAlly($event)">
         </app-results-table>
       </div>
 
@@ -41,11 +32,12 @@
         </div>
       </ng-template>
     </div>
-    <mat-divider></mat-divider>
-    
+
     <!-- Tabla Auditoria -->
-    <div *ngIf="audit">
-      <app-table-overview [audit]="audit" [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
+    <div class="card">
+      <div class="card-body">
+        <app-table-overview [audit]="audit" [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
+      </div>
     </div>
   </div>
 </div>
