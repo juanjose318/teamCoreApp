@@ -6,10 +6,12 @@ import { AliadoService } from 'src/app/services/ally/ally.service';
 import { CompanyService } from 'src/app/services/company/company.service';
 import { ProductService } from 'src/app/services/products/products.service';
 import { ConfigService } from 'src/app/services/config/config.service';
+import { MasterFileService } from 'src/app/services/masterfile/masterfile.service';
 import { ModalDescriptionComponent } from '../modal-description/modal-description.component';
 import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
 import { ModalConfigFormComponent } from '../modal-config-form/modal-config-form.component';
 import { AngularCsv } from 'angular7-csv';
+import { MasterFile } from 'src/app/models/MasterFile.interface';
 
 @Component({
   selector: 'app-results-table',
@@ -43,6 +45,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    * Fuente de informacion de la tabla para paginacion, filtrado y sorteado
    */
   dataSource: MatTableDataSource<any>;
+  dataSourceMaster: MatTableDataSource<MasterFile>;
 
   displayedColumns: string[];
   /**
@@ -64,11 +67,13 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   configAllyCompanyToActivateOrDeactivate = [];
   companyConfigCollection = [];
   ProductCollection = [];
+  MasterFileCollection = [];
   /**
    * Collecion de configuraciones
    */
   configOne;
   companyId = 626;
+  idAlliedCompanyConfig = 200;
   /**
    * Para condicionar de que componenente se trata
    * 1 = Configuracion aliado
@@ -88,6 +93,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     private companyService: CompanyService,
     private productService: ProductService,
     private companyConfigService: ConfigService,
+    private masterFileService: MasterFileService,
     private _snackBar: MatSnackBar
   ) { }
   
@@ -170,6 +176,14 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     // Configuracion de empresa 2 con registro seleccionado en paso 1
     if (this.tableNumber === 3) {
       console.log(this.allies);
+      this.masterFileService.getMasterFiles(this.idAlliedCompanyConfig);
+      this.masterFileService.getMasterFileListener().subscribe((data) => {
+        this.MasterFileCollection = data.masterFiles
+        this.dataSourceMaster = new MatTableDataSource<MasterFile>(this.MasterFileCollection);
+        this.dataSourceMaster.paginator = this.paginator;
+        this.dataSourceMaster.sort = this.sort;
+        this.isLoading.emit(false);
+      });
     }
   }
   /**
