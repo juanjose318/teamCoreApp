@@ -77,6 +77,7 @@ export class ConfigurarAliadosComponent implements OnInit {
    * @param allyId Id de aliado
    */
   handleSearchAlly(allyId) {
+    console.log(allyId);
     if (!!allyId) {
       this.selectedAlly = allyId;
     }

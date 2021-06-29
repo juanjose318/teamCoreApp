@@ -22,7 +22,7 @@
                 class="bi bi-file-earmark-arrow-down"></i></button>
           </div>
         </div>
-        <table mat-table [dataSource]="dataSource" matSort id="excel-table" (matSortChange)="sortData($event)"
+        <table mat-table [dataSource]="dataSource" matSort id="excel-table"
           matSortActive="updateDate" matSortDirection="desc" matSortDisableClear>
 
           <ng-container matColumnDef="idAllied">
@@ -85,7 +85,7 @@
     <div *ngIf="allyAuditTableNumber === 2">
 
       <div *ngIf="auditCollection.length !== 0 || !!auditCollection; else noDisponible">
-        <table mat-table [dataSource]="dataSource" matSort id="excel-table" (matSortChange)="sortData($event)"
+        <table mat-table [dataSource]="dataSource" matSort id="excel-table"
           matSortActive="updateDate" matSortDirection="desc" matSortDisableClear>
 
           <ng-container matColumnDef="idRegistry">

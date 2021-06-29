@@ -10,6 +10,7 @@ import { ModalDescriptionComponent } from '../modal-description/modal-descriptio
 import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
 import { ModalConfigFormComponent } from '../modal-config-form/modal-config-form.component';
 import { AngularCsv } from 'angular7-csv';
+import { AuditService } from 'src/app/services/audit/audit.service';
 
 @Component({
   selector: 'app-results-table',
@@ -30,7 +31,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   @Output() editedAlly: EventEmitter<any> = new EventEmitter();
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter();
   @Output() nextStepWithRegistry: EventEmitter<any> = new EventEmitter();
-
+  @Output() createAllyCompanyConfig: EventEmitter<any> = new EventEmitter();
 
   private allySub: Subscription;
   private companySub: Subscription;
@@ -56,14 +57,19 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    */
   firstConfigColumns = ['idAlliedCompanyConfig', 'selectField', 'allied.idAllied', 'allied.name', 'company.idCompany', 'company.companyCode', 'company.companyName', 'configurationDate', 'state']
   /**
+   * Columnas para configuracion de socios comerciales
+   */
+  secondConfigColumns = ['selectField', 'company.idCompany', 'company.companyCode', 'company.companyName'];
+  /**
    * Colecciones 
    */
-  allyCollection = [];
-  companyCollection = [];
-  companyCollectionToCreateAlliance = [];
-  configAllyCompanyToActivateOrDeactivate = [];
-  companyConfigCollection = [];
-  ProductCollection = [];
+  private allyCollection = [];
+  private companyCollection = [];
+  private companyCollectionToCreateAlliance = [];
+  private configAllyCompanyToActivateOrDeactivate = [];
+  private companyConfigCollection = [];
+  private tradersCollection = [];
+  private ProductCollection = [];
   /**
    * Collecion de configuraciones
    */
@@ -90,7 +96,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     private companyConfigService: ConfigService,
     private _snackBar: MatSnackBar
   ) { }
-  
+
   /**
    * Si es tabla uno y hay un objeto de aliados como input revisar si es de un solo pais o de todos
    */
@@ -128,7 +134,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       this.displayedColumns = this.allyConfigColumns;
     }
     // Configuracion de Envio de informacion paso 1
-       if (this.tableNumber === 2 && !this.filteredAlly && !this.filteredCompany) {
+    if (this.tableNumber === 2 && !this.filteredAlly && !this.filteredCompany) {
       // Fetch de aliados y empresas para creacion de configuraciones
       this.allyService.getAllies();
       this.allySub = this.allyService.getAllyListener().subscribe((data) => {
@@ -138,8 +144,8 @@ export class ResultsTableComponent implements OnInit, OnChanges {
           this.companyCollection = data.companies;
         });
         this.companyConfigService.getAllAllyCompanyConfig();
-        this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data)=> {
-          this.companyCollection = data.companyConfig;          
+        this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
+          this.companyCollection = data.companyConfig;
           this.updateDatable(this.companyCollection);
           this.displayedColumns = this.firstConfigColumns;
 
@@ -147,6 +153,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       });
     }
     else if (this.tableNumber === 2 && !!this.filteredAlly && !this.filteredCompany) {
+      console.log(this.filteredAlly);
       this.companyConfigService.getAllyCompanyConfiguration(this.filteredAlly);
       this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
         this.companyConfigCollection = data.companyConfig
@@ -156,20 +163,15 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       })
       // Configuracion de empresa 1  si hay aliado  y empresa filtrados
     } else if (this.tableNumber === 2 && !!this.filteredAlly && !!this.filteredCompany) {
+      console.log(this.filteredAlly);
+
       this.companyConfigService.getAllyCompanyConfigurationByCompanyAndAlly(this.filteredAlly, this.filteredCompany);
       this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
         this.companyConfigCollection = data.companyConfig
-        this.dataSource = new MatTableDataSource<any>(this.companyConfigCollection);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.updateDatable(this.companyConfigCollection);
         this.displayedColumns = this.firstConfigColumns;
         this.isLoading.emit(false);
       });
-
-    }
-    // Configuracion de empresa 2 con registro seleccionado en paso 1
-    if (this.tableNumber === 3) {
-      console.log(this.allies);
     }
   }
   /**
@@ -177,14 +179,10 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    */
   ngOnInit() {
     if (this.tableNumber === 1 && this.allies) {
-      this.dataSource = new MatTableDataSource<any>(this.allyCollection);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.updateDatable(this.allyCollection);
     }
     else if (this.tableNumber === 2) {
-    this.dataSource = new MatTableDataSource<any>(this.companyConfigCollection);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.updateDatable(this.companyConfigCollection)
     }
   }
   /**
@@ -236,8 +234,8 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    */
   addComercialRelation() {
     const dialogRef = this.dialog.open(ModalConfigFormComponent, {
-      width: '50%',
-      data: { allyCollection: this.allyCollection, companyCollection: this.companyCollection }
+      width: '25%',
+      data: { allyCollection: this.allyCollection, companyCollection: this.companyCollectionToCreateAlliance }
     });
     dialogRef.afterClosed().subscribe((configRelation) => {
       if (!!configRelation) {
@@ -283,6 +281,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
         }]
 
         this.companyConfigService.activateOrDeactivateComercialRelation(deactivateRelations);
+        this.handleAuditAllyCompanyConfig(deactivateRelations);
         this.dataSource.sort = this.sort;
 
       } else {
@@ -294,13 +293,46 @@ export class ResultsTableComponent implements OnInit, OnChanges {
           configurationDate: configAllyCompany.configurationDate
         }]
         this.companyConfigService.activateOrDeactivateComercialRelation(activateRelations);
+        this.handleAuditAllyCompanyConfig(activateRelations);
         this.dataSource.sort = this.sort;
 
       }
     });
-
     this.companyConfigService.getAllyCompanyConfigListener();
+  }
 
+  handleAuditAllyCompanyConfig(configAllyComp) {
+    const updateDate: Date = new Date();
+    configAllyComp.forEach(configAllyCompElement => {
+      if (configAllyCompElement.state.idState === 1) {
+        console.log(configAllyComp);
+        const configAudit = {
+          idAlliedCompanyConfAudit: null,
+          allied: { idAllied: configAllyCompElement.allied.idAllied },
+          state: { idState: configAllyCompElement.state.idState },
+          company: { idCompany: configAllyCompElement.company.idCompany },
+          actionExecuted: "Activacion",
+          executor: "ivan hernandez",
+          ipOrigin: "10.40.32.141",
+          configurationDate: configAllyCompElement.configurationDate,
+          updateDate: updateDate
+        }
+        this.createAllyCompanyConfig.emit(configAudit);
+      } else if (configAllyCompElement.state.idState === 2) {
+        const configAudit = {
+          idAlliedCompanyConfAudit: null,
+          allied: { idAllied: configAllyCompElement.allied.idAllied },
+          state: { idState: configAllyCompElement.state.idState },
+          company: { idCompany: configAllyCompElement.company.idCompany },
+          actionExecuted: "Desactivacion",
+          executor: "ivan hernandez",
+          ipOrigin: "10.40.32.141",
+          configurationDate: configAllyCompElement.configurationDate,
+          updateDate: updateDate
+        }
+        this.createAllyCompanyConfig.emit(configAudit);
+      }
+    });
   }
   /**
    * Abre modal para confirmar que se quiere confirmar registro y permite pasar al siguiente paso de configuracion
@@ -330,13 +362,18 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   deleteAlly(ally) {
     this.deletedAlly.emit(ally);
   }
-  
+
   exportCsv() {
     this.productService.getProductsByCompany(this.companyId);
     this.productService.getProductListener().subscribe((data) => {
       console.info(data.products);
       new AngularCsv(data.products, 'Reporte Productos');
     });
+
+  }
+
+  ngOnDestroy(): void {
+    // this.companyAllyConfigSub.unsubscribe();
 
   }
 

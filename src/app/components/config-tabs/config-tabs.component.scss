@@ -1,0 +1,17 @@
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+.btn-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: left;
+    padding: 2% 0;
+  }
+  
+  .btn-wrapper .btn:first-child {
+    margin-right:2%;
+  
+  }
+
+  .bi {
+    padding-left: 4px;
+  }

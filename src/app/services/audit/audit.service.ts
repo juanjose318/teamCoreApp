@@ -93,4 +93,13 @@ export class AuditService {
     return this.http.post(`${environment.apiUrl}/allies/audits`, audit);
   }
 
+  /**
+   * Crear auditoria de configuracion de alianza
+   * @param configAllyCompanyAudit 
+   */
+  creatAllyCompanyConfig(configAllyCompanyAudit){
+    return this.http.post(`${environment.apiUrl}/audits/configurations/companies`, configAllyCompanyAudit);
+  }
+
+
 }

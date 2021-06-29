@@ -14,6 +14,10 @@ export class ConfigTabsComponent implements OnInit {
 
   registryToConfigure;
 
+  objTradersConfig;
+
+  objAllyCompanyAuditCollection;
+
   tableNumber = 2;
   allyAuditTableNumber = 2;
   constructor() { }
@@ -26,7 +30,7 @@ export class ConfigTabsComponent implements OnInit {
         break;
       case 1:
         this.tableNumber = 3;
-        this.allyAuditTableNumber = 3;
+        this.allyAuditTableNumber = 2;
         break;
       case 2:
         this.allyAuditTableNumber = 4;
@@ -40,7 +44,17 @@ export class ConfigTabsComponent implements OnInit {
 
   continueToSecondStep(registry) {
     this.registryToConfigure = registry;
+    console.log(this.tableNumber);
     this.stepper.next();
+  }
+
+  handleObjTradersToConfig(objTradersToConfig){
+    this.objTradersConfig = objTradersToConfig;
+    console.log(this.objTradersConfig);
+  }
+
+  createAllyCompanyConfig(objAllyCompanyAudit){
+    this.objAllyCompanyAuditCollection = objAllyCompanyAudit;
   }
 
   ngOnInit() {

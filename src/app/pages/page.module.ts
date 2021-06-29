@@ -29,6 +29,7 @@ import { NavigationComponent } from '../components/navigation/navigation.compone
 import { ModalAllyFormComponent } from '../components/modal-ally-form/modal-ally-form.component';
 import { SidebarComponent } from '../shared/components/sidebar/sidebar.component';
 import { ModalConfigFormComponent } from '../components/modal-config-form/modal-config-form.component';
+import { SecondStepTableComponent } from '../components/table-second-step/table-second-step.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ModalConfigFormComponent } from '../components/modal-config-form/modal-
     ModalDescriptionComponent,
     TableOverviewComponent,
     SidebarComponent,
-    ModalConfigFormComponent
+    ModalConfigFormComponent,
+    SecondStepTableComponent
   ],
   imports: [
     CommonModule,

@@ -81,7 +81,6 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
     }
 
   handleSearchCountry(country) {
-      console.log(country)
     this.isLoading = true;
       switch(country) {
       case 'CO':

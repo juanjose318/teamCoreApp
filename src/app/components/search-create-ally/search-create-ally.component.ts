@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
@@ -13,9 +13,9 @@ import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.compo
   selector: 'app-search-create-ally',
   templateUrl: './search-create-ally.component.html',
   styleUrls: ['./search-create-ally.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SearchCreateAllyComponent {
+export class SearchCreateAllyComponent implements OnChanges {
   /**
    * Inputs
    */
@@ -56,20 +56,27 @@ export class SearchCreateAllyComponent {
     private _snackBar: MatSnackBar,
     private allyService: AliadoService,
     private companyService: CompanyService,
-    // private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef
   ) { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    let change = changes['allies'];
+
+    if (change.currentValue !== null) {
+      console.log(change.currentValue);
+      this.handleFetchAllies(change.currentValue);
+      this.handleFetchCompanies(change.currentValue);
+    } else {
+      console.log("im a dick")
+      return;
+    }
+  }
 
   /**
    * @param country pais seleccionado en la busqueda de aliados
    */
   filterCountry(country) {
     this.chosenCountry.emit(country);
-    setTimeout(() => {
-      this.handleFetchAllies(country);
-    }, 0.5);
-    setTimeout(() => {
-      this.handleFetchCompanies(country);
-    }, 1);
   }
 
   /**
@@ -93,6 +100,8 @@ export class SearchCreateAllyComponent {
         this.chosenCompany.emit(this.companyId);
       }
     });
+    this.cd.markForCheck();
+
   }
 
   /**
@@ -108,6 +117,7 @@ export class SearchCreateAllyComponent {
         this.chosenCompany.emit(this.companyId);
       }
     });
+
   }
   /**
    * 
@@ -127,48 +137,64 @@ export class SearchCreateAllyComponent {
         this.chosenCompany.emit(this.companyId);
       }
     });
+
   }
   /**
    * Fetch para filtros 
    */
   handleFetchAllies(country) {
     if (country === 'ALL') {
-      console.log(country);
       this.allyService.getAllies();
       this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
         this.allyCollection = alliesData.allies;
-        console.log(this.allyCollection);
       });
     }
     else {
       this.allyService.getAllyByCountry(country);
       this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
         this.allyCollection = alliesData.allies;
-        console.log(this.allyCollection);
       });
     }
+    this.cd.markForCheck();
   }
 
   handleFetchCompanies(country) {
     if (country === 'ALL') {
-      this.companyService.getCompanies();
-      this.companySub = this.companyService.getCompanyListener().subscribe((company) => {
-        this.companyName = null;
-        this.companyEan = null;
-        this.companyId = null;
-        this.companyCollection = company.companies;
-      });
+      this.fetchAllCompanies();
+      this.cd.markForCheck();
+      console.log(this.companyCollection);
     } else {
-      this.companyService.getCompaniesByCountry(country);
-      this.companySub = this.companyService.getCompanyListener().subscribe((companyData) => {
-        this.companyCollection = companyData.companies;
-        if (this.companyCollection.length === 0) {
-          this.companyName = null;
-          this.companyEan = null;
-          this.companyId = null;
-        }
-      });
+      this.fetchCompaniesByCountry(country);
+      this.cd.markForCheck();
     }
+  }
+
+  fetchCompaniesByCountry(country) {
+    if (country !== 'ALL') {
+      if (country !== null) {
+        this.companyService.getCompaniesByCountry(country);
+        this.companySub = this.companyService.getCompanyListener().subscribe((companyData) => {
+          console.log(companyData.companies);
+          this.companyCollection = companyData.companies;
+          if (this.companyCollection.length === 0) {
+            this.companyName = null;
+            this.companyEan = null;
+            this.companyId = null;
+          }
+        });
+      }
+    }
+  }
+
+  fetchAllCompanies() {
+    this.companyService.getCompanies();
+    this.companySub = this.companyService.getCompanyListener().subscribe((companyData) => {
+      this.companyCollection = companyData.companies;
+      this.companyName = null;
+      this.companyEan = null;
+      this.companyId = null;
+      this.companyCollection = companyData.companies;
+    });
   }
   /**
    * Modal para creacion de nuevo aliado

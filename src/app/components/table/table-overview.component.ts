@@ -47,6 +47,10 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     @Input() selectedCompany;
     @Input() selectedAlly;
     /**
+     * Objeto para auditoria de configuracion de aliados
+     */
+    @Input() objAllyCompanyAudit;
+    /**
      * Coleccion para iterar
      */
     auditCollection = [];
@@ -57,22 +61,21 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     ) { }
 
     ngOnInit() {
-        if(this.auditCollection)
-        this.dataSource = new MatTableDataSource<any>(this.auditCollection);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.updateTable(this.auditCollection);
     }
 
     ngOnChanges() {
+        if (!!this.objAllyCompanyAudit) {
+            this.handleAuditCompanyConfig(this.objAllyCompanyAudit);
+        }
         if (this.audit && this.allyAuditTableNumber === 1) {
             this.auditService.getAuditByCountry(this.audit);
             this.auditSub = this.auditService.getAuditListener()
                 .subscribe((filteredAudit) => {
                     this.auditCollection = filteredAudit.audit;
-                    this.dataSource = new MatTableDataSource<any>(this.auditCollection);
+                    this.updateTable(this.auditCollection)
                     this.displayedColumns = this.allyAuditColumns;
-                    this.dataSource.paginator = this.paginator;
-                    this.dataSource.sort = this.sort;
+            
                 });
         }
         else if (this.allyAuditTableNumber === 2) {
@@ -81,10 +84,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                 this.auditSub = this.auditService.getAuditListener()
                     .subscribe((filteredAudit) => {
                         this.auditCollection = filteredAudit.audit;
-                        // console.log(this.auditCollection);
-                        this.dataSource = new MatTableDataSource<any>(this.auditCollection);
-                        this.dataSource.paginator = this.paginator;
-                        this.dataSource.sort = this.sort;
+                        this.updateTable(this.auditCollection)
                         this.displayedColumns = this.allyCompanyAuditColumns;
 
                     });
@@ -94,9 +94,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                 this.auditSub = this.auditService.getAuditListener()
                     .subscribe((filteredAudit) => {
                         this.auditCollection = filteredAudit.audit;
-                        this.dataSource = new MatTableDataSource<any>(this.auditCollection);
-                        this.dataSource.paginator = this.paginator;
-                        this.dataSource.sort = this.sort;
+                        this.updateTable(this.auditCollection)
                         this.displayedColumns = this.allyCompanyAuditColumns;
 
                     });
@@ -106,14 +104,18 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                 this.auditSub = this.auditService.getAuditListener()
                     .subscribe((filteredAudit) => {
                         this.auditCollection = filteredAudit.audit;
-                        this.dataSource = new MatTableDataSource<any>(this.auditCollection);
-                        this.dataSource.paginator = this.paginator;
-                        this.dataSource.sort = this.sort;
+                        this.updateTable(this.auditCollection)
                         this.displayedColumns = this.allyCompanyAuditColumns;
 
                     });
             }
         }
+    }
+
+    updateTable(collection) {
+        this.dataSource = new MatTableDataSource<any>(collection);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;  
     }
 
     exportexcel(): void {
@@ -127,6 +129,15 @@ export class TableOverviewComponent implements OnInit, OnChanges {
         this.dataSource.filter = filterValue.trim().toLowerCase();
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
+        }
+    }
+
+    handleAuditCompanyConfig(configAllyCompAudit) {
+        if (configAllyCompAudit) {
+            this.auditService.creatAllyCompanyConfig(configAllyCompAudit).subscribe(() => {
+                this.updateTable(this.auditCollection)
+                this.auditCollection.push(configAllyCompAudit);
+            });
         }
     }
 }
