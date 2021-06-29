@@ -11,11 +11,8 @@ import { ModalDescriptionComponent } from '../modal-description/modal-descriptio
 import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
 import { ModalConfigFormComponent } from '../modal-config-form/modal-config-form.component';
 import { AngularCsv } from 'angular7-csv';
-<<<<<<< HEAD
 import { AuditService } from 'src/app/services/audit/audit.service';
-=======
 import { MasterFile } from 'src/app/models/MasterFile.interface';
->>>>>>> 464412d8549b5af11a04c39e0477ec58604d6ba9
 
 @Component({
   selector: 'app-results-table',
@@ -69,7 +66,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   /**
    * Colecciones 
    */
-<<<<<<< HEAD
   private allyCollection = [];
   private companyCollection = [];
   private companyCollectionToCreateAlliance = [];
@@ -77,15 +73,13 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   private companyConfigCollection = [];
   private tradersCollection = [];
   private ProductCollection = [];
-=======
-  allyCollection = [];
-  companyCollection = [];
-  companyCollectionToCreateAlliance = [];
-  configAllyCompanyToActivateOrDeactivate = [];
-  companyConfigCollection = [];
-  ProductCollection = [];
   MasterFileCollection = [];
->>>>>>> 464412d8549b5af11a04c39e0477ec58604d6ba9
+  // allyCollection = [];
+  // companyCollection = [];
+  // companyCollectionToCreateAlliance = [];
+  // configAllyCompanyToActivateOrDeactivate = [];
+  // companyConfigCollection = [];
+  // ProductCollection = [];
   /**
    * Collecion de configuraciones
    */
@@ -190,8 +184,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
         this.displayedColumns = this.firstConfigColumns;
         this.isLoading.emit(false);
       });
-<<<<<<< HEAD
-=======
 
     }
     // Configuracion de empresa 2 con registro seleccionado en paso 1
@@ -205,7 +197,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
         this.dataSourceMaster.sort = this.sort;
         this.isLoading.emit(false);
       });
->>>>>>> 464412d8549b5af11a04c39e0477ec58604d6ba9
     }
   }
   /**
