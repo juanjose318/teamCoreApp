@@ -39,28 +39,22 @@ export class MasterFileService {
         return this.masterFileListener.asObservable();
     }
 
-    upload(formData) {
-        return this.http.post<any>(`${environment.apiUrl}/masters/`, formData, {
+    uploadFile(formData) {
+        const headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.append('Accept', 'application/json');
+        this.http.post(`${environment.apiUrl}/masters/`, formData, {
             reportProgress: true,
-            observe: 'events'
-        });
-    }
-
-    uploadFile(file) {
-        const formData = new FormData();
-        formData.append('file', file.data);
-        file.inProgress = true;
-        this.masterFiles.upload(formData).pipe(
-            map(event => {
-            }),
-            catchError((error: HttpErrorResponse) => {
-                file.inProgress = false;
-                return of(`Upload failed: ${file.data.name}`);
-            })).subscribe((event: any) => {
-                if (typeof (event) === 'object') {
-                    console.log(event.body);
+            observe: 'events',
+            headers: headers
+        })
+            .subscribe(events => {
+                if (events.type == HttpEventType.UploadProgress) {
+                    console.log('Upload progress: ', Math.round(events.loaded / events.total * 100) + '%');
+                } else if (events.type === HttpEventType.Response) {
+                    console.log(events);
                 }
-            });
+            })
     }
 
 }
