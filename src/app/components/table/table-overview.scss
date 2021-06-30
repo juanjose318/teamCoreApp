@@ -9,8 +9,9 @@ table {
     width: 100%;
   }
   
-  td, th {
+  td, th , .mat-sort-header-button{
     font-size: 0.6rem;
+    text-align: center;
   }
 
   .wrapper {

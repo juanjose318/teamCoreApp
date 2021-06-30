@@ -10,7 +10,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule } from '@angular/material/stepper';
-import {MatCheckboxModule} from '@angular/material/checkbox'; 
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -26,6 +27,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         MatProgressSpinnerModule,
         MatStepperModule,
         MatCheckboxModule,
+        MatRadioModule
     ],
     exports: [
         MatDialogModule,
@@ -40,6 +42,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         MatProgressSpinnerModule,
         MatStepperModule,
         MatCheckboxModule,
+        MatRadioModule
 
     ],
     declarations: [],

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,6 @@ import { ModalDescriptionComponent } from '../modal-description/modal-descriptio
 import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
 import { ModalConfigFormComponent } from '../modal-config-form/modal-config-form.component';
 import { AngularCsv } from 'angular7-csv';
-import { AuditService } from 'src/app/services/audit/audit.service';
 import { MasterFile } from 'src/app/models/MasterFile.interface';
 
 @Component({
@@ -20,7 +19,7 @@ import { MasterFile } from 'src/app/models/MasterFile.interface';
   styleUrls: ['./results-table.component.scss'],
 })
 
-export class ResultsTableComponent implements OnInit, OnChanges {
+export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
   /**
   * Allies es el pais del que se tiene que hacer el fetch
   */
@@ -209,6 +208,10 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     else if (this.tableNumber === 2) {
       this.updateDatable(this.companyConfigCollection)
     }
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
   }
   /**
    * Actualizar tabla

@@ -9,8 +9,16 @@
     </div>
     <div class="card-body">
     <app-text-box [text]="textBox"></app-text-box>
+    <app-search-trace 
+    (searchParams)="handleSearch($event)"
+    ></app-search-trace>
+    <mat-spinner *ngIf="isLoading === true"></mat-spinner>
     <div class="card-body">
-      <app-results-table [tableNumber]="tableNumber"></app-results-table>
+      <app-trace-table
+      [(traceParams)]="searchParams" 
+      (ngModelChange)="updateTable($event)"
+      [isLoading]="isLoading"
+      (stopLoading)="handleIsloading($event)"></app-trace-table>
     </div>
   </div>
 </div>

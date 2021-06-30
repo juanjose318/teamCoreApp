@@ -30,6 +30,8 @@ import { ModalAllyFormComponent } from '../components/modal-ally-form/modal-ally
 import { SidebarComponent } from '../shared/components/sidebar/sidebar.component';
 import { ModalConfigFormComponent } from '../components/modal-config-form/modal-config-form.component';
 import { SecondStepTableComponent } from '../components/table-second-step/table-second-step.component';
+import { SearchTraceComponent } from '../components/search-trace/search-trace.component';
+import { TraceTableComponent } from '../components/trace-table/trace-table.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { SecondStepTableComponent } from '../components/table-second-step/table-
     TableOverviewComponent,
     SidebarComponent,
     ModalConfigFormComponent,
-    SecondStepTableComponent
+    SecondStepTableComponent,
+    SearchTraceComponent,
+    TraceTableComponent
   ],
   imports: [
     CommonModule,

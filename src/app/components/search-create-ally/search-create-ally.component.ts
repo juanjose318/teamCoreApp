@@ -31,8 +31,8 @@ export class SearchCreateAllyComponent implements OnChanges {
   /**
    * Colleciones iterables
    */
-  allyCollection;
-  companyCollection;
+  private allyCollection;
+  private companyCollection;
   @Input() testCollection;
   /**
    * Subscripciones
@@ -42,8 +42,8 @@ export class SearchCreateAllyComponent implements OnChanges {
   /**
   * Filtros
   */
-  selectedCountry;
-  selectedAlly;
+  private selectedCountry;
+  private selectedAlly;
   /**
    * Autofill empresa
    */
@@ -67,7 +67,6 @@ export class SearchCreateAllyComponent implements OnChanges {
       this.handleFetchAllies(change.currentValue);
       this.handleFetchCompanies(change.currentValue);
     } else {
-      console.log("im a dick")
       return;
     }
   }
@@ -193,7 +192,6 @@ export class SearchCreateAllyComponent implements OnChanges {
       this.companyName = null;
       this.companyEan = null;
       this.companyId = null;
-      this.companyCollection = companyData.companies;
     });
   }
   /**

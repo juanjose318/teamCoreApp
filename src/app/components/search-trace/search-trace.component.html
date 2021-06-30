@@ -1,0 +1,57 @@
+<div class="input-group">
+  <div class="wrapper">
+
+    <div class="field-container">
+      <mat-form-field appearance="fill">
+        <mat-label><span class="red">*</span>Pais</mat-label>
+        <mat-select [(ngModel)]="selectedCountry" (ngModelChange)="filterCountry($event)">
+          <mat-option selected value="EMPTY" disabled>Seleccionar</mat-option>
+          <mat-option value="CO">Colombia</mat-option>
+          <mat-option value="ALL">Todos</mat-option>
+          <mat-option value="AR">Argentina</mat-option>
+          <mat-option value="PE">Peru</mat-option>
+          <mat-option value="MX">Mexico</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="field-container">
+      <mat-form-field appearance="fill">
+        <mat-label>*Nombre Aliado</mat-label>
+        <mat-select matNativeControl [(ngModel)]="selectedAlly">
+          <mat-option selected value="EMPTY" disabled>Seleccionar</mat-option>
+          <mat-option *ngFor="let ally of allyCollection" [value]="ally.idAllied">
+            {{ ally?.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="field-container">
+      <mat-radio-group [(ngModel)]="companyType" (ngModelChange)="filterByCompanyType()">
+        <mat-radio-button value="F">Fabricante</mat-radio-button>
+        <mat-radio-button value="C">Comerciante</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="field-container">
+      <mat-form-field appearance="fill">
+        <mat-label>*Nombre Empresa</mat-label>
+        <mat-select matNativeControl [(ngModel)]="selectedCompany">
+          <mat-option selected value="EMPTY" disabled>Seleccionar</mat-option>
+          <mat-option *ngFor="let company of companyCollection" [value]="company.idCompany">
+            {{ company?.companyName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="field-container">
+      <div class="btn-wrapper">
+        <button class="btn btn-primary" (click)="submitSearch()">Buscar</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

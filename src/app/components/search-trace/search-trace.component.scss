@@ -1,0 +1,32 @@
+
+.example-section {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+.example-margin {
+    margin: 0 10px;
+  }
+
+  .field-wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+  }
+
+  .mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }
+
+  .wrapper {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      align-items:baseline;
+      width: 100%;
+  }
+
+  .input-group {
+      padding: 2% 0;
+  }

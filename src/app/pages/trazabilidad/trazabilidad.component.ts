@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { TraceService } from 'src/app/services/trace/trace.service';
 
 @Component({
   selector: 'app-trazabilidad',
@@ -8,10 +10,26 @@ import { Component, OnInit } from '@angular/core';
 export class TrazabilidadComponent implements OnInit {
   // tslint:disable-next-line: max-line-length
   textBox = 'Herramienta que permite ejecutar una trazabilidad, consultando la meta data de caa uno de los archivos generados y enviados al Aliado ya sea del fabricante o del comercio';
-  tableNumber = 5;
-  constructor() { }
+  private searchParams;
+
+  private traceCollection;
+
+  private isLoading: boolean;
+
+
+  constructor(
+    private traceService: TraceService
+  ) { }
 
   ngOnInit() {
   }
 
+  handleSearch(params) {
+    this.isLoading = true;
+    this.searchParams = params;
+  }
+
+  handleIsloading(loading) {
+    (loading === true) ? this.isLoading = true : this.isLoading = false
+  }
 }

@@ -95,7 +95,11 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         this.dataSource.sort = this.sort;
     }
 
-    applyFilter(filterValue: string) {
+    applyFilter(filterValue) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
     }
+
 }

@@ -22,8 +22,8 @@
                 class="bi bi-file-earmark-arrow-down"></i></button>
           </div>
         </div>
-        <table mat-table [dataSource]="dataSource" matSort id="excel-table"
-          matSortActive="updateDate" matSortDirection="desc" matSortDisableClear>
+        <table mat-table [dataSource]="dataSource" matSort id="excel-table" matSortActive="updateDate"
+          matSortDirection="desc" matSortDisableClear>
 
           <ng-container matColumnDef="idAllied">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Id Aliado </th>
@@ -85,8 +85,17 @@
     <div *ngIf="allyAuditTableNumber === 2">
 
       <div *ngIf="auditCollection.length !== 0 || !!auditCollection; else noDisponible">
-        <table mat-table [dataSource]="dataSource" matSort id="excel-table"
-          matSortActive="updateDate" matSortDirection="desc" matSortDisableClear>
+        <div class="row">
+          <div class="col-sm">
+            <button type="button" class="btn btn-primary" (click)="exportexcel()">Descargar Auditoria <i
+                class="bi bi-file-earmark-arrow-down"></i></button>
+          </div>
+        </div>
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+          </mat-form-field>
+        <table mat-table [dataSource]="dataSource" matSort id="excel-table" matSortActive="updateDate"
+          matSortDirection="desc" matSortDisableClear>
 
           <ng-container matColumnDef="idRegistry">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Id Registro </th>
