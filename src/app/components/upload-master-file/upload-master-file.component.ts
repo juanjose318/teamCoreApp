@@ -14,7 +14,7 @@ export class UploadMasterFileComponent {
   @ViewChild('file') file: ElementRef;
   fileData: File = null;
 
-  constructor(private http: HttpClient, private masterFileService: MasterFileService, private masterFile: MasterFile) { }
+  constructor(private http: HttpClient, private masterFileService: MasterFileService) { }
 
   ngOnInit() {
 
@@ -29,9 +29,9 @@ export class UploadMasterFileComponent {
     var dataDecode = '';
     const formData = new FormData();
     //formData.append('file', this.fileData);
-    formData.append('file',
+    /*formData.append('file',
       this.file.nativeElement.files[0],
-      this.file.nativeElement.files[0].name);
+      this.file.nativeElement.files[0].name);*/
     let masterFile: MasterFile;
     masterFile = {
       "fileName": this.file.nativeElement.files[0].name,
@@ -44,6 +44,7 @@ export class UploadMasterFileComponent {
       "startDateLoad": new Date(Date.now()),
       "endDateLoad": new Date(Date.now())
     };
+    console.log(masterFile.detail);
     //dataEncode = btoa("username:temppass");
     //console.log(dataEncode);
     //dataDecode = atob(dataEncode);
