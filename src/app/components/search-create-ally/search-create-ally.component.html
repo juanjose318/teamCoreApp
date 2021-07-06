@@ -1,66 +1,72 @@
 <div class="card " [ngClass]="{'global-wrapper': isConfiginfoSending === true}">
   <div class="card-body wrapper">
-    
-    <div class="input-group">
-      <mat-form-field appearance="fill">
-        <mat-label><span class="red">*</span>Pais</mat-label>
-        <mat-select [(ngModel)]="selectedCountry" (ngModelChange)="filterCountry($event)">
-          <mat-option selected value="EMPTY" disabled>Seleccionar</mat-option>
-          <mat-option value="CO">Colombia</mat-option>
-          <mat-option value="ALL">Todos</mat-option>
-          <mat-option value="AR">Argentina</mat-option>
-          <mat-option value="PE">Peru</mat-option>
-          <mat-option value="MX">Mexico</mat-option>
-        </mat-select>
-      </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label *ngIf="isConfiginfoSending === false">Nombre Aliado</mat-label>
-        <mat-label *ngIf="isConfiginfoSending === true">*Nombre Aliado</mat-label>
-        <mat-select matNativeControl [(ngModel)]="selectedAlly" (ngModelChange)="filterAlly($event)">
-          <mat-option selected value="EMPTY" disabled>Seleccionar</mat-option>
-          <mat-option *ngFor="let ally of allyCollection" [value]="ally.idAllied">
-            {{ ally?.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+    <div class="fields">
+      <div class="field">
+        <mat-form-field appearance="fill">
+          <mat-label><span class="red">*</span>País</mat-label>
+          <mat-select [(ngModel)]="selectedCountry" (ngModelChange)="filterCountry($event)">
+            <mat-option selected value="EMPTY" disabled>Seleccionar</mat-option>
+            <mat-option value="CO">Colombia</mat-option>
+            <mat-option value="ALL">Todos</mat-option>
+            <mat-option value="AR">Argentina</mat-option>
+            <mat-option value="PE">Peru</mat-option>
+            <mat-option value="MX">Mexico</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-    <!-- Configuracion de envio de la informacion -->
-    <div class="input-group" *ngIf="isConfiginfoSending === true">
+      <!-- Configuracion de envio de la informacion -->
 
-      <mat-form-field appearance="fill">
-        <mat-label>Empresa</mat-label>
-        <mat-select [(ngModel)]="companyName" (ngModelChange)="filterByCompanyName($event)">
-          <mat-option *ngFor="let company of companyCollection" [value]="company.companyName">
-            {{ company?.companyName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="field">
+        <mat-form-field appearance="fill">
+          <mat-label *ngIf="isConfiginfoSending === false">Nombre Aliado</mat-label>
+          <mat-label *ngIf="isConfiginfoSending === true">*Nombre Aliado</mat-label>
+          <mat-select matNativeControl [(ngModel)]="selectedAlly" (ngModelChange)="filterAlly($event)">
+            <mat-option selected value="EMPTY" disabled>Seleccionar</mat-option>
+            <mat-option *ngFor="let ally of allyCollection" [value]="ally.idAllied">
+              {{ ally?.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Codigo</mat-label>
-        <input matInput placeholder="Ean Empresa" [(ngModel)]="companyEan" (ngModelChange)="filterByCompanyEan($event)">
-      </mat-form-field>
+      <div class="field">
+        <mat-form-field appearance="fill" *ngIf="isConfiginfoSending === true">
+          <mat-label>Empresa</mat-label>
+          <mat-select [(ngModel)]="companyName" (ngModelChange)="filterByCompanyName($event)">
+            <mat-option *ngFor="let company of companyCollection" [value]="company.companyName">
+              {{ company?.companyName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
+      <div class="field">
+        <mat-form-field appearance="fill" *ngIf="isConfiginfoSending === true">
+          <mat-label>Codigo</mat-label>
+          <input matInput placeholder="Ean Empresa" [(ngModel)]="companyEan"
+            (ngModelChange)="filterByCompanyEan($event)">
+        </mat-form-field>
+      </div>
+      <!-- 
       <mat-form-field appearance="fill">
         <mat-label>ID</mat-label>
         <input matInput placeholder="Id Empresa" [(ngModel)]="companyId" (ngModelChange)="filterByCompanyId($event)">
-      </mat-form-field>
+      </mat-form-field> -->
 
     </div>
     <!--- Si esta desde la pagina de configuracion del Aliado -->
-    <div *ngIf="isConfiginfoSending === false" class="input-group">
+    <div *ngIf="isConfiginfoSending === false">
       <div class="btn-wrapper">
-        <button class="btn btn-primary" type="submit" (click)="openDialog()">Nuevo <i
-            class="bi bi-plus-circle"></i></button>
-        <!-- <button class="btn btn-primary" type="submit" (click)="filterAlly($event)">Buscar<i
-            class="bi bi-search"></i></button> -->
+        <button class="btn btn-primary" type="submit" (click)="openDialog()">Nuevo <i class="bi bi-plus-circle"></i></button>
       </div>
     </div>
     <!--- Si esta desde la pagina de configuracion de envio de informacion al aliado -->
-      <div class="btn-wrapper"  *ngIf="isConfiginfoSending === true" >
-        <button class="btn btn-primary" type="submit" (click)="saveAlly($event)">Guardar <i class="bi bi-save"></i></button>
-        <button class="btn btn-primary" type="submit" (click)="cancel($event)">Cancelar <i class="bi bi-x-circle"></i></button>
-      </div>
+    <div class="btn-wrapper" *ngIf="isConfiginfoSending === true">
+      <button class="btn btn-primary" type="submit" (click)="saveAlly($event)">Guardar <i
+          class="bi bi-save"></i></button>
+      <button class="btn btn-primary" type="submit" (click)="cancel($event)">Cancelar <i
+          class="bi bi-x-circle"></i></button>
+    </div>
   </div>

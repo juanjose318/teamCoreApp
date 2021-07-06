@@ -25,7 +25,8 @@
           <app-config-tabs 
           [cleanConfig]="cleanConfig"
           [selectedAlly]="selectedAlly"
-          [selectedCompany]="selectedCompany">
+          [selectedCompany]="selectedCompany"
+          (resetStepper)="handleReset($event)">
         </app-config-tabs>
         </div>
       </div>

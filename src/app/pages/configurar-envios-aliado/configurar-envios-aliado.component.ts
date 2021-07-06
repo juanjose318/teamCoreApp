@@ -105,4 +105,8 @@ export class ConfigurarEnviosAliadoComponent {
     }
   }
 
+  handleReset(){
+    this.cleanConfig = false;
+  }
+
 }

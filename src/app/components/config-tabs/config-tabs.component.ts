@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material';
 
 @Component({
@@ -10,6 +10,8 @@ export class ConfigTabsComponent implements OnChanges {
   @Input() selectedAlly;
   @Input() selectedCompany;
   @Input() cleanConfig;
+
+  @Output() resetStepper: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild(MatStepper) stepper: MatStepper;
 
@@ -81,6 +83,7 @@ export class ConfigTabsComponent implements OnChanges {
     this.isActive1 = false;
     this.isActive2 = false;
     this.isActive3 = false;
+    this.resetStepper.emit(true);
   }
 
   createAllyCompanyConfig(objAllyCompanyAudit) {
