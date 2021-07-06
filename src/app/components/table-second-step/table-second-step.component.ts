@@ -8,7 +8,6 @@ import { ConfigService } from 'src/app/services/config/config.service';
     selector: 'app-second-step-table',
     templateUrl: 'table-second-step.component.html',
     styleUrls: ['./table-second-step.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SecondStepTableComponent implements OnInit, OnChanges {
@@ -37,12 +36,12 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
 
     constructor(
         private companyConfigService: ConfigService,
-        private cd: ChangeDetectorRef
     ) { }
 
     ngOnChanges(changes: SimpleChanges) {
-            let change = changes['registry'];
-            if (change.currentValue !== null) {
+        let change = changes['registry'];
+        if (!!change) {
+            if (!!change.currentValue) {
                 if (!!change.currentValue.idAlliedCompanyConfig) {
                     this.fetchCurrentConfig(change.currentValue.idAlliedCompanyConfig);
                     this.fetchAllTraders();
@@ -50,6 +49,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
                     this.updateDatable(this.tradersTableCollection);
                 }
             }
+        }
     }
 
     ngOnInit() {
@@ -58,7 +58,6 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
             this.tradersCollection = data.traders;
             this.updateDatable(this.tradersCollection);
         });
-        this.cd.markForCheck();
     }
 
     fetchCurrentConfig(idConfig) {
@@ -66,7 +65,6 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         this.companyAllyConfigSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersForConfig = data.traders;
         });
-        this.cd.markForCheck();
     }
 
     fetchAllTraders() {

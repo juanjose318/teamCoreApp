@@ -1,6 +1,6 @@
 <div *ngIf="data.description">
   <div mat-dialog-header>
-    <h1 mat-dialog-title class="text-primary">Descripcion de Aliado</h1>
+    <h1 mat-dialog-title class="text-primary">Descripción de Aliado</h1>
   </div>
   <div mat-dialog-content>
     <p> {{ data.description }}</p>
@@ -15,7 +15,7 @@
     <h1 mat-dialog-title class="text-primary">Borrar Aliado</h1>
   </div>
   <div mat-dialog-content>
-    <p>Esta Seguro de Eliminar el Registro?</p>
+    <p>Está seguro de eliminar el registro?</p>
   </div>
   <div mat-dialog-actions class="btn-wrapper">
     <button class="btn btn-primary" [mat-dialog-close]="data.deleting">Confirmar</button>
@@ -25,11 +25,11 @@
 
 <div *ngIf="!!data.configurating">
   <div mat-dialog-header>
-    <h1 mat-dialog-title class="text-primary">Confirmacion
+    <h1 mat-dialog-title class="text-primary">Confirmación
     </h1>
   </div>
   <div mat-dialog-content>
-    <p>Al activar esta configuracion, iniciara el envio de informacion (Ventas e Inventarios) del cliente {{ data.registry.company.companyName }} al {{ data.registry.allied.name }}. Desea Continuar?</p>
+    <p>Al activar esta configuración, iniciará el envío de información (ventas e inventarios) del cliente {{ data.registry.company.companyName }} al {{ data.registry.allied.name }}. Desea continuar?</p>
   </div>
   <div mat-dialog-actions class="btn-wrapper">
     <button class="btn btn-primary" [mat-dialog-close]="data">Confirmar</button>

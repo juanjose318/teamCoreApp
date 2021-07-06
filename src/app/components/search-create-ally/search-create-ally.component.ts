@@ -28,6 +28,7 @@ export class SearchCreateAllyComponent implements OnChanges {
   @Output() chosenAlly: EventEmitter<any> = new EventEmitter();
   @Output() chosenCompany: EventEmitter<any> = new EventEmitter();
   @Output() createdAlly: EventEmitter<any> = new EventEmitter();
+  @Output() cancelConfiguration: EventEmitter<any> = new EventEmitter();
   /**
    * Colleciones iterables
    */
@@ -61,13 +62,13 @@ export class SearchCreateAllyComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     let change = changes['allies'];
-
-    if (change.currentValue !== null) {
-      console.log(change.currentValue);
-      this.handleFetchAllies(change.currentValue);
-      this.handleFetchCompanies(change.currentValue);
-    } else {
-      return;
+    if (change) {
+      if (change.currentValue !== null) {
+        this.handleFetchAllies(change.currentValue);
+        this.handleFetchCompanies(change.currentValue);
+      } else {
+        return;
+      }
     }
   }
 
@@ -90,7 +91,6 @@ export class SearchCreateAllyComponent implements OnChanges {
    * @param companyEan Codigo de empresa
    */
   filterByCompanyEan(companyEan) {
-    // console.log(companyEan);
     const filtered = this.companyCollection.filter(company => company.companyCode == companyEan);
     filtered.forEach(item => {
       this.companyId = item.idCompany;
@@ -123,7 +123,6 @@ export class SearchCreateAllyComponent implements OnChanges {
    * @param companyArray array de objeto iterado en el momento de la seleccion de empresa
    */
   filterByCompanyName(companyName) {
-    // console.log(companyName);
     if (!companyName) {
       this.companyEan = null;
       this.companyId = null;
@@ -161,7 +160,6 @@ export class SearchCreateAllyComponent implements OnChanges {
     if (country === 'ALL') {
       this.fetchAllCompanies();
       this.cd.markForCheck();
-      console.log(this.companyCollection);
     } else {
       this.fetchCompaniesByCountry(country);
       this.cd.markForCheck();
@@ -173,7 +171,6 @@ export class SearchCreateAllyComponent implements OnChanges {
       if (country !== null) {
         this.companyService.getCompaniesByCountry(country);
         this.companySub = this.companyService.getCompanyListener().subscribe((companyData) => {
-          console.log(companyData.companies);
           this.companyCollection = companyData.companies;
           if (this.companyCollection.length === 0) {
             this.companyName = null;
@@ -226,5 +223,10 @@ export class SearchCreateAllyComponent implements OnChanges {
     // this.allySub.unsubscribe();
     // this.companySub.unsubscribe();
   }
-
+  /**
+  * Cancelar los registros
+  */
+  cancel() {
+    this.cancelConfiguration.emit(true);
+  }
 }

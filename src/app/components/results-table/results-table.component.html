@@ -16,9 +16,8 @@
       </ng-container>
 
       <ng-container matColumnDef="creationDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Creacion</th>
-        <td mat-cell *matCellDef="let row">
-          {{ row.creationDate | date:'d/MMM/y HH:mm' }} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Creación</th>
+        <td mat-cell *matCellDef="let row">{{ row.creationDate | date:'d/MMM/y HH:mm' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="channel">
@@ -32,7 +31,7 @@
       </ng-container>
 
       <ng-container matColumnDef="idCountry">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pais del Aliado </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> País del Aliado </th>
         <td mat-cell *matCellDef="let row"> {{ row.idCountry }} </td>
       </ng-container>
 
@@ -42,7 +41,7 @@
       </ng-container>
 
       <ng-container matColumnDef="identification">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Identificacion del Aliado </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Identificación del Aliado </th>
         <td mat-cell *matCellDef="let row"> {{ row.identification }} </td>
       </ng-container>
 
@@ -57,12 +56,12 @@
       </ng-container>
 
       <ng-container matColumnDef="phone">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Telefono del Aliado </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Teléfono del Aliado </th>
         <td mat-cell *matCellDef="let row"> {{ row.phone }} </td>
       </ng-container>
 
       <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
         <td mat-cell *matCellDef="let row" class="description" (click)="openDialog(row.description)"> Ver Detalle </td>
       </ng-container>
 
@@ -101,13 +100,15 @@
     <!-- <button class="btn btn-primary">Configurar<i class="bi bi-arrow-right-circle"></i></button> -->
   </div>
 
-  <ng-template #noDisponible class="card">
-    <div class="card-body">
-      No existe información para visualizar
+  <ng-template #noDisponible>
+    <div class="card">
+      <div class="card-body">
+        No existe información para visualizar
+      </div>
     </div>
   </ng-template>
 
-  <div *ngIf="companyConfigCollection?.length !== 0 || companyConfigCollection != null; else noDisponible" class="card">
+  <div *ngIf="!!allies || !!filteredAlly || !!filteredCompany || companyConfigCollection?.length !== 0; else noDisponible" class="card">
 
     <table mat-table [dataSource]="dataSource" matSort matSortActive="configurationDate" matSortDirection="desc"
       matSortDisableClear #dataTable class="card-body">
@@ -169,7 +170,7 @@
       </ng-container>
 
       <ng-container matColumnDef="configurationDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de configuracion</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Configuración</th>
         <td mat-cell *matCellDef="let row" class="selectable" (click)="goToConfiguration(row)">
           {{ row.configurationDate | date:'d/MMM/y HH:mm' }}</td>
       </ng-container>

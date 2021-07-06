@@ -9,8 +9,9 @@ import { AuditService } from 'src/app/services/audit/audit.service';
  */
 @Component({
     selector: 'app-table-overview',
-    styleUrls: ['table-overview.scss'],
-    templateUrl: 'table-overview.html',
+    templateUrl: 'table-overview.component.html',
+    styleUrls: ['table-overview.component.scss'],
+
 })
 export class TableOverviewComponent implements OnInit, OnChanges {
     /**
@@ -20,7 +21,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     allyAuditColumns: string[] = ['idAllied', 'actionExecuted', 'updateDate', 'creationDate', 'executor',
         'ipOrigin', 'affectedField', 'valueBefore', 'valueAfter'];
     allyCompanyAuditColumns: string[] = ['idRegistry', 'idAllied', 'allied.name', 'company.idCompany',
-        'company.companyName', 'configurationDate', 'state.state', 'updateDate', 'executor', 'ipOrigin', 'actionExecuted', 'detail']
+        'company.companyName', 'configurationDate', 'state.state', 'updateDate', 'executor', 'ipOrigin','detail']
     /**
      * Recurso de display de data para tabla material
      */
@@ -75,7 +76,6 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                     this.auditCollection = filteredAudit.audit;
                     this.updateTable(this.auditCollection)
                     this.displayedColumns = this.allyAuditColumns;
-            
                 });
         }
         else if (this.allyAuditTableNumber === 2) {
@@ -96,17 +96,6 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                         this.auditCollection = filteredAudit.audit;
                         this.updateTable(this.auditCollection)
                         this.displayedColumns = this.allyCompanyAuditColumns;
-
-                    });
-            }
-            else {
-                this.auditService.getAllAllyCompanyConfig();
-                this.auditSub = this.auditService.getAuditListener()
-                    .subscribe((filteredAudit) => {
-                        this.auditCollection = filteredAudit.audit;
-                        this.updateTable(this.auditCollection)
-                        this.displayedColumns = this.allyCompanyAuditColumns;
-
                     });
             }
         }
@@ -115,7 +104,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     updateTable(collection) {
         this.dataSource = new MatTableDataSource<any>(collection);
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;  
+        this.dataSource.sort = this.sort;
     }
 
     exportexcel(): void {

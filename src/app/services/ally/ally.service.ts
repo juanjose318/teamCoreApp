@@ -14,6 +14,7 @@ const httpOptions = {
 @Injectable({ providedIn: 'root' })
 export class AliadoService {
     private allyListener = new Subject<{ allies: any }>();
+    private ipListener = new Subject<{ ip: any }>();
     private allies: any;
     constructor(
         private http: HttpClient,
@@ -39,6 +40,23 @@ export class AliadoService {
 
     getAllyListener() {
         return this.allyListener.asObservable();
+    }
+
+    getIpListener() {
+        return this.ipListener.asObservable();
+    }
+    /**
+     * @returns Ip de cliente
+     */
+    getIp() {
+        return this.http
+            .get(`${environment.apiUrl}/allies/ips`, { responseType: 'text' }).pipe(
+                map((data => data))
+            ).subscribe((data) => {
+                this.ipListener.next({
+                    ip: data
+                });
+            });
     }
 
     updateAlly(ally) {

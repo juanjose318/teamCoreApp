@@ -27,7 +27,7 @@ import { MatRadioModule } from '@angular/material';
         MatProgressSpinnerModule,
         MatStepperModule,
         MatCheckboxModule,
-        MatRadioModule
+        MatRadioModule,
     ],
     exports: [
         MatDialogModule,

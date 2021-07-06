@@ -19,7 +19,7 @@ import { ConfigurarAliadosComponent } from './configurar-aliados/configurar-alia
 import { SearchCreateAllyComponent } from '../components/search-create-ally/search-create-ally.component';
 import { ResultsTableComponent } from '../components/results-table/results-table.component';
 import { ModalDescriptionComponent } from '../components/modal-description/modal-description.component';
-import { TableOverviewComponent } from '../components/table/table-overview.component';
+import { TableOverviewComponent } from '../components/table-audit/table-overview.component';
 import { ConfigurarEnviosAliadoComponent } from './configurar-envios-aliado/configurar-envios-aliado.component';
 import { ConfigTabsComponent } from '../components/config-tabs/config-tabs.component';
 import { AuditConfigComponent } from '../components/audit-config/audit-config.component';

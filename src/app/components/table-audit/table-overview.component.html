@@ -1,7 +1,7 @@
 <div class="card audit-table">
 
   <div class="card-header">
-    <h5>Auditoria</h5>
+    <h5>Auditoría</h5>
   </div>
   <div class="card-body">
 
@@ -31,20 +31,18 @@
           </ng-container>
 
           <ng-container matColumnDef="creationDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creacion</th>
-            <td mat-cell *matCellDef="let row">
-              {{ row.creationDate  | date: 'd/MMM/y HH:mm' }} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creación</th>
+            <td mat-cell *matCellDef="let row"> {{ row.creationDate  | date: 'd/MMM/y HH:mm' }} </td>
           </ng-container>
 
           <ng-container matColumnDef="actionExecuted">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Accion Ejecutada</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Accion Ejecutada</th>
             <td mat-cell *matCellDef="let row"> {{ row.actionExecuted }} </td>
           </ng-container>
 
           <ng-container matColumnDef="updateDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de actualizacion</th>
-            <td mat-cell *matCellDef="let row">
-              {{ row.updateDate  | date: 'd/MMM/y HH:mm' }} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de actualización</th>
+            <td mat-cell *matCellDef="let row">  {{ row.updateDate  | date: 'd/MMM/y HH:mm' }} </td>
           </ng-container>
 
           <ng-container matColumnDef="executor">
@@ -68,7 +66,7 @@
           </ng-container>
 
           <ng-container matColumnDef="valueAfter">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Valor Despues</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Valor Después</th>
             <td mat-cell *matCellDef="let row"> {{ row.valueAfter }} </td>
           </ng-container>
 
@@ -87,15 +85,16 @@
       <div *ngIf="auditCollection.length !== 0 || !!auditCollection; else noDisponible">
         <div class="row">
           <div class="col-sm">
-            <button type="button" class="btn btn-primary" (click)="exportexcel()">Descargar Auditoria <i
+            <button type="button" class="btn btn-primary" (click)="exportexcel()">Descargar Auditoría <i
                 class="bi bi-file-earmark-arrow-down"></i></button>
           </div>
         </div>
         <mat-form-field>
           <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
-          </mat-form-field>
-        <table mat-table [dataSource]="dataSource" matSort id="excel-table" matSortActive="updateDate"
-          matSortDirection="desc" matSortDisableClear>
+        </mat-form-field>
+        <!-- matSortActive="updateDate"
+          matSortDirection="desc" -->
+        <table mat-table [dataSource]="dataSource" matSort id="excel-table"  matSortDisableClear>
 
           <ng-container matColumnDef="idRegistry">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Id Registro </th>
@@ -145,18 +144,13 @@
             <td mat-cell *matCellDef="let row"> {{ row.executor }} </td>
           </ng-container>
 
-          <ng-container matColumnDef="actionExecuted">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Accion Ejecutada</th>
-            <td mat-cell *matCellDef="let row"> {{ row.actionExecuted }} </td>
-          </ng-container>
-
           <ng-container matColumnDef="ipOrigin">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>IP Origen</th>
             <td mat-cell *matCellDef="let row"> {{ row.ipOrigin }} </td>
           </ng-container>
 
           <ng-container matColumnDef="detail">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Detalle</th>
+            <th mat-header-cell *matHeaderCellDef>Detalle</th>
             <td mat-cell *matCellDef="let row"> ver detalle </td>
           </ng-container>
 
@@ -165,7 +159,7 @@
           </tr>
         </table>
 
-        <mat-paginator [length]="dataSource?.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 30, 40]">
+        <mat-paginator [length]="dataSource?.length" [pageSize]="10" [pageSizeOptions]="[10, 20, 30, 40]">
         </mat-paginator>
       </div>
 

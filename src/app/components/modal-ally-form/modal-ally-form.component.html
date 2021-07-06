@@ -34,12 +34,12 @@
         </div>
 
         <div class="mb-3 col-sm">
-          <label class="label form-label">*Telefono</label>
+          <label class="label form-label">*Teléfono</label>
           <input [class.is-invalid]="phoneField.invalid && phoneField.touched" type="text" class="form-control"
             formControlName="phone" (keydown.space)="$event.preventDefault()" required>
           <div *ngIf="(phoneField.invalid && phoneField.touched) || phoneField.dirty" class="error-msg">
             <small *ngIf="phoneField.errors?.required" class="text-danger">
-              Telefono es requerido
+              Teléfono es requerido
             </small>
           </div>
         </div>
@@ -58,14 +58,14 @@
 
       <div class="row">
         <div class="mb-3">
-          <label class="form-label label">*Identificacion</label><input
+          <label class="form-label label">*Identificación</label><input
             [class.is-invalid]="identificationField.invalid && identificationField.touched" type="text"
             class="form-control" formControlName="identification" required>
         </div>
         <div *ngIf="(identificationField.invalid && identificationField.touched) || identificationField.dirty"
           class="error-msg">
           <small *ngIf="identificationField.errors?.required" class="text-danger">
-            Identificacion es requerido
+            Identificación es requerida
           </small>
           <small *ngIf="identificationField.errors?.maxlength || identificationField.errors?.pattern"
             class="text-danger">
@@ -122,13 +122,13 @@
 
       <div class="row">
         <div class="mb-3 col-sm">
-          <label class="form-label label">*Descripcion</label>
+          <label class="form-label label">*Descripción</label>
           <textarea formControlName="description" class="form-control" rows="3"
             [class.is-invalid]="descriptionField.invalid && descriptionField.touched"></textarea>
         </div>
         <div *ngIf="(descriptionField.invalid && descriptionField.touched) || descriptionField.dirty" class="error-msg">
           <small *ngIf="descriptionField.errors?.required" class="text-danger">
-            Descripcion es requerida
+            Descripción es requerida
           </small>
           <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors?.pattern" class="text-danger">
             La información ingresada no es correcta
@@ -171,7 +171,7 @@
         </div>
         <div class="row">
           <div class="mb-3 col-sm">
-            <label class="form-label">Pais</label>
+            <label class="form-label">País</label>
             <select class="form-select" formControlName="idCountry" required>
               <option selected>Seleccionar</option>
               <option value="CO">Colombia</option>
@@ -181,12 +181,12 @@
           </div>
 
           <div class="mb-3 col-sm">
-            <label class="label form-label">Telefono</label>
+            <label class="label form-label">Teléfono</label>
             <input [class.is-invalid]="phoneField.invalid && phoneField.touched" type="text" class="form-control"
               formControlName="phone" (keydown.space)="$event.preventDefault()" required>
             <div *ngIf="(phoneField.invalid && phoneField.touched) || phoneField.dirty" class="error-msg">
               <small *ngIf="phoneField.errors?.required" class="text-danger">
-                Telefono es requerido
+                Teléfono es requerido
               </small>
             </div>
           </div>
@@ -237,14 +237,14 @@
    
         <div class="row">
           <div class="mb-3">
-            <label class="form-label label">Identificacion</label><input
+            <label class="form-label label">Identificación</label><input
               [class.is-invalid]="identificationField.invalid && identificationField.touched" type="text"
               class="form-control" formControlName="identification" required readonly>
           </div>
           <div *ngIf="(identificationField.invalid && identificationField.touched) || identificationField.dirty"
             class="error-msg">
             <small *ngIf="identificationField.errors?.required" class="text-danger">
-              Identificacion es requerido
+              Identificación es requerida
             </small>
             <small *ngIf="identificationField.errors?.maxlength || identificationField.errors?.pattern"
               class="text-danger">
@@ -270,7 +270,7 @@
 
         <div class="row">
           <div class="mb-3 col-sm">
-            <label class="form-label label">Descripcion</label>
+            <label class="form-label label">Descripción</label>
             <textarea formControlName="description" class="form-control" rows="3"
               [class.is-invalid]="descriptionField.invalid && descriptionField.touched"></textarea>
           </div>

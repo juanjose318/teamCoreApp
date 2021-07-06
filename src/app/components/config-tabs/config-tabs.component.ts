@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material';
 
 @Component({
@@ -6,9 +6,10 @@ import { MatStepper } from '@angular/material';
   templateUrl: './config-tabs.component.html',
   styleUrls: ['./config-tabs.component.scss']
 })
-export class ConfigTabsComponent implements OnInit {
+export class ConfigTabsComponent implements OnChanges {
   @Input() selectedAlly;
   @Input() selectedCompany;
+  @Input() cleanConfig;
 
   @ViewChild(MatStepper) stepper: MatStepper;
 
@@ -18,9 +19,22 @@ export class ConfigTabsComponent implements OnInit {
 
   objAllyCompanyAuditCollection;
 
+  isActive1: boolean;
+  isActive2: boolean;
+  isActive3: boolean;
+
   tableNumber = 2;
   allyAuditTableNumber = 2;
   constructor() { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    let change = changes['cleanConfig'];
+    if (!!change) {
+      if (change.currentValue) {
+          this.handleCleanConfig();      
+      }
+    }
+  }
 
   changeStep(step) {
     switch (step.selectedIndex) {
@@ -44,20 +58,33 @@ export class ConfigTabsComponent implements OnInit {
 
   continueToSecondStep(registry) {
     this.registryToConfigure = registry;
-    console.log(this.tableNumber);
-    this.stepper.next();
+    this.isActive1 = true;
+    console.log(this.registryToConfigure);
+    setTimeout(() => {
+      this.stepper.next();
+
+    }, 0.2);
   }
 
-  handleObjTradersToConfig(objTradersToConfig){
+  handleObjTradersToConfig(objTradersToConfig) {
     this.objTradersConfig = objTradersToConfig;
-    console.log(this.objTradersConfig);
+    if (this.objTradersConfig.length !== 0) {
+      this.isActive2 = true;
+    }
+    console.log(objTradersToConfig);
   }
 
-  createAllyCompanyConfig(objAllyCompanyAudit){
+  handleCleanConfig() {
+    this.registryToConfigure = null;
+    this.objTradersConfig = null;
+    this.stepper.reset();
+    this.isActive1 = false;
+    this.isActive2 = false;
+    this.isActive3 = false;
+  }
+
+  createAllyCompanyConfig(objAllyCompanyAudit) {
     this.objAllyCompanyAuditCollection = objAllyCompanyAudit;
-  }
-
-  ngOnInit() {
   }
 
 }

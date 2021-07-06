@@ -60,7 +60,7 @@
     </div>
     <!--- Si esta desde la pagina de configuracion de envio de informacion al aliado -->
       <div class="btn-wrapper"  *ngIf="isConfiginfoSending === true" >
-        <button class="btn btn-primary" type="submit" (click)="saveAlly($event)">Guardar</button>
-        <button class="btn btn-primary" type="submit" (click)="cancel($event)">Cancelar</button>
+        <button class="btn btn-primary" type="submit" (click)="saveAlly($event)">Guardar <i class="bi bi-save"></i></button>
+        <button class="btn btn-primary" type="submit" (click)="cancel($event)">Cancelar <i class="bi bi-x-circle"></i></button>
       </div>
   </div>

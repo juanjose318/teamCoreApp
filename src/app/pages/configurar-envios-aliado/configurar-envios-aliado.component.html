@@ -3,7 +3,7 @@
 <div class="container content-container">
   <div class="card mat-elevation-z8">
     <div class="card-header bg-primary text-white ">
-      <h5 class="head-title"> Configurar > Servicios > Analiticos > CENc > Configurar envio de informacion a Aliados
+      <h5 class="head-title">Configurar envío de información a aliados
       </h5>
     </div>
     <div class="card-body">
@@ -15,6 +15,7 @@
         [allies]="selectedCountry" 
         [testCollection]="allyCollection"
         [isConfiginfoSending]="configInfoSending"
+        (cancelConfiguration)="handleCancel($event)"
         (chosenCountry)="handleSearchCountry($event)" 
         (chosenAlly)="handleSearchAlly($event)"
         (chosenCompany)="handleSearchCompany($event)">
@@ -22,17 +23,11 @@
       <div class="card">
         <div class="card-body">
           <app-config-tabs 
+          [cleanConfig]="cleanConfig"
           [selectedAlly]="selectedAlly"
           [selectedCompany]="selectedCompany">
         </app-config-tabs>
         </div>
       </div>
-      <!-- <div class="card audit">
-        <div class="card-body">
-          <div class="card-header bg-primary text-white">
-            Auditoria
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>

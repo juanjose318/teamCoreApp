@@ -2,8 +2,8 @@
   y condicionar el layout -->
   <!-- [tableNumber]="tableNumber"  -->
 
-<mat-horizontal-stepper (selectionChange)="changeStep($event)" [linear]="false">
-  <mat-step label="Paso 1 - Empresas">
+<mat-horizontal-stepper (selectionChange)="changeStep($event)" [linear]="true">
+  <mat-step label="Paso 1 - Empresas" [completed]="isActive1 === true ? true : false">
     <app-results-table 
     [(tableNumber)]="tableNumber" 
     [filteredAlly]="selectedAlly" 
@@ -19,7 +19,7 @@
     [selectedAlly]="selectedAlly"
     ></app-table-overview>
   </mat-step>
-  <mat-step label="Paso 2 - Socio Comercial" >
+  <mat-step label="Paso 2 - Socio Comercial" [completed]="isActive2 === true ? true : false">
     <div class="btn-wrapper">
       <button  class="btn btn-primary" matStepperPrevious>Volver <i class="bi bi-arrow-left-circle"></i></button>
       <button  class="btn btn-primary" matStepperNext >Configurar Produtos <i class="bi bi-arrow-right-circle"></i></button>
@@ -31,7 +31,7 @@
     <app-table-overview 
     [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
   </mat-step>
-  <mat-step label="Paso 3 - Productos">
+  <mat-step label="Paso 3 - Productos" [completed]="isActive3 === true ? true : false">
     <app-results-table [tableNumber]="tableNumber"></app-results-table>
     <app-table-overview [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
   </mat-step>

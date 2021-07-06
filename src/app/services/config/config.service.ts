@@ -56,7 +56,6 @@ export class ConfigService {
     
     activateOrDeactivateComercialRelation(relation){
         const convertedRelation = JSON.stringify(relation);
-        console.log(convertedRelation);
         return this.http.put(`${environment.apiUrl}/configurations/companies`, convertedRelation, httpOptions).subscribe();
     }
 
@@ -64,7 +63,6 @@ export class ConfigService {
         if(!configId) {
             return;
         }
-        console.log(configId);
         this.http.get(`${environment.apiUrl}/configurations/traders/companiesconfig/`+ configId).subscribe((data) => {
             this.traders = data;
             this.traderListener.next({

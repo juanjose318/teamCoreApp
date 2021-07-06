@@ -25,6 +25,10 @@ export class ConfigurarAliadosComponent implements OnInit {
    */
   private selectedCountry: string;
   /**
+   * Ip
+   */
+  private clientIp;
+  /**
    * Auditoria
    */
   private audit: any;
@@ -38,8 +42,8 @@ export class ConfigurarAliadosComponent implements OnInit {
    * Mensajes para textBox component
    * TODO: Ponerlos en archivo aparte como mock
    */
-  descriptionBoxText = 'Herramienta que permite crear y/o editar informacion de los Aliados';
-  descriptionAudit = 'El ultimo cambio efectuado sobre la informacion de Aliado';
+  descriptionBoxText = 'Herramienta que permite crear y/o editar Información de los Aliados';
+  descriptionAudit = 'El ultimo cambio efectuado sobre la Información de Aliado';
   /**
    * Config envio de aliados
   */
@@ -57,11 +61,11 @@ export class ConfigurarAliadosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.aliadoService.getAllies();
-    // this.allySub = this.aliadoService.getAllyListener()
-    //   .subscribe((allyData) => {
-    //     this.everyAlly = allyData.allies;
-    //   });
+    this.aliadoService.getIp();
+    this.allySub = this.aliadoService.getIpListener().subscribe((data) => {
+      this.clientIp = data.ip
+      console.log(this.clientIp)
+    });
   }
   /**
    * Creacion de Aliado
@@ -107,7 +111,7 @@ export class ConfigurarAliadosComponent implements OnInit {
             'affectedField': ' ',
             'valueBefore': ' ',
             'valueAfter': ' ',
-            'ipOrigin': '10.20.32.141',
+            'ipOrigin': this.clientIp,
             'creationDate': toDeleteAlly.creationDate,
             'updateDate': toDeleteAlly.updateDate
           }];
@@ -149,7 +153,7 @@ export class ConfigurarAliadosComponent implements OnInit {
             'affectedField': val,
             'valueBefore': ally.selectedAlly[val],
             'valueAfter': ally.modifiedAlly[val],
-            'ipOrigin': '10.20.32.141',
+            'ipOrigin': this.clientIp,
             'creationDate': ally.modifiedAlly.creationDate,
             'updateDate': updateDate
           };

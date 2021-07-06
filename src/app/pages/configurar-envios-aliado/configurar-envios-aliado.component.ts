@@ -10,7 +10,7 @@ import { ConfigService } from 'src/app/services/config/config.service';
   templateUrl: './configurar-envios-aliado.component.html',
   styleUrls: ['./configurar-envios-aliado.component.scss']
 })
-export class ConfigurarEnviosAliadoComponent implements OnInit {
+export class ConfigurarEnviosAliadoComponent {
   /**
  * Aliado
  */
@@ -26,7 +26,7 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
   * Mensajes para textBox component
   * TODO: Ponerlos en archivo aparte como mock
   */
-  descriptionText: String = 'Herramienta que permite  Habilitar en inhabilitar tanto comercio como un fabricante y sobre este ultimo, activar los socios Comerciales y las referencisa del catalogo de productos para el envio de la Meta Data de ventar para inventarios al aliado';
+  descriptionText: String = 'Herramienta que permite Habilitar e inhabilitar tanto comercio como un fabricante y sobre este último, activar los socios Comerciales y las referencias del catalogo de productos para el envío de la Metadata de ventas para inventarios al aliado ';
   /**
    * Conficional para Saber si se trata de la pantalla configurar envios de aliado
    */
@@ -43,9 +43,12 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
   /**
    * Coleccion
    */
-  allyCollection;
-  companyCollection;
-
+  private allyCollection;
+  private companyCollection;
+  /**
+   * Reset de configuracion
+   */
+  private cleanConfig;
 
   isLoading: boolean;
 
@@ -63,22 +66,16 @@ export class ConfigurarEnviosAliadoComponent implements OnInit {
 
   ) { }
 
-  ngOnInit() {
-    // this.allyService.getAllies();
-    // this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
-    //   this.allyCollection = alliesData.allies;
-    //   this.companyService.getCompanies();
-    //   this.companySub = this.companyService.getCompanyListener().subscribe((company) => {
-    //     this.companyCollection = company.companies;
-    //     console.log(this.companyCollection);
-    //   });
-    // });
-  }
-
   handleSearchCompany(companyId) {
-      console.log(companyId);
       this.selectedCompany = companyId;
     }
+
+  handleCancel(cancel){
+    console.log(cancel);
+    if(cancel === true){
+      this.cleanConfig = true;
+    }
+  }
 
   handleSearchCountry(country) {
     this.isLoading = true;
