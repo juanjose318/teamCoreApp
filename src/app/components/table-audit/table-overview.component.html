@@ -15,10 +15,10 @@
 
     <div class="container wrapper" *ngIf="allyAuditTableNumber === 1">
 
-      <div *ngIf="auditCollection?.length !== 0; else noDisponible">
+      <div *ngIf="auditCollection?.length !== 0 || !!auditCollection; else noDisponible">
         <div class="row">
           <div class="col-sm">
-            <button type="button" class="btn btn-primary" (click)="exportexcel()">Descargar Auditoria <i
+            <button type="button" class="btn btn-primary" (click)="exportexcel()" >Descargar Auditoria <i
                 class="bi bi-file-earmark-arrow-down"></i></button>
           </div>
         </div>
@@ -84,7 +84,7 @@
 
     <div *ngIf="allyAuditTableNumber === 2">
 
-      <div *ngIf="auditCollection.length !== 0; else noDisponible">
+      <div *ngIf="auditCollection.length !== 0 || !!auditCollection; else noDisponible">
         <div class="row">
           <div class="col-sm">
             <button type="button" class="btn btn-primary" (click)="exportexcel()">Descargar Auditoría <i
