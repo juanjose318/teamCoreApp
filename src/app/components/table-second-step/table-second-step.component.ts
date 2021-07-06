@@ -26,7 +26,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
     tradersForConfig = [];
     tradersCollection = [];
 
-    displayedColumns: String[] = ['selectField', 'company.idCompany', 'company.companyCode', 'companyName'];
+    displayedColumns: String[] = ['selectField', 'company.companyCode', 'companyName'];
 
     objTraders = [];
 

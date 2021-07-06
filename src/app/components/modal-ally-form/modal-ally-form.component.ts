@@ -34,6 +34,7 @@ private creationDate: Date = new Date ();
 
   save() {
     if (this.formGroup.invalid) {
+      this.showValidationMsg(this.formGroup)
       return;
     }
     this.dialogRef.close(this.formGroup.value);
@@ -42,6 +43,22 @@ private creationDate: Date = new Date ();
   close() {
     this.dialogRef.close();
   }
+
+  showValidationMsg(formGroup: FormGroup) {
+
+    for (const key in formGroup.controls) {
+        if (formGroup.controls.hasOwnProperty(key)) {
+            const control: FormControl = <FormControl>formGroup.controls[key];
+
+            if (Object.keys(control).includes('controls')) {
+                const formGroupChild: FormGroup = <FormGroup>formGroup.controls[key];
+                this.showValidationMsg(formGroupChild);
+            }
+
+            control.markAsTouched();
+        }
+    }
+}
 
   /**
    * Getters para manejo dentro del html
@@ -100,16 +117,18 @@ private creationDate: Date = new Date ();
         Validators.maxLength(100)]),
       mail: new FormControl(this.mail, [
         Validators.required,
-        Validators.pattern('^[a-zA-Z]+.*[a-zA-Z]+@[a-zA-Z]+\.[a-zA-Z]+$')]),
+        Validators.pattern('^[a-zA-Z]+.*[a-zA-Z]+@[a-zA-Z]+\.[a-zA-Z]+$'),
+        Validators.maxLength(100)]),
       phone: new FormControl(this.phone, [
-        Validators.required]),
+        Validators.required,
+        Validators.maxLength(20)]),
       description: new FormControl(this.description, [
         Validators.required,
         Validators.maxLength(400),
         Validators.pattern('^.*$')]),
       carvajalContact: new FormControl(this.carvajalContact, [
         Validators.required,
-        Validators.maxLength(320),
+        Validators.maxLength(100),
         Validators.pattern('^[a-zA-Z]+.*[a-zA-Z]+@[a-zA-Z]+\.[a-zA-Z]+$')]),
       creationDate: new FormControl(this.creationDate)
     });

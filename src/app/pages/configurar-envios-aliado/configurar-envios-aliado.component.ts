@@ -26,7 +26,7 @@ export class ConfigurarEnviosAliadoComponent {
   * Mensajes para textBox component
   * TODO: Ponerlos en archivo aparte como mock
   */
-  descriptionText: String = 'Herramienta que permite Habilitar e inhabilitar tanto comercio como un fabricante y sobre este último, activar los socios Comerciales y las referencias del catalogo de productos para el envío de la Metadata de ventas para inventarios al aliado ';
+  descriptionText: String = 'Herramienta que permite habilitar e inhabilitar tanto comercio como un fabricante y sobre este último, activar los socios comerciales y las referencias del catalogo de productos para el envío de la metadata de ventas para inventarios al aliado ';
   /**
    * Conficional para Saber si se trata de la pantalla configurar envios de aliado
    */

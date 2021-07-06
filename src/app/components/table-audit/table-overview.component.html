@@ -16,7 +16,7 @@
     <div class="container wrapper" *ngIf="allyAuditTableNumber === 1">
 
       <div *ngIf="auditCollection?.length !== 0 || !!auditCollection; else noDisponible">
-        <div class="row">
+        <div class="row download">
           <div class="col-sm">
             <button type="button" class="btn btn-primary" (click)="exportexcel()" >Descargar Auditoria <i
                 class="bi bi-file-earmark-arrow-down"></i></button>
@@ -85,18 +85,19 @@
     <div *ngIf="allyAuditTableNumber === 2">
 
       <div *ngIf="auditCollection.length !== 0 || !!auditCollection; else noDisponible">
-        <div class="row">
+        <div class="row download">
           <div class="col-sm">
             <button type="button" class="btn btn-primary" (click)="exportexcel()">Descargar Auditoría <i
                 class="bi bi-file-earmark-arrow-down"></i></button>
           </div>
         </div>
+        
         <mat-form-field>
           <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
         </mat-form-field>
-        <!-- matSortActive="updateDate"
-          matSortDirection="desc" -->
-        <table mat-table [dataSource]="dataSource" matSort id="excel-table" matSortDisableClear>
+
+        <table mat-table [dataSource]="dataSource" matSort id="excel-table" matSortDisableClear matSortActive="updateDate"
+        matSortDirection="desc" >
 
           <ng-container matColumnDef="idRegistry">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Id Registro </th>

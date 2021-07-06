@@ -10,8 +10,8 @@
             <mat-option value="CO">Colombia</mat-option>
             <mat-option value="ALL">Todos</mat-option>
             <mat-option value="AR">Argentina</mat-option>
-            <mat-option value="PE">Peru</mat-option>
-            <mat-option value="MX">Mexico</mat-option>
+            <mat-option value="PE">Perú</mat-option>
+            <mat-option value="MX">México</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -44,7 +44,7 @@
 
       <div class="field">
         <mat-form-field appearance="fill" *ngIf="isConfiginfoSending === true">
-          <mat-label>Codigo</mat-label>
+          <mat-label>Código</mat-label>
           <input matInput placeholder="Ean Empresa" [(ngModel)]="companyEan"
             (ngModelChange)="filterByCompanyEan($event)">
         </mat-form-field>
@@ -56,6 +56,7 @@
       </mat-form-field> -->
 
     </div>
+    <mat-divider class="divider"></mat-divider>
     <!--- Si esta desde la pagina de configuracion del Aliado -->
     <div *ngIf="isConfiginfoSending === false">
       <div class="btn-wrapper">

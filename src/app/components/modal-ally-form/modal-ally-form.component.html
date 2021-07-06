@@ -28,8 +28,9 @@
           <select class="form-select" formControlName="idCountry" required>
             <option selected>Seleccionar</option>
             <option value="CO">Colombia</option>
-            <option value="CO">Todos</option>
             <option value="AR">Argentina</option>
+            <option value="PE">Perú</option>
+            <option value="MX">México</option>
           </select>
         </div>
 
@@ -82,8 +83,7 @@
           <small *ngIf="contactField.errors?.required" class="text-danger">
             Contacto es requerido
           </small>
-          <small *ngIf="contactField.errors?.maxlength || contactField.errors?.pattern"
-            class="text-danger">
+          <small *ngIf="contactField.errors?.maxlength || contactField.errors?.pattern" class="text-danger">
             La información ingresada no es correcta
           </small>
         </div>
@@ -175,8 +175,9 @@
             <select class="form-select" formControlName="idCountry" required>
               <option selected>Seleccionar</option>
               <option value="CO">Colombia</option>
-              <option value="CO">Todos</option>
               <option value="AR">Argentina</option>
+              <option value="PE">Perú</option>
+              <option value="MX">México</option>
             </select>
           </div>
 
@@ -211,8 +212,7 @@
             <small *ngIf="contactField.errors?.required" class="text-danger">
               Contacto es requerido
             </small>
-            <small *ngIf="contactField.errors?.maxlength || contactField.errors.pattern"
-              class="text-danger">
+            <small *ngIf="contactField.errors?.maxlength || contactField.errors.pattern" class="text-danger">
               La información ingresada no es correcta
             </small>
           </div>
@@ -234,7 +234,7 @@
           </div>
         </div>
 
-   
+
         <div class="row">
           <div class="mb-3">
             <label class="form-label label">Identificación</label><input
@@ -277,7 +277,7 @@
           <div *ngIf="(descriptionField.invalid && descriptionField.touched) || descriptionField.dirty"
             class="error-msg">
             <small *ngIf="descriptionField.errors?.required" class="text-danger">
-              Descripcion es requerida
+              Descripción es requerida
             </small>
             <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors?.pattern" class="text-danger">
               La información ingresada no es correcta

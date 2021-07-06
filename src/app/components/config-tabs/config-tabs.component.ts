@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material';
+import { ProductService } from 'src/app/services/products/products.service';
+import { AngularCsv } from 'angular7-csv';
 
 @Component({
   selector: 'app-config-tabs',
@@ -27,7 +29,9 @@ export class ConfigTabsComponent implements OnChanges {
 
   tableNumber = 2;
   allyAuditTableNumber = 2;
-  constructor() { }
+  constructor(
+    private productService: ProductService,
+  ) { }
 
   ngOnChanges(changes: SimpleChanges) {
     let change = changes['cleanConfig'];
@@ -88,6 +92,17 @@ export class ConfigTabsComponent implements OnChanges {
 
   createAllyCompanyConfig(objAllyCompanyAudit) {
     this.objAllyCompanyAuditCollection = objAllyCompanyAudit;
+  }
+
+  handleCsv(download){
+    console.log(this.registryToConfigure);
+    if(download){
+      // this.productService.getProductsByCompany(this.companyId);
+      // this.productService.getProductListener().subscribe((data) => {
+      //   console.info(data.products);
+      //   new AngularCsv(data.products, 'Reporte Productos');
+      // });
+    }
   }
 
 }

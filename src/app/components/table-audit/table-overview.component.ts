@@ -63,6 +63,12 @@ export class TableOverviewComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.updateTable(this.auditCollection);
+        // Modificar filtro
+        this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.allied.idAllied.toLowerCase().includes(filter) || data.allied.name.toLowerCase().includes(filter) || data.company.idCompany.toString().includes(filter) || data.company.companyName.toString().includes(filter)
+            || data.configurationDate.toString().includes(filter) || data.state.state.toString().includes(filter) || data.executor.toString().includes(filter) || data.ipOrigin.toString().includes(filter) || data.updateDate.toString().includes(filter)
+            || data.executor.toString().includes(filter) === filter;
+        };
     }
 
     ngOnChanges() {
@@ -78,7 +84,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                     this.displayedColumns = this.allyAuditColumns;
                 });
         }
-        else if (this.allyAuditTableNumber === 2) {
+        else if (this.allyAuditTableNumber === 2 || this.allyAuditTableNumber === 3 || this.allyAuditTableNumber === 4) {
             if (!!this.selectedAlly && !this.selectedCompany) {
                 this.auditService.getAuditConfigAllyCompanyByAlly(this.selectedAlly);
                 this.auditSub = this.auditService.getAuditListener()
@@ -118,7 +124,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
         this.dataSource.filter = filterValue.trim().toLowerCase();
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
-        }
+        } 
     }
 
     handleAuditCompanyConfig(configAllyCompAudit) {

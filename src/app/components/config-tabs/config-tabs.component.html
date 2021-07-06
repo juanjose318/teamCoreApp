@@ -11,7 +11,6 @@
     (nextStepWithRegistry)="continueToSecondStep($event)"
     (createAllyCompanyConfig)="createAllyCompanyConfig($event)"
     ></app-results-table>
-  
     <app-table-overview 
     [allyAuditTableNumber]="allyAuditTableNumber"
     [(objAllyCompanyAudit)]="objAllyCompanyAuditCollection"
@@ -32,7 +31,11 @@
     [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
   </mat-step>
   <mat-step label="Paso 3 - Productos" [completed]="isActive3 === true ? true : false">
-    <app-results-table [tableNumber]="tableNumber"></app-results-table>
-    <app-table-overview [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
+    <app-results-table 
+    [tableNumber]="tableNumber" 
+    [registry]="registry"
+    (downloadCsv)="handleDownload($event)"></app-results-table>
+    <app-table-overview 
+    [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
   </mat-step>
 </mat-horizontal-stepper>
