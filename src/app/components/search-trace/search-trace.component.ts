@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { SearchParams } from 'src/app/models/searchParams';
 import { AliadoService } from 'src/app/services/ally/ally.service';
@@ -16,7 +17,8 @@ export class SearchTraceComponent implements OnInit {
         private companyService: CompanyService,
         private allyService: AliadoService,
         private auditService: AuditService,
-        private cd: ChangeDetectorRef
+        private cd: ChangeDetectorRef,
+        private _snackBar: MatSnackBar
     ) { }
 
     @Output() searchParams: EventEmitter<SearchParams> = new EventEmitter<SearchParams>();
@@ -45,7 +47,13 @@ export class SearchTraceComponent implements OnInit {
 
     submitSearch() {
         const params: SearchParams = { idAlly: this.selectedAlly, idCompany: this.selectedCompany }
+        if(params.idAlly && params.idCompany){
         this.searchParams.emit(params)
+        } else {
+            this._snackBar.open('Campos requeridos no han sido seleccionados', 'cerrar', {
+                duration: 2000,
+              });
+        }
     }
 
     filterCountry(country) {
