@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AliadoService } from 'src/app/services/ally/ally.service';
-import { CompanyService } from 'src/app/services/company/company.service';
-import { ConfigService } from 'src/app/services/config/config.service';
 
 @Component({
   selector: 'app-configurar-envios-aliado',
   templateUrl: './configurar-envios-aliado.component.html',
-  styleUrls: ['./configurar-envios-aliado.component.scss']
+  styleUrls: ['./configurar-envios-aliado.component.scss'],
 })
 export class ConfigurarEnviosAliadoComponent {
+  constructor(
+    private cd: ChangeDetectorRef
+  ) { }
   /**
  * Aliado
  */
@@ -18,15 +17,9 @@ export class ConfigurarEnviosAliadoComponent {
   private selectedCountry: any;
   private selectedCompany;
   /**
-   * Suscripciones
-   */
-  private allySub: Subscription;
-  private companySub: Subscription;
-  /**
   * Mensajes para textBox component
-  * TODO: Ponerlos en archivo aparte como mock
   */
-  descriptionText: String = 'Herramienta que permite habilitar e inhabilitar tanto comercio como un fabricante y sobre este último, activar los socios comerciales y las referencias del catalogo de productos para el envío de la metadata de ventas para inventarios al aliado ';
+  descriptionText: String = 'Herramienta que permite habilitar e inhabilitar tanto comercio como un fabricante y sobre este último, activar los socios comerciales y las referencias del cátalogo de productos para el envío de la metadata de ventas para inventarios al aliado';
   /**
    * Conficional para Saber si se trata de la pantalla configurar envios de aliado
    */
@@ -49,6 +42,11 @@ export class ConfigurarEnviosAliadoComponent {
    * Reset de configuracion
    */
   private cleanConfig;
+  /**
+   * Condicional de registro
+   */
+  hasRegistry: boolean;
+  hasSelectedComercialPartners: boolean;
 
   isLoading: boolean;
 
@@ -58,55 +56,65 @@ export class ConfigurarEnviosAliadoComponent {
     }
   }
 
-  constructor(
-    private aliadoService: AliadoService,
-    private configService: ConfigService,
-    private companyService: CompanyService,
-    private allyService: AliadoService,
-
-  ) { }
-
   handleSearchCompany(companyId) {
-      this.selectedCompany = companyId;
-    }
+    this.selectedCompany = companyId;
+  }
 
-  handleCancel(cancel){
+  handleCancel(cancel) {
     console.log(cancel);
-    if(cancel === true){
+    if (cancel === true) {
       this.cleanConfig = true;
     }
   }
 
   handleSearchCountry(country) {
     this.isLoading = true;
-      switch(country) {
+    switch (country) {
       case 'CO':
-      this.selectedCountry = country;
-      this.audit = country;
-      break;
+        this.selectedCountry = country;
+        this.audit = country;
+        break;
       case 'ALL':
-      this.selectedCountry = country;
-      break;
+        this.selectedCountry = country;
+        break;
       case 'AR':
-      this.selectedCountry = country;
-      this.audit = country;
-      break;
+        this.selectedCountry = country;
+        this.audit = country;
+        break;
       case 'EMPTY':
-      this.isLoading = false;
-      break;
+        this.isLoading = false;
+        break;
       case 'MX':
-      this.selectedCountry = country;
-      this.audit = country;
-      break;
+        this.selectedCountry = country;
+        this.audit = country;
+        break;
       case 'PE':
-      this.selectedCountry = country;
-      this.audit = country;
-      break;
+        this.selectedCountry = country;
+        this.audit = country;
+        break;
+    }
+  }
+  /**
+   * @param hasRegistry boolean que confirma si hay registro seleccionado
+   */
+  handleRegistry(hasRegistry) {
+    if (hasRegistry === true) {
+      this.hasRegistry = true;
+      console.log(this.hasRegistry);
     }
   }
 
-  handleReset(){
-    this.cleanConfig = false;
+  handleComercialPartners(hasComercialPartners) {
+    if (hasComercialPartners) {
+      this.hasSelectedComercialPartners = true;
+      console.log(this.hasSelectedComercialPartners);
+    }
+  }
+
+  handleReset() {
+    setTimeout(() => {
+      this.cleanConfig = false;
+    }, 1000);
   }
 
 }

@@ -6,6 +6,7 @@ import { AliadoService } from 'src/app/services/ally/ally.service';
 import { CompanyService } from 'src/app/services/company/company.service';
 import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
 
+
 /**
  * TODO reemplazar EAN por CODIGO
  */
@@ -21,6 +22,8 @@ export class SearchCreateAllyComponent implements OnChanges {
    */
   @Input() isConfiginfoSending: boolean;
   @Input() allies;
+  @Input() hasRegistry: boolean;
+  @Input() hasSelectedComercialPartners: boolean;
   /**
    * Outputs
    */
@@ -29,6 +32,7 @@ export class SearchCreateAllyComponent implements OnChanges {
   @Output() chosenCompany: EventEmitter<any> = new EventEmitter();
   @Output() createdAlly: EventEmitter<any> = new EventEmitter();
   @Output() cancelConfiguration: EventEmitter<any> = new EventEmitter();
+  @Output() saveConfiguration: EventEmitter<any> = new EventEmitter();
   /**
    * Colleciones iterables
    */
@@ -51,7 +55,10 @@ export class SearchCreateAllyComponent implements OnChanges {
   companyName: string;
   companyEan: number;
   companyId: string;
-
+  /**
+   * Condicional para habilitar el boton de guardar
+   */
+  isButtonEnabled;
   constructor(
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
@@ -62,6 +69,7 @@ export class SearchCreateAllyComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     let change = changes['allies'];
+
     if (change) {
       if (change.currentValue !== null) {
         this.handleFetchAllies(change.currentValue);
@@ -70,6 +78,13 @@ export class SearchCreateAllyComponent implements OnChanges {
         return;
       }
     }
+    if (this.hasRegistry && this.hasSelectedComercialPartners) {
+        if (this.hasRegistry === true && this.hasSelectedComercialPartners === true) {
+          this.isButtonEnabled = true;
+        } else {
+          this.isButtonEnabled = false;
+        }
+    }
   }
 
   /**
@@ -77,6 +92,7 @@ export class SearchCreateAllyComponent implements OnChanges {
    */
   filterCountry(country) {
     this.chosenCountry.emit(country);
+    this.cd.markForCheck();
   }
 
   /**
@@ -212,7 +228,7 @@ export class SearchCreateAllyComponent implements OnChanges {
           duration: 2000,
         });
       } else {
-        this._snackBar.open('Operacion cancelada', 'cerrar', {
+        this._snackBar.open('Operación cancelada', 'cerrar', {
           duration: 2000,
         });
       }
@@ -227,6 +243,13 @@ export class SearchCreateAllyComponent implements OnChanges {
   * Cancelar los registros
   */
   cancel() {
+    this.isButtonEnabled = false;
     this.cancelConfiguration.emit(true);
+  }
+  /**
+   * Guardar Configuraciones
+   */
+  saveConfig() {
+    this.saveConfiguration.emit(true);
   }
 }

@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material';
 import { ProductService } from 'src/app/services/products/products.service';
-import { AngularCsv } from 'angular7-csv';
 
 @Component({
   selector: 'app-config-tabs',
   templateUrl: './config-tabs.component.html',
-  styleUrls: ['./config-tabs.component.scss']
+  styleUrls: ['./config-tabs.component.scss'],
 })
 export class ConfigTabsComponent implements OnChanges {
   @Input() selectedAlly;
@@ -14,6 +13,9 @@ export class ConfigTabsComponent implements OnChanges {
   @Input() cleanConfig;
 
   @Output() resetStepper: EventEmitter<boolean> = new EventEmitter();
+
+  @Output() registry: EventEmitter<any> = new EventEmitter();
+  @Output() comercialPartners: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatStepper) stepper: MatStepper;
 
@@ -68,7 +70,7 @@ export class ConfigTabsComponent implements OnChanges {
     console.log(this.registryToConfigure);
     setTimeout(() => {
       this.stepper.next();
-
+      this.registry.emit(true);
     }, 0.2);
   }
 
@@ -76,8 +78,8 @@ export class ConfigTabsComponent implements OnChanges {
     this.objTradersConfig = objTradersToConfig;
     if (this.objTradersConfig.length !== 0) {
       this.isActive2 = true;
+      this.comercialPartners.emit(true);
     }
-    console.log(objTradersToConfig);
   }
 
   handleCleanConfig() {
@@ -92,17 +94,6 @@ export class ConfigTabsComponent implements OnChanges {
 
   createAllyCompanyConfig(objAllyCompanyAudit) {
     this.objAllyCompanyAuditCollection = objAllyCompanyAudit;
-  }
-
-  handleCsv(download){
-    console.log(this.registryToConfigure);
-    if(download){
-      // this.productService.getProductsByCompany(this.companyId);
-      // this.productService.getProductListener().subscribe((data) => {
-      //   console.info(data.products);
-      //   new AngularCsv(data.products, 'Reporte Productos');
-      // });
-    }
   }
 
 }

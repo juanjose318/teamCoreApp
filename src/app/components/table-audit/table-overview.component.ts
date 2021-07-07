@@ -20,8 +20,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     displayedColumns = [];
     allyAuditColumns: string[] = ['idAllied', 'actionExecuted', 'updateDate', 'creationDate', 'executor',
         'ipOrigin', 'affectedField', 'valueBefore', 'valueAfter'];
-    allyCompanyAuditColumns: string[] = ['idRegistry', 'idAllied', 'allied.name', 'company.idCompany',
-        'company.companyName', 'configurationDate', 'state.state', 'updateDate', 'executor', 'ipOrigin','detail']
+    allyCompanyAuditColumns: string[] = ['idRegistry', 'idAllied', 'allied.name','company.companyName', 'configurationDate', 'state.state', 'updateDate', 'executor', 'ipOrigin','detail']
     /**
      * Recurso de display de data para tabla material
      */

@@ -12,7 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material';
-
+import {MatTooltipModule} from '@angular/material/tooltip'; 
 @NgModule({
     imports: [
         MatDialogModule,
@@ -28,6 +28,7 @@ import { MatRadioModule } from '@angular/material';
         MatStepperModule,
         MatCheckboxModule,
         MatRadioModule,
+        MatTooltipModule
     ],
     exports: [
         MatDialogModule,
@@ -42,8 +43,8 @@ import { MatRadioModule } from '@angular/material';
         MatProgressSpinnerModule,
         MatStepperModule,
         MatCheckboxModule,
-        MatRadioModule
-
+        MatRadioModule,
+        MatTooltipModule
     ],
     declarations: [],
     providers: [],

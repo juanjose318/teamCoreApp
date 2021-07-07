@@ -60,14 +60,28 @@
     <!--- Si esta desde la pagina de configuracion del Aliado -->
     <div *ngIf="isConfiginfoSending === false">
       <div class="btn-wrapper">
-        <button class="btn btn-primary" type="submit" (click)="openDialog()">Nuevo <i class="bi bi-plus-circle"></i></button>
+        <button class="btn btn-primary" type="submit" (click)="openDialog()">Nuevo <i
+            class="bi bi-plus-circle"></i></button>
       </div>
     </div>
     <!--- Si esta desde la pagina de configuracion de envio de informacion al aliado -->
-    <div class="btn-wrapper" *ngIf="isConfiginfoSending === true">
-      <button class="btn btn-primary" type="submit" (click)="saveAlly($event)">Guardar <i
+    <div class="btn-wrapper configButtons" *ngIf="isConfiginfoSending === true">
+      <ng-template #buttonDisabled>
+        <button class="btn btn-primary" type="submit" (click)="saveAlly($event)" disabled>Guardar <i
+            class="bi bi-save"></i></button>
+      </ng-template>
+
+      <button *ngIf="isButtonEnabled; else buttonDisabled" class="btn btn-primary" (click)="saveConfig()">Guardar <i
           class="bi bi-save"></i></button>
+
       <button class="btn btn-primary" type="submit" (click)="cancel($event)">Cancelar <i
           class="bi bi-x-circle"></i></button>
+    </div>
+    <div *ngIf="!isButtonEnabled && isConfiginfoSending === true">
+      <mat-divider class="divider"></mat-divider>
+      <div class="row">
+        <small> <i class="bi bi-info-circle"></i> Para guardar la configuración debes tener mínimo un socio comercial seleccionado y un producto
+        </small>
+      </div>
     </div>
   </div>

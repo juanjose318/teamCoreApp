@@ -2,11 +2,14 @@
 
 .card {
   width: 100%;
-  margin: 1% auto;
 }
 
 .input-group {
   padding-right: 2%;
+}
+
+.global-wrapper {
+  margin-bottom: 2%;
 }
 
 .wrapper {
@@ -38,11 +41,12 @@
   flex-flow: row nowrap;
   align-items: center;
 }
-.btn-wrapper .btn {
+
+.btn-wrapper .btn, .empty  .btn {
   margin-right: 2%;
 }
 
-.divider {
+.divider, .configButtons {
   margin-bottom: 2%;
 }
 
@@ -63,5 +67,13 @@
 
 .field {
   margin-right: 2%;
+}
+
+.no-click {
+  pointer-events: none;
+}
+
+small, .bi-info-circle {
+  color: rgb(0, 155, 46);
 }
 

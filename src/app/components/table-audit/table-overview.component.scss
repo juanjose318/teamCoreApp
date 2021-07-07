@@ -25,3 +25,7 @@ table {
   .download {
     margin-bottom: 3%;
   }
+
+  ::ng-deep .mat-sort-header-container {
+    justify-content: center !important;
+  }
