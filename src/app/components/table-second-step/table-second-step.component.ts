@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatPaginator, MatSort } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { ConfigService } from 'src/app/services/config/config.service';
     styleUrls: ['./table-second-step.component.scss'],
 })
 
-export class SecondStepTableComponent implements OnInit, OnChanges {
+export class SecondStepTableComponent implements OnInit, OnChanges{
 
     @Input() registry;
     @Input() tableNumber;
@@ -46,7 +46,9 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
                     this.fetchCurrentConfig(change.currentValue.idAlliedCompanyConfig);
                     this.fetchAllTraders();
                     this.tradersTableCollection = this.tradersForConfig.concat(this.tradersCollection);
-                    this.updateDatable(this.tradersTableCollection);
+                    setTimeout(() => {
+                        this.updateDatable(this.tradersTableCollection);
+                    },1000);
                 }
             }
         }

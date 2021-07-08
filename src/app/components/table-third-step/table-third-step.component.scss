@@ -1,0 +1,41 @@
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+.btn-wrapper .btn {
+  margin-right: 2%;
+}
+
+.card {
+  margin-top: 2%;
+}
+
+.btn-wrapper {
+  margin-bottom: 2%;
+}
+
+td,
+th,
+.mat-sort-header-button {
+  font-size: 0.6rem;
+  text-align: center;
+}
+
+.bi {
+  padding-left: 4px;
+}
+
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center !important;
+}
+
+table {
+  width: 100%;
+}
+
+mat-divider {
+    margin-bottom: 2%;
+}
+
+app-upload-master-file {
+  margin-bottom: 2%;
+}

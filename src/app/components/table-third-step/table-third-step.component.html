@@ -1,0 +1,81 @@
+<!-- Producto y puntos de venta -->
+<div class="card">
+  <div class="card-body">
+   
+    <div class="btn-wrapper">
+      <button class="btn btn-primary" (click)="goToPreviousStep()">Volver<i class="bi bi-arrow-left-circle"></i></button>
+      <button class="btn btn-primary" (click)="exportCsv()">Descargar Maestro<i class="bi bi-file-earmark-arrow-down"></i></button>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="fill">
+        <mat-label>*Maestro</mat-label>
+        <mat-select [(ngModel)]="selectedMaster" (ngModelChange)="changeMaster($event)">
+          <mat-option selected value="EMPTY" disabled>Seleccionar</mat-option>
+          <mat-option value="PV">Puntos de venta</mat-option>
+          <mat-option value="PR">Productos</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+<mat-divider></mat-divider>
+    
+    <app-upload-master-file></app-upload-master-file>
+
+    <div class="card">
+      <div class="card-body">
+      
+        <ng-template #noDisponible class="card">
+          <div class="card-body">
+            No existe información para visualizar
+          </div>
+        </ng-template>
+
+        <table *ngIf="masterFileCollection?.length !== 0 || masterFileCollection !== null; else noDisponible" mat-table [dataSource]="dataSource" matSort matSortDirection="desc" matSortDisableClear #dataTable
+          class="card-body">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+            <td mat-cell *matCellDef="let row">{{ row.idMasterFile }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="startLoadingDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Inicio de Cargue</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.startDateLoad | date: 'd/MMM/y HH:mm' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</th>
+            <td mat-cell *matCellDef="let row"> {{ row.userName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="master">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Master</th>
+            <td mat-cell *matCellDef="let row">{{ row.master }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="fileUploaded">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Archivo Subido</th>
+            <td mat-cell *matCellDef="let row">{{ row.fileUploaded }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="state">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+            <td mat-cell *matCellDef="let row">{{ row.state.state }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="errorDetail">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Detalle</th>
+            <td mat-cell *matCellDef="let row">{{ row.detail }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [length]="dataSource?.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 30, 40]">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

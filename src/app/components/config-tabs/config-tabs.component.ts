@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material';
 import { ProductService } from 'src/app/services/products/products.service';
 
@@ -13,11 +13,14 @@ export class ConfigTabsComponent implements OnChanges {
   @Input() cleanConfig;
 
   @Output() resetStepper: EventEmitter<boolean> = new EventEmitter();
+  @Output() OutisLoading: EventEmitter<boolean> = new EventEmitter();
 
   @Output() registry: EventEmitter<any> = new EventEmitter();
   @Output() comercialPartners: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatStepper) stepper: MatStepper;
+
+  isLoading: boolean;
 
   registryToConfigure;
 
@@ -39,7 +42,7 @@ export class ConfigTabsComponent implements OnChanges {
     let change = changes['cleanConfig'];
     if (!!change) {
       if (change.currentValue) {
-          this.handleCleanConfig();      
+        this.handleCleanConfig();
       }
     }
   }
@@ -55,8 +58,8 @@ export class ConfigTabsComponent implements OnChanges {
         this.allyAuditTableNumber = 2;
         break;
       case 2:
-        this.allyAuditTableNumber = 4;
-        this.tableNumber = 4;
+        this.allyAuditTableNumber = 2;
+        this.tableNumber = 3;
         break;
       default:
         this.allyAuditTableNumber = 2;
@@ -92,8 +95,22 @@ export class ConfigTabsComponent implements OnChanges {
     this.resetStepper.emit(true);
   }
 
+  handlePreviousStep(goBack) {
+    if (goBack) {
+      this.stepper.previous();
+    }
+  }
+
+  handleDownload($event){
+    
+  }
+
   createAllyCompanyConfig(objAllyCompanyAudit) {
     this.objAllyCompanyAuditCollection = objAllyCompanyAudit;
   }
+
+  // handleIsloading(loading) {
+  //   (loading === true) ? this.isLoading = true : this.isLoading = false
+  // }
 
 }

@@ -1,6 +1,5 @@
 <!--Asignar valor de tabla para definir como distribuir la informacion 
   y condicionar el layout -->
-  <!-- [tableNumber]="tableNumber"  -->
 
 <mat-horizontal-stepper (selectionChange)="changeStep($event)" [linear]="true">
   <mat-step label="Paso 1 - Empresas" [completed]="isActive1 === true ? true : false">
@@ -28,14 +27,19 @@
     (objTradersToConfig)="handleObjTradersToConfig($event)"
     ></app-second-step-table>
     <app-table-overview 
-    [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
+    [allyAuditTableNumber]="allyAuditTableNumber"
+    [selectedCompany]="selectedCompany"
+    [selectedAlly]="selectedAlly"></app-table-overview>
   </mat-step>
   <mat-step label="Paso 3 - Productos" [completed]="isActive3 === true ? true : false">
-    <app-results-table 
-    [tableNumber]="tableNumber" 
-    [registry]="registry"
-    (downloadCsv)="handleDownload($event)"></app-results-table>
+    <app-table-third-step
+    [registry]="registryToConfigure"
+    (previousStep)="handlePreviousStep($event)"
+    (downloadCsv)="handleDownload($event)"
+    ></app-table-third-step>
     <app-table-overview 
-    [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
+    [allyAuditTableNumber]="allyAuditTableNumber"
+    [selectedCompany]="selectedCompany"
+    [selectedAlly]="selectedAlly"></app-table-overview>
   </mat-step>
 </mat-horizontal-stepper>

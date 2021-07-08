@@ -83,7 +83,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                     this.displayedColumns = this.allyAuditColumns;
                 });
         }
-        else if (this.allyAuditTableNumber === 2 || this.allyAuditTableNumber === 3 || this.allyAuditTableNumber === 4) {
+        else if (this.allyAuditTableNumber === 2) {
             if (!!this.selectedAlly && !this.selectedCompany) {
                 this.auditService.getAuditConfigAllyCompanyByAlly(this.selectedAlly);
                 this.auditSub = this.auditService.getAuditListener()

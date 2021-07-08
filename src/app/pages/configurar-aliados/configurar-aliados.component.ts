@@ -98,7 +98,6 @@ export class ConfigurarAliadosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
         const updateDate: Date = new Date();
-
         this.aliadoService.deleteAlly(toDeleteAlly.idAllied).subscribe(() => {
           this.aliadoService.getAllyByCountry(toDeleteAlly.idCountry);
           const allyAudit = [{

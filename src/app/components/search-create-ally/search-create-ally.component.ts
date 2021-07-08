@@ -6,7 +6,6 @@ import { AliadoService } from 'src/app/services/ally/ally.service';
 import { CompanyService } from 'src/app/services/company/company.service';
 import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
 
-
 /**
  * TODO reemplazar EAN por CODIGO
  */

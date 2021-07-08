@@ -32,6 +32,7 @@ import { ModalConfigFormComponent } from '../components/modal-config-form/modal-
 import { SecondStepTableComponent } from '../components/table-second-step/table-second-step.component';
 import { SearchTraceComponent } from '../components/search-trace/search-trace.component';
 import { TraceTableComponent } from '../components/trace-table/trace-table.component';
+import { ThirdStepTableComponent } from '../components/table-third-step/table-third-step.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { TraceTableComponent } from '../components/trace-table/trace-table.compo
     ModalConfigFormComponent,
     SecondStepTableComponent,
     SearchTraceComponent,
-    TraceTableComponent
+    TraceTableComponent,
+    ThirdStepTableComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +66,6 @@ import { TraceTableComponent } from '../components/trace-table/trace-table.compo
     ReactiveFormsModule,
     PageRoutingModule,
     MaterialModule
-
   ],
   entryComponents: [
     ModalAllyFormComponent,

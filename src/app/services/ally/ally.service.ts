@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
+import { of, Subject, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 
@@ -18,24 +19,35 @@ export class AliadoService {
     private allies: any;
     constructor(
         private http: HttpClient,
+        private _snackBar: MatSnackBar
     ) { }
 
     getAllies() {
         return this.http
             .get<{ allies: any[] }>(`${environment.apiUrl}/allies`)
             .pipe(
-                map((data => data))
+                map((data => data)),
+                catchError(err => {
+                    this.showErrorMessage('No se pudo obtener aliados');
+                    return throwError(err)
+                })
             ).subscribe((transformedData) => {
                 this.allies = transformedData;
                 this.allyListener.next({
                     allies: this.allies
                 });
             });
+
     }
 
     createAlly(newAlly) {
         const convertedAlly = JSON.stringify(newAlly);
-        return this.http.post(`${environment.apiUrl}/allies`, convertedAlly, httpOptions);
+        return this.http.post(`${environment.apiUrl}/allies`, convertedAlly, httpOptions).pipe(
+            catchError(err => {
+                this.showErrorMessage('No se pudo crear aliado');
+                return throwError(err)
+            })
+        );
     }
 
     getAllyListener() {
@@ -51,7 +63,11 @@ export class AliadoService {
     getIp() {
         return this.http
             .get(`${environment.apiUrl}/allies/ips`, { responseType: 'text' }).pipe(
-                map((data => data))
+                map((data => data),
+                    catchError(err => {
+                        this.showErrorMessage('No se pudo alcanzar el IP');
+                        return throwError(err)
+                    }))
             ).subscribe((data) => {
                 this.ipListener.next({
                     ip: data
@@ -61,13 +77,31 @@ export class AliadoService {
 
     updateAlly(ally) {
         const updatedAlly = JSON.stringify(ally);
-        return this.http.put(`${environment.apiUrl}/allies`, updatedAlly, httpOptions);
+        return this.http.put(`${environment.apiUrl}/allies`, updatedAlly, httpOptions)
+            .pipe(
+                catchError(err => {
+                    this.showErrorMessage('No se pudo actualizar aliado');
+                    return throwError(err)
+                }
+                )
+            );
     }
 
     deleteAlly(idAllied) {
         return this.http.delete(
             `${environment.apiUrl}/allies/` + idAllied, httpOptions
+        ).pipe(
+            catchError(err => {
+                this.showErrorMessage('No se pudo eliminar aliado');
+                return throwError(err)
+            })
         );
+    }
+
+    showErrorMessage(message) {
+        this._snackBar.open(message, 'cerrar', {
+            duration: 2000,
+        });
     }
     /**
      * Country by letter CO, AR, EC
@@ -78,7 +112,11 @@ export class AliadoService {
         } else {
             return this.http.get<{ allies: any[] }>(`${environment.apiUrl}/allies/countries/` + country
             ).pipe(
-                map((data => data))
+                map((data => data),
+                    catchError(err => {
+                        this.showErrorMessage('No se pudo alcanzar el aliado');
+                        return throwError(err)
+                    }))
             ).subscribe((transformedData) => {
                 this.allies = transformedData;
                 this.allyListener.next({

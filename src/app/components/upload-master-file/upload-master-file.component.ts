@@ -44,7 +44,7 @@ export class UploadMasterFileComponent {
       "startDateLoad": new Date(Date.now()),
       "endDateLoad": new Date(Date.now())
     };
-    console.log(masterFile.detail);
+    console.log(masterFile);
     //dataEncode = btoa("username:temppass");
     //console.log(dataEncode);
     //dataDecode = atob(dataEncode);
