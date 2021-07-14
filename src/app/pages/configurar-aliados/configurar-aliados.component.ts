@@ -64,7 +64,6 @@ export class ConfigurarAliadosComponent implements OnInit {
     this.aliadoService.getIp();
     this.allySub = this.aliadoService.getIpListener().subscribe((data) => {
       this.clientIp = data.ip
-      console.log(this.clientIp)
     });
   }
   /**
@@ -81,7 +80,6 @@ export class ConfigurarAliadosComponent implements OnInit {
    * @param allyId Id de aliado
    */
   handleSearchAlly(allyId) {
-    console.log(allyId);
     if (!!allyId) {
       this.selectedAlly = allyId;
     }
@@ -172,6 +170,10 @@ export class ConfigurarAliadosComponent implements OnInit {
     });
   }
 
+  /**
+   * 
+   * TODO cambiar ruta y canal canal 2 y ruta 4
+   */
   /**
    * Filtro por pais
    * @param country Id de pais por el cual se quiere filtrar

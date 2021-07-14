@@ -10,7 +10,7 @@ import { ConfigService } from 'src/app/services/config/config.service';
     styleUrls: ['./table-second-step.component.scss'],
 })
 
-export class SecondStepTableComponent implements OnInit, OnChanges{
+export class SecondStepTableComponent implements OnInit, OnChanges {
 
     @Input() registry;
     @Input() tableNumber;
@@ -21,6 +21,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges{
     @Output() objTradersToConfig: EventEmitter<any> = new EventEmitter();
 
     private companyAllyConfigSub: Subscription;
+    private traderSub: Subscription;
 
     tradersTableCollection = [];
     tradersForConfig = [];
@@ -31,6 +32,9 @@ export class SecondStepTableComponent implements OnInit, OnChanges{
     objTraders = [];
 
     objSecondStep;
+
+    companyCode;
+    configId;
 
     dataSource: MatTableDataSource<any>;
 
@@ -43,36 +47,33 @@ export class SecondStepTableComponent implements OnInit, OnChanges{
         if (!!change) {
             if (!!change.currentValue) {
                 if (!!change.currentValue.idAlliedCompanyConfig) {
-                    this.fetchCurrentConfig(change.currentValue.idAlliedCompanyConfig);
-                    this.fetchAllTraders();
-                    this.tradersTableCollection = this.tradersForConfig.concat(this.tradersCollection);
-                    setTimeout(() => {
-                        this.updateDatable(this.tradersTableCollection);
-                    },1000);
+                    this.configId = change.currentValue.idAlliedCompanyConfig;
+                    this.companyCode = change.currentValue.company.companyCode;
+                    this.fetchTradersWithConfig(this.configId, this.companyCode);
+                } else if (!change.currentValue.idAlliedCompanyConfig) {
+                    this.fetchTradersWithoutConfig(change.currentValue.company.companyCode);
                 }
             }
         }
     }
 
     ngOnInit() {
-        this.companyConfigService.getTraders();
-        this.companyAllyConfigSub = this.companyConfigService.getTraderListener().subscribe((data) => {
+        this.updateDatable(this.tradersCollection);
+    }
+
+    fetchTradersWithoutConfig(companyCode) {
+        this.companyConfigService.getTradersFirstTime(companyCode);
+        this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
-            this.updateDatable(this.tradersCollection);
+            setTimeout(() => this.updateDatable(this.tradersCollection), 1000)
         });
     }
 
-    fetchCurrentConfig(idConfig) {
-        this.companyConfigService.getTradersByConfigId(idConfig);
-        this.companyAllyConfigSub = this.companyConfigService.getTraderListener().subscribe((data) => {
-            this.tradersForConfig = data.traders;
-        });
-    }
-
-    fetchAllTraders() {
-        this.companyConfigService.getTraders();
-        this.companyAllyConfigSub = this.companyConfigService.getTraderListener().subscribe((data) => {
+    fetchTradersWithConfig(companyCode, configId) {
+        this.companyConfigService.getTradersSecondtTme(companyCode, configId);
+        this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
+            setTimeout(() => this.updateDatable(this.tradersCollection), 1000)
         });
     }
 
@@ -85,7 +86,6 @@ export class SecondStepTableComponent implements OnInit, OnChanges{
                 this.objTraders.splice(registryInCollection, 1)
             });
         }
-        console.log(this.objTraders);
         this.objTradersToConfig.emit(this.objTraders);
     }
 
@@ -100,6 +100,11 @@ export class SecondStepTableComponent implements OnInit, OnChanges{
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.companyAllyConfigSub.unsubscribe();
+        this.traderSub.unsubscribe();
     }
 
 }

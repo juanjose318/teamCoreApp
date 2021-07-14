@@ -84,8 +84,6 @@ export class ModalConfigFormComponent implements OnInit {
             this.companyCode = item.companyCode;
             this.idCompany = item.idCompany;
         });
-
-        console.log(filtered);
     }
 
     filterByAllyName(allyName) {
@@ -96,7 +94,6 @@ export class ModalConfigFormComponent implements OnInit {
     }
 
     filterByAllyId(allyId) {
-        console.log(allyId);
         const filtered = this.data.allyCollection.filter(ally => ally.idAllied == allyId);
         filtered.forEach(item => {
             this.allyName = item.name;

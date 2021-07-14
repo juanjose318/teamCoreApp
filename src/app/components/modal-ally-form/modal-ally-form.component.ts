@@ -30,7 +30,7 @@ export class ModalAllyFormComponent implements OnInit {
   private phone: number;
   private description: string;
   private carvajalContact: string;
-private creationDate: Date = new Date ();
+  private creationDate: Date = new Date();
 
   save() {
     if (this.formGroup.invalid) {
@@ -47,18 +47,18 @@ private creationDate: Date = new Date ();
   showValidationMsg(formGroup: FormGroup) {
 
     for (const key in formGroup.controls) {
-        if (formGroup.controls.hasOwnProperty(key)) {
-            const control: FormControl = <FormControl>formGroup.controls[key];
+      if (formGroup.controls.hasOwnProperty(key)) {
+        const control: FormControl = <FormControl>formGroup.controls[key];
 
-            if (Object.keys(control).includes('controls')) {
-                const formGroupChild: FormGroup = <FormGroup>formGroup.controls[key];
-                this.showValidationMsg(formGroupChild);
-            }
-
-            control.markAsTouched();
+        if (Object.keys(control).includes('controls')) {
+          const formGroupChild: FormGroup = <FormGroup>formGroup.controls[key];
+          this.showValidationMsg(formGroupChild);
         }
+
+        control.markAsTouched();
+      }
     }
-}
+  }
 
   /**
    * Getters para manejo dentro del html
@@ -69,6 +69,10 @@ private creationDate: Date = new Date ();
 
   get mailField() {
     return this.formGroup.get('mail');
+  }
+
+  get countryField() {
+    return this.formGroup.get('idCountry');
   }
 
   get contactField() {

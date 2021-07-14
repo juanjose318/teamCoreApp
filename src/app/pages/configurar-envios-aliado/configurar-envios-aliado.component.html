@@ -17,6 +17,7 @@
         [hasRegistry]="hasRegistry"
         [isConfiginfoSending]="configInfoSending"
         (cancelConfiguration)="handleCancel($event)"
+        (saveConfiguration)="handleSave($event)"
         (chosenCountry)="handleSearchCountry($event)" 
         (chosenAlly)="handleSearchAlly($event)"
         (chosenCompany)="handleSearchCompany($event)">
@@ -25,6 +26,7 @@
         <div class="card-body">
           <app-config-tabs 
           [cleanConfig]="cleanConfig"
+          [saveConfig]="saveConfig"
           [selectedAlly]="selectedAlly"
           [selectedCompany]="selectedCompany"
           (resetStepper)="handleReset($event)"

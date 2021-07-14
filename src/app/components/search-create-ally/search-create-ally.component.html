@@ -1,4 +1,4 @@
-<div class="card " [ngClass]="{'global-wrapper': isConfiginfoSending === true}">
+<div class="card" [ngClass]="{'global-wrapper': isConfiginfoSending === true}">
   <div class="card-body wrapper">
 
     <div class="fields">
@@ -45,8 +45,8 @@
       <div class="field">
         <mat-form-field appearance="fill" *ngIf="isConfiginfoSending === true">
           <mat-label>Código</mat-label>
-          <input matInput placeholder="Ean Empresa" [(ngModel)]="companyEan"
-            (ngModelChange)="filterByCompanyEan($event)">
+          <input matInput placeholder="Código Empresa" [(ngModel)]="companyCode"
+            (ngModelChange)="filterByCompanyCode($event)">
         </mat-form-field>
       </div>
       <!-- 

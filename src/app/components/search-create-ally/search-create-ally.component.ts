@@ -6,9 +6,7 @@ import { AliadoService } from 'src/app/services/ally/ally.service';
 import { CompanyService } from 'src/app/services/company/company.service';
 import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
 
-/**
- * TODO reemplazar EAN por CODIGO
- */
+
 @Component({
   selector: 'app-search-create-ally',
   templateUrl: './search-create-ally.component.html',
@@ -16,6 +14,7 @@ import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.compo
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchCreateAllyComponent implements OnChanges {
+  
   /**
    * Inputs
    */
@@ -23,6 +22,7 @@ export class SearchCreateAllyComponent implements OnChanges {
   @Input() allies;
   @Input() hasRegistry: boolean;
   @Input() hasSelectedComercialPartners: boolean;
+
   /**
    * Outputs
    */
@@ -32,28 +32,33 @@ export class SearchCreateAllyComponent implements OnChanges {
   @Output() createdAlly: EventEmitter<any> = new EventEmitter();
   @Output() cancelConfiguration: EventEmitter<any> = new EventEmitter();
   @Output() saveConfiguration: EventEmitter<any> = new EventEmitter();
+
   /**
    * Colleciones iterables
    */
   private allyCollection;
   private companyCollection;
   @Input() testCollection;
+
   /**
    * Subscripciones
    */
   private allySub: Subscription;
   private companySub: Subscription;
+
   /**
   * Filtros
   */
   private selectedCountry;
   private selectedAlly;
+
   /**
    * Autofill empresa
    */
   companyName: string;
-  companyEan: number;
+  companyCode: number;
   companyId: string;
+
   /**
    * Condicional para habilitar el boton de guardar
    */
@@ -78,11 +83,11 @@ export class SearchCreateAllyComponent implements OnChanges {
       }
     }
     if (this.hasRegistry && this.hasSelectedComercialPartners) {
-        if (this.hasRegistry === true && this.hasSelectedComercialPartners === true) {
-          this.isButtonEnabled = true;
-        } else {
-          this.isButtonEnabled = false;
-        }
+      if (this.hasRegistry === true && this.hasSelectedComercialPartners === true) {
+        this.isButtonEnabled = true;
+      } else {
+        this.isButtonEnabled = false;
+      }
     }
   }
 
@@ -103,10 +108,10 @@ export class SearchCreateAllyComponent implements OnChanges {
 
   /**
    *  filtrar y autocompletar 
-   * @param companyEan Codigo de empresa
+   * @param companyCode Codigo de empresa
    */
-  filterByCompanyEan(companyEan) {
-    const filtered = this.companyCollection.filter(company => company.companyCode == companyEan);
+  filterByCompanyCode(companyCode) {
+    const filtered = this.companyCollection.filter(company => company.companyCode == companyCode);
     filtered.forEach(item => {
       this.companyId = item.idCompany;
       this.companyName = item.companyName;
@@ -115,7 +120,6 @@ export class SearchCreateAllyComponent implements OnChanges {
       }
     });
     this.cd.markForCheck();
-
   }
 
   /**
@@ -125,33 +129,33 @@ export class SearchCreateAllyComponent implements OnChanges {
   filterByCompanyId(companyId) {
     const filtered = this.companyCollection.filter(company => company.idCompany == companyId);
     filtered.forEach(item => {
-      this.companyEan = item.companyCode;
+      this.companyCode = item.companyCode;
       this.companyName = item.companyName;
       if (this.companyId === item.idCompany) {
         this.chosenCompany.emit(this.companyId);
       }
     });
-
   }
+
   /**
    * 
    * @param companyArray array de objeto iterado en el momento de la seleccion de empresa
    */
   filterByCompanyName(companyName) {
     if (!companyName) {
-      this.companyEan = null;
+      this.companyCode = null;
       this.companyId = null;
     }
     const filtered = this.companyCollection.filter(company => company.companyName == companyName);
     filtered.forEach(item => {
-      this.companyEan = item.companyCode;
+      this.companyCode = item.companyCode;
       this.companyId = item.idCompany;
       if (this.companyId === item.idCompany) {
         this.chosenCompany.emit(this.companyId);
       }
     });
-
   }
+
   /**
    * Fetch para filtros 
    */
@@ -189,7 +193,7 @@ export class SearchCreateAllyComponent implements OnChanges {
           this.companyCollection = companyData.companies;
           if (this.companyCollection.length === 0) {
             this.companyName = null;
-            this.companyEan = null;
+            this.companyCode = null;
             this.companyId = null;
           }
         });
@@ -202,10 +206,11 @@ export class SearchCreateAllyComponent implements OnChanges {
     this.companySub = this.companyService.getCompanyListener().subscribe((companyData) => {
       this.companyCollection = companyData.companies;
       this.companyName = null;
-      this.companyEan = null;
+      this.companyCode = null;
       this.companyId = null;
     });
   }
+
   /**
    * Modal para creacion de nuevo aliado
    */
@@ -234,10 +239,6 @@ export class SearchCreateAllyComponent implements OnChanges {
     });
   }
 
-  ngOnDestroy(): void {
-    // this.allySub.unsubscribe();
-    // this.companySub.unsubscribe();
-  }
   /**
   * Cancelar los registros
   */
@@ -245,10 +246,16 @@ export class SearchCreateAllyComponent implements OnChanges {
     this.isButtonEnabled = false;
     this.cancelConfiguration.emit(true);
   }
+
   /**
    * Guardar Configuraciones
    */
   saveConfig() {
     this.saveConfiguration.emit(true);
+  }
+
+  ngOnDestroy(): void {
+    this.allySub.unsubscribe();
+    this.companySub.unsubscribe();
   }
 }

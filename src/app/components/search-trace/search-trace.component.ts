@@ -119,4 +119,10 @@ export class SearchTraceComponent implements OnInit {
             });
         }
     }
+
+    ngOnDestroy(): void {
+        this.allySub.unsubscribe();
+        this.companySub.unsubscribe();
+        this.auditSub.unsubscribe();
+    }
 }

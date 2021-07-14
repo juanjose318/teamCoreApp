@@ -53,7 +53,6 @@ export class TraceTableComponent implements OnInit, OnChanges {
             this.traceCollection = traceData.trace;
             this.stopLoading.emit(false);
             this.updateTable(this.traceCollection);
-            console.log(this.traceCollection);
         })
     }
 

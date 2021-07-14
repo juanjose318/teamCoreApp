@@ -23,16 +23,37 @@ export class ProductService {
     ) { }
 
     getProductsByCompany(companyId) {
-        return this.http
-            .get<{ products: any[] }>(`${environment.apiUrl}/products/companies/` + companyId, httpOptions)
-            .pipe(
-                map((data => data))
-            ).subscribe((data) => {
-                this.products = data;
-                this.productListener.next({
-                    products: this.products
+        if (!!companyId) {
+            return this.http
+                .get<{ products: any[] }>(`${environment.apiUrl}/products/companies/` + companyId, httpOptions)
+                .pipe(
+                    map((data => data))
+                ).subscribe((data) => {
+                    this.products = data;
+                    this.productListener.next({
+                        products: this.products
+                    });
                 });
-            });
+        } else {
+            return;
+        }
+    }
+
+    getProductsByConfigAndCompany(configId, companyId) {
+        if (!!configId && !!companyId) {
+            return this.http
+                .get<{ products: any[] }>(`${environment.apiUrl}/products/companies/` + companyId + '/configurations/' + configId, httpOptions)
+                .pipe(
+                    map((data => data))
+                ).subscribe((data) => {
+                    this.products = data;
+                    this.productListener.next({
+                        products: this.products
+                    });
+                });
+        } else {
+            return;
+        }
     }
 
     getProductListener() {

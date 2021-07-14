@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:9000/ebusiness-api/v1'
+  apiUrl: 'http://localhost:8098/teamcore-api/v1'
 };
 
 
