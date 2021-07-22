@@ -1,0 +1,17 @@
+td, th , .mat-sort-header-button{
+    font-size: 0.6rem;
+    text-align: center;
+  }
+
+  ::ng-deep .mat-sort-header-container {
+    justify-content: center !important;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+  
+  .input-wrapper {
+    width: 100%;
+    padding: 2%;
+  }

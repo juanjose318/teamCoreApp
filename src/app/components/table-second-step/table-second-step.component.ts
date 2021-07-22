@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatPaginator, MatSort } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -19,19 +19,18 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
     @ViewChild(MatSort) sort: MatSort;
 
     @Output() objTradersToConfig: EventEmitter<any> = new EventEmitter();
+    @Output() hasTradersSelected: EventEmitter<any> = new EventEmitter();
+    @Output() objToCompare: EventEmitter<any> = new EventEmitter();
 
-    private companyAllyConfigSub: Subscription;
     private traderSub: Subscription;
 
-    tradersTableCollection = [];
-    tradersForConfig = [];
     tradersCollection = [];
+    tradersAfterMod = [];
 
     displayedColumns: String[] = ['selectField', 'company.companyCode', 'companyName'];
 
     objTraders = [];
-
-    objSecondStep;
+    objToCompareIfTradersChanged = [];
 
     companyCode;
     configId;
@@ -65,7 +64,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         this.companyConfigService.getTradersFirstTime(companyCode);
         this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
-            setTimeout(() => this.updateDatable(this.tradersCollection), 1000)
+            setTimeout(() => this.updateDatable(this.tradersCollection), 500)
         });
     }
 
@@ -73,26 +72,65 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         this.companyConfigService.getTradersSecondtTme(companyCode, configId);
         this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
-            setTimeout(() => this.updateDatable(this.tradersCollection), 1000)
+            this.tradersAfterMod = data.traders;
+            this.objToCompare.emit(this.tradersAfterMod);
+            this.pushTraders(this.tradersCollection);
+            setTimeout(() => this.updateDatable(this.tradersCollection), 500)
         });
     }
 
+    /**
+     * Funcion para agregar y quitar comercios y la vez generar un estado temporal para su activación o desactivación
+     * @param event clicked
+     * @param trader comercio seleccionado
+     */
     handleCheck(event: MatCheckboxChange, trader) {
         if (event.checked) {
             this.objTraders.push(trader);
-        }
-        else {
-            this.objTraders.forEach(registryInCollection => {
-                this.objTraders.splice(registryInCollection, 1)
+            this.tradersAfterMod.forEach(traderInCl => {
+                if (traderInCl.companyCode === trader.companyCode) {
+                    traderInCl.idStateTemp = 1;
+                }
             });
         }
+        else {
+            for (let i = this.objTraders.length - 1; i >= 0; --i) {
+                if (this.objTraders[i].companyCode == trader.companyCode) {
+                    this.objTraders.splice(i, 1);
+                }
+            }
+            this.tradersAfterMod.forEach(traderInCl => {
+                if (traderInCl.companyCode === trader.companyCode) {
+                    traderInCl.idStateTemp = 2;
+                }
+            });
+        }
+        this.objToCompare.emit(this.tradersAfterMod);
         this.objTradersToConfig.emit(this.objTraders);
+
     }
 
     updateDatable(dataSource) {
         this.dataSource = new MatTableDataSource<any>(dataSource);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.dataSource.filterPredicate = (data: any, filter) => {
+            const dataStr = JSON.stringify(data).toLowerCase();
+            return dataStr.indexOf(filter) != -1;
+        }
+    }
+
+    pushTraders(traders) {
+        if (!!traders) {
+            traders.forEach(trader => {
+                if (trader.idAlliedCompanyConfig) {
+                    this.objTraders.push(trader);
+                }
+            });
+            this.hasTradersSelected.emit(true);
+
+            this.objTradersToConfig.emit(this.objTraders);
+        }
     }
 
     applyFilter(filterValue) {
@@ -103,8 +141,10 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
     }
 
     ngOnDestroy(): void {
-        this.companyAllyConfigSub.unsubscribe();
-        this.traderSub.unsubscribe();
+        setTimeout(() => {
+            this.traderSub.unsubscribe();
+        }, 300000);
+
     }
 
 }

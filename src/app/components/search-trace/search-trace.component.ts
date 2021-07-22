@@ -47,12 +47,12 @@ export class SearchTraceComponent implements OnInit {
 
     submitSearch() {
         const params: SearchParams = { idAlly: this.selectedAlly, idCompany: this.selectedCompany }
-        if(params.idAlly && params.idCompany){
-        this.searchParams.emit(params)
+        if (params.idAlly && params.idCompany) {
+            this.searchParams.emit(params)
         } else {
             this._snackBar.open('Campos requeridos no han sido seleccionados', 'cerrar', {
                 duration: 2000,
-              });
+            });
         }
     }
 
@@ -121,8 +121,10 @@ export class SearchTraceComponent implements OnInit {
     }
 
     ngOnDestroy(): void {
-        this.allySub.unsubscribe();
-        this.companySub.unsubscribe();
-        this.auditSub.unsubscribe();
+        setTimeout(() => {
+            this.allySub.unsubscribe();
+            this.companySub.unsubscribe();
+            this.auditSub.unsubscribe();
+        }, 300000);
     }
 }

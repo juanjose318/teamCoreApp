@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
  * Material Module
  */
 import { MaterialModule } from '../shared/modules/material.module';
+
 /**
  * Componentes
  */
@@ -33,6 +34,8 @@ import { SecondStepTableComponent } from '../components/table-second-step/table-
 import { SearchTraceComponent } from '../components/search-trace/search-trace.component';
 import { TraceTableComponent } from '../components/trace-table/trace-table.component';
 import { ThirdStepTableComponent } from '../components/table-third-step/table-third-step.component';
+import { ModalAuditComponent } from '../components/modal-audit/modal-audit.component';
+import { TableDataAuditComponent } from '../components/table-data-audit/table-data-audit.component';
 
 @NgModule({
   declarations: [
@@ -48,13 +51,15 @@ import { ThirdStepTableComponent } from '../components/table-third-step/table-th
     NavigationComponent,
     ModalAllyFormComponent,
     ModalDescriptionComponent,
+    ModalAuditComponent,
     TableOverviewComponent,
     SidebarComponent,
     ModalConfigFormComponent,
     SecondStepTableComponent,
     SearchTraceComponent,
     TraceTableComponent,
-    ThirdStepTableComponent
+    ThirdStepTableComponent,
+    TableDataAuditComponent,
   ],
   imports: [
     CommonModule,
@@ -70,7 +75,8 @@ import { ThirdStepTableComponent } from '../components/table-third-step/table-th
   entryComponents: [
     ModalAllyFormComponent,
     ModalDescriptionComponent,
-    ModalConfigFormComponent
+    ModalConfigFormComponent,
+    ModalAuditComponent
   ],
   providers: [
     DatePipe

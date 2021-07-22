@@ -1,9 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MasterFileService } from 'src/app/services/masterfile/masterfile.service';
-import { base64 } from 'angular-base64/angular-base64';
 import { MasterFile } from 'src/app/models/MasterFile.interface';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-master-file',
@@ -26,7 +22,7 @@ export class UploadMasterFileComponent {
   ngOnInit() {
 
   }
-
+  // TODO AGREGAR SPINNER
   convertToBase64() {
     const reader = new FileReader();
     reader.readAsDataURL(this.selectedFile as Blob);

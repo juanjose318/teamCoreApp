@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { MasterFile } from 'src/app/models/MasterFile.interface';
-import { MasterFileService } from 'src/app/services/masterfile/masterfile.service';
+import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { ProductService } from 'src/app/services/products/products.service';
-import { AngularCsv } from 'angular7-csv';
 import { Subscription } from 'rxjs';
 import { PointsOfSaleService } from 'src/app/services/pointsOfSale/pointsOfSale.service';
+import { ConfigService } from 'src/app/services/config/config.service';
+// import { Parser } from 'json2csv';
+import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 
 @Component({
     selector: 'app-table-third-step',
@@ -13,10 +13,12 @@ import { PointsOfSaleService } from 'src/app/services/pointsOfSale/pointsOfSale.
     styleUrls: ['./table-third-step.component.scss']
 })
 
+
 export class ThirdStepTableComponent implements OnInit, OnChanges {
 
     @Input() registry;
     @Input() traders;
+    @Input() configurationDone;
 
     @Output() isLoading: EventEmitter<boolean> = new EventEmitter();
     @Output() downloadCSV: EventEmitter<any> = new EventEmitter();
@@ -27,6 +29,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
+
     /**
    * Columnas para configuracion de masterfile
    */
@@ -41,14 +44,20 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
     idForPointsOfSale;
     idForProducts;
 
+    decodedData;
+
+    searchParams;
+    idToRefresh;
+
     private masterSub: Subscription;
     private retailersSubs: Subscription;
     private productsSubs: Subscription;
 
     constructor(
-        private masterFileService: MasterFileService,
+        private configService: ConfigService,
         private productService: ProductService,
-        private pointsOfSaleService: PointsOfSaleService
+        private pointsOfSaleService: PointsOfSaleService,
+        private _snackBar: MatSnackBar,
     ) { }
 
 
@@ -56,6 +65,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
         if (!!changes) {
             let changeTraders = changes['traders'];
             let changeRegistry = changes['registry'];
+            let changeConfiguration = changes['configurationDone'];
             if (!!changeTraders) {
                 // check si hay cambios en el primer registro seleccionado o en la cantidad de socios comerciales
                 if (!!changeTraders.currentValue) {
@@ -66,13 +76,23 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                     // check para asignacion de ID de busqueda para productos dependiendo si hay una configuracion establecida o no
                     if (!changeRegistry.currentValue.idAlliedCompanyConfig) {
                         this.idForProducts = changeRegistry.currentValue.company.companyCode;
-                    } else {
-                        let searchParams = {
+                        console.log(this.idForProducts);
+                    } else if (!!changeRegistry.currentValue.idAlliedCompanyConfig) {
+                        this.searchParams = {
                             idCompany: changeRegistry.currentValue.company.companyCode,
                             idAlliedCompanyConfig: changeRegistry.currentValue.idAlliedCompanyConfig
                         }
-                        this.fetchMasterFile(searchParams.idAlliedCompanyConfig);
-                        this.idForProducts = searchParams;
+                        this.fetchMasterFile(this.searchParams.idAlliedCompanyConfig);
+                        console.log(this.searchParams.idAlliedCompanyConfig)
+                    }
+                }
+            }
+            if (!!changeConfiguration) {
+                if (!!changeConfiguration.currentValue) {
+                    if (!!changeConfiguration.currentValue.idAlliedCompanyConfig) {
+                        console.log(changeConfiguration.currentValue.isDone);
+                        this.idToRefresh = changeConfiguration.currentValue.idAlliedCompanyConfig;
+                        this.fetchMasterFile(changeConfiguration.currentValue.idAlliedCompanyConfig);
                     }
                 }
             }
@@ -87,10 +107,9 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
     * Llamar archivos masterfile
     */
     fetchMasterFile(companyConfigId) {
-        this.masterFileService.getMasterFiles(companyConfigId);
-        this.masterSub = this.masterFileService.getMasterFileListener().subscribe((data) => {
+        this.configService.getMasterFiles(companyConfigId);
+        this.masterSub = this.configService.getMasterFileListener().subscribe((data) => {
             this.masterFileCollection = data.masterFiles;
-            console.log(this.masterFileCollection);
             setTimeout(() => this.updateDatable(this.masterFileCollection), 1000);
         });
     }
@@ -102,24 +121,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
         this.pointsOfSaleService.getPointsOfSale(this.idForPointsOfSale);
         this.retailersSubs = this.pointsOfSaleService.getPointsOfSaleListener().subscribe((pointsOfSaleData) => {
             this.pointsOfSaleCollection = pointsOfSaleData.pointsOfSale;
-        })
-    }
-
-    /**
-     * LLamar productos
-     */
-    fetchProducts() {
-        if (typeof this.idForProducts === 'object' && !!this.idForProducts) {
-            this.productService.getProductsByConfigAndCompany(this.idForProducts.idCompany, this.idForProducts.idAlliedCompanyConfig);
-            this.productsSubs = this.productService.getProductListener().subscribe((productData) => {
-                this.productsCollection = productData.products;
-            })
-        } else {
-            this.productService.getProductsByCompany(this.idForProducts);
-            this.productsSubs = this.productService.getProductListener().subscribe((productData) => {
-                this.productsCollection = productData.products;
-            });
-        }
+        });
     }
 
     handleMasterfile(objMasterfile) {
@@ -144,7 +146,6 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
     }
 
     updateDatable(dataSource) {
-        console.log(dataSource);
         this.dataSource = new MatTableDataSource<any>(dataSource);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -161,21 +162,71 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
         }
     }
 
-    downloadDetailCsv(masterfile){
+    downloadDetailCsv(masterfile) {
+        this.configService.getLogMasterFile(masterfile).subscribe((encodedData) => {
+            if (encodedData === null) {
+                this._snackBar.open('El archivo no esta disponible', 'cerrar', {
+                    duration: 2000,
+                });
+            } else {
+                let logFileName = 'CenC_' + masterfile.fileName + '_log.csv';
+                console.log(encodedData);
+                this.exportToCsv(encodedData, logFileName);
+            }
+        })
+    }
 
+    exportToCsv(data, name) {
+        const dataType = data.type;
+        const binaryData = [];
+        binaryData.push(data);
+
+        const filePath = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
+        const downloadLink = document.createElement('a');
+        downloadLink.href = filePath;
+        document.body.appendChild(downloadLink);
+        downloadLink.setAttribute('download', name);
+        downloadLink.click();
+    }
+
+    handleRefresh() {
+        if (this.searchParams.idAlliedCompanyConfig){
+            this.fetchMasterFile(this.searchParams.idAlliedCompanyConfig);
+        } else {
+            this.fetchMasterFile(this.idToRefresh);
+        }
     }
 
     exportCsv() {
         if (this.selectedMaster === 'PR') {
-            this.fetchProducts();
-            setTimeout(() => new AngularCsv(this.productsCollection, 'Reporte Productos'),
-                500);
+            if (!!this.searchParams) {
+                this.productService.getProductsByConfigAndCompany(this.searchParams.idCompany, this.searchParams.idAlliedCompanyConfig);
+                this.productsSubs = this.productService.getProductListener().subscribe((productData) => {
+                    this.productsCollection = productData.products;
+                    console.log(this.productsCollection);
+
+                    let options = {
+                        quoteStrings: '',
+                        headers: ["Id Producto", "EAN Producto", "Descripción", "Estado"]
+                    };
+
+                    new AngularCsv(this.productsCollection, 'Reporte Productos',options);
+                })
+            } else {
+                this.productService.getProductsByCompany(this.idForProducts);
+                this.productsSubs = this.productService.getProductListener().subscribe((productData) => {
+                    this.productsCollection = productData.products;
+                    let options = {
+                        quoteStrings: '',
+                        headers: ["Id Producto", "EAN Producto", "Descripción", "Estado"]                    };
+
+                    new AngularCsv(this.productsCollection, 'Reporte Productos', options);
+                });
+            }
 
         } else {
-            this.fetchPointsOfSale();
-            setTimeout(() => {
-                new AngularCsv(this.pointsOfSaleCollection, 'Reporte Puntos de Venta');
-            }, 500);
+            // this.fetchPointsOfSale();
+            // this.exportToCsv(this.pointsOfSaleCollection, 'Reporte Puntos de venta')
         }
     }
 
@@ -187,8 +238,10 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
     }
 
     ngOnDestroy(): void {
-        this.masterSub.unsubscribe();
-        this.retailersSubs.unsubscribe();
-        this.productsSubs.unsubscribe();
+        setTimeout(() => {
+            this.masterSub.unsubscribe();
+            this.retailersSubs.unsubscribe();
+            this.productsSubs.unsubscribe();
+        }, 300000);
     }
 }

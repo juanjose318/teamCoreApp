@@ -1,8 +1,10 @@
-import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import * as XLSX from 'xlsx';
+import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { AuditService } from 'src/app/services/audit/audit.service';
+import { ModalAuditComponent } from '../modal-audit/modal-audit.component';
 
 /**
  * @title Data table with sorting, pagination, and filtering.
@@ -20,17 +22,21 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     displayedColumns = [];
     allyAuditColumns: string[] = ['idAllied', 'actionExecuted', 'updateDate', 'creationDate', 'executor',
         'ipOrigin', 'affectedField', 'valueBefore', 'valueAfter'];
-    allyCompanyAuditColumns: string[] = ['idRegistry', 'idAllied', 'allied.name','company.companyName', 'configurationDate', 'state.state', 'updateDate', 'executor', 'ipOrigin','detail']
+    allyCompanyAuditColumns: string[] = ['idAlliedCompanyConfAudit', 'allied.idAllied', 'allied.name', 'company.companyName',
+        'configurationDate', 'state.state', 'updateDate', 'executor', 'ipOrigin', 'detail'];
+
     /**
      * Recurso de display de data para tabla material
      */
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
+
     /**
      * Nombre de archivo para descarga
      */
     fileName = 'ExcelSheet.xlsx';
+
     /**
      * Subscriber para auditorias
      */
@@ -40,37 +46,41 @@ export class TableOverviewComponent implements OnInit, OnChanges {
      * audit es el pais seleccionado para filtrar
      */
     @Input() audit;
+
     /**
      * Filtros y numero de tabla
      */
     @Input() allyAuditTableNumber;
     @Input() selectedCompany;
     @Input() selectedAlly;
+
     /**
      * Objeto para auditoria de configuracion de aliados
      */
     @Input() objAllyCompanyAudit;
+
+    /**
+     * Ya termino la configuracion y se genero auditoria
+     */
+    @Input() configurationDone;
+
     /**
      * Coleccion para iterar
      */
     auditCollection = [];
 
-
     constructor(
         private auditService: AuditService,
+        public dialog: MatDialog,
     ) { }
 
     ngOnInit() {
         this.updateTable(this.auditCollection);
-        // Modificar filtro
-        this.dataSource.filterPredicate = function(data, filter: string): boolean {
-            return data.allied.idAllied.toLowerCase().includes(filter) || data.allied.name.toLowerCase().includes(filter) || data.company.idCompany.toString().includes(filter) || data.company.companyName.toString().includes(filter)
-            || data.configurationDate.toString().includes(filter) || data.state.state.toString().includes(filter) || data.executor.toString().includes(filter) || data.ipOrigin.toString().includes(filter) || data.updateDate.toString().includes(filter)
-            || data.executor.toString().includes(filter) === filter;
-        };
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
+        let change = changes['configurationDone'];
+
         if (!!this.objAllyCompanyAudit) {
             this.handleAuditCompanyConfig(this.objAllyCompanyAudit);
         }
@@ -91,11 +101,20 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                         this.auditCollection = filteredAudit.audit;
                         this.updateTable(this.auditCollection)
                         this.displayedColumns = this.allyCompanyAuditColumns;
-
                     });
             }
             else if (!!this.selectedAlly && !!this.selectedCompany) {
                 this.auditService.getAuditConfigAllyCompanyByAllyAndCompany(this.selectedAlly, this.selectedCompany);
+                this.auditSub = this.auditService.getAuditListener()
+                    .subscribe((filteredAudit) => {
+                        this.auditCollection = filteredAudit.audit;
+                        this.updateTable(this.auditCollection)
+                        this.displayedColumns = this.allyCompanyAuditColumns;
+                    });
+            }
+        } else if (change) {
+            if (change.currentValue.isDone) {
+                this.auditService.getAuditConfigAllyCompanyByAllyAndCompany(change.currentValue.ally, change.currentValue.company);
                 this.auditSub = this.auditService.getAuditListener()
                     .subscribe((filteredAudit) => {
                         this.auditCollection = filteredAudit.audit;
@@ -108,7 +127,13 @@ export class TableOverviewComponent implements OnInit, OnChanges {
 
     updateTable(collection) {
         this.dataSource = new MatTableDataSource<any>(collection);
+        // Modificar filtro
+        this.dataSource.filterPredicate = (data: any, filter) => {
+            const dataStr = JSON.stringify(data).toLowerCase();
+            return dataStr.indexOf(filter) != -1;
+        }
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sortingDataAccessor = _.get; 
         this.dataSource.sort = this.sort;
     }
 
@@ -123,7 +148,13 @@ export class TableOverviewComponent implements OnInit, OnChanges {
         this.dataSource.filter = filterValue.trim().toLowerCase();
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
-        } 
+        }
+    }
+
+    openModalForAudit(audit) {
+        const dialogRef = this.dialog.open(ModalAuditComponent, {
+            data: { registry: audit }
+        });
     }
 
     handleAuditCompanyConfig(configAllyCompAudit) {

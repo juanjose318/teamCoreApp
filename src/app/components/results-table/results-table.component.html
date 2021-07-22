@@ -6,7 +6,7 @@
     </div>
   </ng-template>
 
-  <div *ngIf="allyCollection?.length !== 0; else noDisponible" class="card-body">
+  <div *ngIf="allyCollection?.length; else noDisponible" class="card-body">
 
     <table mat-table [dataSource]="dataSource" matSort matSortActive="creationDate" matSortDirection="desc"
       matSortDisableClear>
@@ -21,12 +21,12 @@
           {{ row.creationDate | date:'d/MMM/y HH:mm' }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="channel">
+      <ng-container matColumnDef="channel.channel">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Canal </th>
         <td mat-cell *matCellDef="let row"> {{ row.channel.channel }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="route">
+      <ng-container matColumnDef="route.route">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Ruta </th>
         <td mat-cell *matCellDef="let row"> {{ row.route.route }} </td>
       </ng-container>
@@ -92,7 +92,7 @@
 
   <div class="btn-wrapper">
     <button class="btn btn-primary" (click)="activateOrDeactivateComercialRelation()"
-      *ngIf="companyConfigCollection?.length !== 0; else active">Activar/Desactivar<i
+      *ngIf="companyConfigCollection?.length; else active">Activar/Desactivar<i
         class="bi bi-patch-check"></i></button>
     <ng-template #active>
       <button class="btn btn-primary" #active disabled>Activar/Desactivar<i class="bi bi-patch-check"></i></button>
@@ -110,20 +110,14 @@
   </ng-template>
 
   <div
-    *ngIf="!!allies || !!filteredAlly || !!filteredCompany || companyConfigCollection?.length !== 0; else noDisponible"
+    *ngIf="companyConfigCollection?.length; else noDisponible"
     class="card">
 
-    <table mat-table [dataSource]="dataSource" matSort matSortActive="configurationDate" matSortDirection="desc"
-      matSortDisableClear #dataTable class="card-body">
-
-      <ng-container matColumnDef="idAlliedCompanyConfig">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id Registro</th>
-        <td mat-cell *matCellDef="let row" class="selectable" (click)="goToConfiguration(row)">
-          {{ row.idAlliedCompanyConfig }}</td>
-      </ng-container>
+    <table mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort matSortActive="configurationDate" matSortDirection="desc"
+      matSortDisableClear class="card-body">
 
       <ng-container matColumnDef="selectField">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Seleccionar</th>
+        <th mat-header-cell *matHeaderCellDef>Seleccionar</th>
         <td mat-cell *matCellDef="let row">
           <section class="example-section">
             <mat-checkbox class="example-margin" [value]="row" (change)="handleCheck($event,row)"
@@ -136,7 +130,7 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="registry">
+      <ng-container matColumnDef="idAlliedCompanyConfig">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Id Registro</th>
         <td mat-cell *matCellDef="let row" class="selectable" (click)="goToConfiguration(row)">
           {{ row.idAlliedCompanyConfig }}
@@ -153,12 +147,6 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre Aliado</th>
         <td mat-cell *matCellDef="let row" class="selectable" (click)="goToConfiguration(row)"> {{ row.allied.name }}</td>
       </ng-container>
-      <!-- 
-      <ng-container matColumnDef="company.idCompany">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id Empresa</th>
-        <td mat-cell *matCellDef="let row" class="selectable" (click)="goToConfiguration(row)">
-          {{ row.company.idCompany }}</td>
-      </ng-container> -->
 
       <ng-container matColumnDef="company.companyCode">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Codigo Empresa</th>
@@ -178,10 +166,11 @@
           {{ row.configurationDate | date:'d/MMM/y HH:mm' }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="state">
+      <ng-container matColumnDef="state.state">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
         <td mat-cell *matCellDef="let row" class="selectable" (click)="goToConfiguration(row)"> {{ row.state.state }}</td>
       </ng-container>
+      
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>

@@ -225,7 +225,8 @@ export class SearchCreateAllyComponent implements OnChanges {
         result = {
           ...result,
           channel: { idChannel: 1 },
-          route: { idRoute: 1 }
+          route: { idRoute: 1 },
+          idState: 1
         }
         this.createdAlly.emit(result);
         this._snackBar.open('La informacion se almaceno satisfactoriamente', 'cerrar', {
