@@ -15,6 +15,7 @@
         [allies]="selectedCountry" 
         [hasSelectedComercialPartners]="hasSelectedComercialPartners"
         [hasRegistry]="hasRegistry"
+        [hasUploadedFile]="hasUploadedFile"
         [isConfiginfoSending]="configInfoSending"
         (cancelConfiguration)="handleCancel($event)"
         (saveConfiguration)="handleSave($event)"
@@ -29,9 +30,11 @@
           [saveConfig]="saveConfig"
           [selectedAlly]="selectedAlly"
           [selectedCompany]="selectedCompany"
+          (saved)="handleWasSaved($event)"
           (resetStepper)="handleReset($event)"
           (registry)="handleRegistry($event)"
-          (comercialPartners)="handleComercialPartners($event)">
+          (comercialPartners)="handleComercialPartners($event)"
+          (uploadedFile)="handleUploadedfile($event)">
         </app-config-tabs>
         </div>
       </div>

@@ -1,5 +1,7 @@
 <div *ngIf="dataType === 'products'" class="card">
-   
+  <div class="card-header">
+    Productos
+  </div> 
   <div class="input-wrapper">
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar" class="filter">
@@ -9,18 +11,18 @@
 
   <table mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort matSortDirection="desc" matSortDisableClear class="card-body">
     
-    <ng-container matColumnDef="ean">
+    <ng-container matColumnDef="product.ean">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>EAN</th>
       <td mat-cell *matCellDef="let row">
         {{ row.product.ean }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="name">
+    <ng-container matColumnDef="product.product">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-      <td mat-cell *matCellDef="let row"> {{ row.product.name }} </td>
+      <td mat-cell *matCellDef="let row"> {{ row.product.product }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="action">
+    <ng-container matColumnDef="state.state">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Acción </th>
       <td mat-cell *matCellDef="let row"> {{ row.state.state }} </td>
     </ng-container>
@@ -35,7 +37,9 @@
 </div>
 
 <div *ngIf="dataType === 'traders'" class="card">
-   
+  <div class="card-header">
+    Comercios
+  </div> 
   <div class="input-wrapper">
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar" class="filter">
@@ -67,7 +71,9 @@
 </div>
 
 <div *ngIf="dataType === 'pointsSale'" class="card">
-   
+  <div class="card-header">
+    Puntos de Venta
+  </div> 
   <div class="input-wrapper">
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar" class="filter">
@@ -76,22 +82,28 @@
 
   <table mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort matSortDirection="desc" matSortDisableClear class="card-body">
 
-    <ng-container matColumnDef="ean">
+    <ng-container matColumnDef="pointSale.ean">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> EAN </th>
-      <td mat-cell *matCellDef="let row"> {{ row.ean}} </td>
+      <td mat-cell *matCellDef="let row"> {{ row.pointSale.ean}} </td>
     </ng-container>
     
-    <ng-container matColumnDef="name">
+    <ng-container matColumnDef="pointSale.name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-      <td mat-cell *matCellDef="let row"> {{ row.traderName}} </td>
+      <td mat-cell *matCellDef="let row"> {{ row.pointSale.pointSale}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="code">
+    <ng-container matColumnDef="pointSale.traderCode">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
-      <td mat-cell *matCellDef="let row"> {{ row.company.companyCode }} </td>
+      <td mat-cell *matCellDef="let row"> {{ row.pointSale.traderCode }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="action">
+    
+    <ng-container matColumnDef="pointSale.traderName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre Comercio</th>
+      <td mat-cell *matCellDef="let row"> {{ row.pointSale.traderName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="state.state">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Acción </th>
       <td mat-cell *matCellDef="let row"> {{ row.state.state }} </td>
     </ng-container>
@@ -102,3 +114,39 @@
   <mat-paginator *ngIf="dataSource" [length]="dataSource?.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 30, 40]">
   </mat-paginator>
 </div>
+
+
+<div *ngIf="dataType === 'masters'" class="card">
+  <div class="card-header">
+    Maestros Pendientes
+  </div> 
+  <div class="input-wrapper">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar" class="filter">
+    </mat-form-field>
+  </div>
+
+  <table mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort matSortDirection="desc" matSortDisableClear class="card-body">
+
+    <ng-container matColumnDef="master.idMasterFile">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{ row.master.idMasterFile}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="master.master">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre Maestro </th>
+      <td mat-cell *matCellDef="let row"> {{ row.master.master }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="state.state">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Acción </th>
+      <td mat-cell *matCellDef="let row"> {{ row.state.state }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator *ngIf="dataSource" [length]="dataSource?.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 30, 40]">
+  </mat-paginator>
+</div>
+

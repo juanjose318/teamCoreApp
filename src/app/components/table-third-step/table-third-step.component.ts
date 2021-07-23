@@ -4,7 +4,6 @@ import { ProductService } from 'src/app/services/products/products.service';
 import { Subscription } from 'rxjs';
 import { PointsOfSaleService } from 'src/app/services/pointsOfSale/pointsOfSale.service';
 import { ConfigService } from 'src/app/services/config/config.service';
-// import { Parser } from 'json2csv';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 
 @Component({
@@ -36,21 +35,21 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
     displayedColumns: String[] = ['id', 'startLoadingDate', 'user', 'master', 'fileUploaded', 'state', 'detail'];
 
     masterFileCollection = [];
-    pointsOfSaleCollection = [];
+    pointSaleCollection = [];
     productsCollection = [];
+    tradersCollection = [];
 
     selectedMaster;
 
     idForPointsOfSale;
     idForProducts;
-
     decodedData;
 
     searchParams;
     idToRefresh;
 
     private masterSub: Subscription;
-    private retailersSubs: Subscription;
+    private pointSaleSub: Subscription;
     private productsSubs: Subscription;
 
     constructor(
@@ -69,7 +68,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
             if (!!changeTraders) {
                 // check si hay cambios en el primer registro seleccionado o en la cantidad de socios comerciales
                 if (!!changeTraders.currentValue) {
-                    // console.log(changeTraders.currentValue);
+                    this.tradersCollection = changeTraders.currentValue;
                 }
             } if (!!changeRegistry) {
                 if (!!changeRegistry.currentValue) {
@@ -83,14 +82,17 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                             idAlliedCompanyConfig: changeRegistry.currentValue.idAlliedCompanyConfig
                         }
                         this.fetchMasterFile(this.searchParams.idAlliedCompanyConfig);
-                        console.log(this.searchParams.idAlliedCompanyConfig)
                     }
                 }
             }
             if (!!changeConfiguration) {
                 if (!!changeConfiguration.currentValue) {
                     if (!!changeConfiguration.currentValue.idAlliedCompanyConfig) {
-                        console.log(changeConfiguration.currentValue.isDone);
+                        this.searchParams = {
+                            idCompany: changeConfiguration.currentValue.company,
+                            idAlliedCompanyConfig: changeConfiguration.currentValue.idAlliedCompanyConfig
+                        }
+                        // this.searchParams.idAlliedCompanyConfig = changeConfiguration.currentValue.idAlliedCompanyConfig;
                         this.idToRefresh = changeConfiguration.currentValue.idAlliedCompanyConfig;
                         this.fetchMasterFile(changeConfiguration.currentValue.idAlliedCompanyConfig);
                     }
@@ -110,7 +112,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
         this.configService.getMasterFiles(companyConfigId);
         this.masterSub = this.configService.getMasterFileListener().subscribe((data) => {
             this.masterFileCollection = data.masterFiles;
-            setTimeout(() => this.updateDatable(this.masterFileCollection), 1000);
+            this.updateDatable(this.masterFileCollection);
         });
     }
 
@@ -119,8 +121,8 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
      */
     fetchPointsOfSale() {
         this.pointsOfSaleService.getPointsOfSale(this.idForPointsOfSale);
-        this.retailersSubs = this.pointsOfSaleService.getPointsOfSaleListener().subscribe((pointsOfSaleData) => {
-            this.pointsOfSaleCollection = pointsOfSaleData.pointsOfSale;
+        this.pointSaleSub = this.pointsOfSaleService.getPointsOfSaleListener().subscribe((pointsOfSaleData) => {
+            this.pointSaleCollection = pointsOfSaleData.pointsOfSale;
         });
     }
 
@@ -170,7 +172,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                 });
             } else {
                 let logFileName = 'CenC_' + masterfile.fileName + '_log.csv';
-                console.log(encodedData);
+                // console.log(encodedData);
                 this.exportToCsv(encodedData, logFileName);
             }
         })
@@ -190,7 +192,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
     }
 
     handleRefresh() {
-        if (this.searchParams.idAlliedCompanyConfig){
+        if (this.searchParams.idAlliedCompanyConfig) {
             this.fetchMasterFile(this.searchParams.idAlliedCompanyConfig);
         } else {
             this.fetchMasterFile(this.idToRefresh);
@@ -210,7 +212,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                         headers: ["Id Producto", "EAN Producto", "Descripción", "Estado"]
                     };
 
-                    new AngularCsv(this.productsCollection, 'Reporte Productos',options);
+                    new AngularCsv(this.productsCollection, 'Reporte Productos', options);
                 })
             } else {
                 this.productService.getProductsByCompany(this.idForProducts);
@@ -218,15 +220,35 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                     this.productsCollection = productData.products;
                     let options = {
                         quoteStrings: '',
-                        headers: ["Id Producto", "EAN Producto", "Descripción", "Estado"]                    };
-
+                        headers: ["Id Producto", "EAN Producto", "Descripción", "Estado"]
+                    };
                     new AngularCsv(this.productsCollection, 'Reporte Productos', options);
                 });
             }
 
-        } else {
-            // this.fetchPointsOfSale();
-            // this.exportToCsv(this.pointsOfSaleCollection, 'Reporte Puntos de venta')
+        } else if (this.selectedMaster === 'PV') {
+            if (!!this.searchParams) {
+                if (this.searchParams.idAlliedCompanyConfig) {
+                    this.pointsOfSaleService.getPointsOfSale(this.searchParams.idAlliedCompanyConfig);
+                    this.pointSaleSub = this.pointsOfSaleService.getPointsOfSaleListener().subscribe((pointSaleData) => {
+                        this.pointSaleCollection = pointSaleData.pointsOfSale;
+                        let options = {
+                            quoteStrings: '',
+                            headers: ["Id Punto de Venta", "EAN", "Punto de Venta", "Código Comercio", "Comercio", "Estado"]
+                        }
+                        new AngularCsv(this.pointSaleCollection, 'Reporte Puntos de Venta', options);
+                    });
+                }
+            }
+            else {
+                this.pointsOfSaleService.postTradersToGetPointSale(this.tradersCollection).subscribe((pointSaleData) => {
+                    let options = {
+                        quoteStrings: '',
+                        headers: ["Id Punto de Venta", "EAN", "Punto de Venta", "Código Comercio", "Comercio", "Estado"]
+                    }
+                    new AngularCsv(pointSaleData, 'Reporte Puntos de Venta', options);
+                });
+            }
         }
     }
 
@@ -240,7 +262,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
     ngOnDestroy(): void {
         setTimeout(() => {
             this.masterSub.unsubscribe();
-            this.retailersSubs.unsubscribe();
+            this.pointSaleSub.unsubscribe();
             this.productsSubs.unsubscribe();
         }, 300000);
     }

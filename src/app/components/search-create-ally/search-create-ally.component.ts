@@ -14,14 +14,15 @@ import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.compo
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchCreateAllyComponent implements OnChanges {
-  
+
   /**
    * Inputs
    */
   @Input() isConfiginfoSending: boolean;
   @Input() allies;
-  @Input() hasRegistry: boolean;
+  @Input() hasRegistry: any;
   @Input() hasSelectedComercialPartners: boolean;
+  @Input() hasUploadedFile: boolean;
 
   /**
    * Outputs
@@ -82,12 +83,14 @@ export class SearchCreateAllyComponent implements OnChanges {
         return;
       }
     }
-    if (this.hasRegistry && this.hasSelectedComercialPartners) {
-      if (this.hasRegistry === true && this.hasSelectedComercialPartners === true) {
-        this.isButtonEnabled = true;
-      } else {
-        this.isButtonEnabled = false;
-      }
+    else if (!!this.hasRegistry.registry) {
+      this.isButtonEnabled = true;
+    }
+    else if( this.hasRegistry.hasRegistry && this.hasSelectedComercialPartners && this.hasUploadedFile){
+      this.isButtonEnabled = true;
+    }
+    else {
+      this.isButtonEnabled = false;
     }
   }
 
@@ -97,6 +100,10 @@ export class SearchCreateAllyComponent implements OnChanges {
   filterCountry(country) {
     this.chosenCountry.emit(country);
     this.cd.markForCheck();
+    this.selectedAlly = null;
+    this.companyName = null;
+    this.companyCode = null;
+    this.companyId = null;
   }
 
   /**
@@ -252,6 +259,7 @@ export class SearchCreateAllyComponent implements OnChanges {
    * Guardar Configuraciones
    */
   saveConfig() {
+    console.log(true);
     this.saveConfiguration.emit(true);
   }
 

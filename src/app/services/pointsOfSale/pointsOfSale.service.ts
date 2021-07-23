@@ -5,11 +5,11 @@ import { Subject } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
-// const httpOptions = {
-//     headers: new HttpHeaders({
-//         'Content-Type': 'application/json'
-//     })
-// };
+const httpOptions = {
+    headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+    })
+};
 
 @Injectable({ providedIn: 'root' })
 export class PointsOfSaleService {
@@ -24,11 +24,11 @@ export class PointsOfSaleService {
         console.log(idAlliedCompanyConfig);
         if (!!idAlliedCompanyConfig) {
             return this.http
-                .get<{ pointsOfSale: any[] }>(`${environment.apiUrl}/pointsale/` + idAlliedCompanyConfig)
+                .get<{ pointsOfSale: any[] }>(`${environment.apiUrl}/pointssale/configurations/` + idAlliedCompanyConfig, httpOptions)
                 .pipe(
                     map((data => data))
                 ).subscribe((data) => {
-                    this.pointsOfSale = data.pointsOfSale;
+                    this.pointsOfSale = data;
                     this.pointsOfSaleListener.next({
                         pointsOfSale: this.pointsOfSale
                     });
@@ -38,9 +38,12 @@ export class PointsOfSaleService {
         }
     }
 
+    postTradersToGetPointSale(traders){
+
+        return this.http.post(`${environment.apiUrl}/pointssale/traders`, traders);
+    }
+
     getPointsOfSaleListener() {
         return this.pointsOfSaleListener.asObservable();
-
     }
 }
-

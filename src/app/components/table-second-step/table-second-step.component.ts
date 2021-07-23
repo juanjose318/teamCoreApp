@@ -14,6 +14,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
 
     @Input() registry;
     @Input() tableNumber;
+    @Input() configurationDone;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -23,16 +24,19 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
     @Output() objToCompare: EventEmitter<any> = new EventEmitter();
 
     private traderSub: Subscription;
-
+    //coleccion de traders
     tradersCollection = [];
+    //traders en modo edicion despues de selccionar y deseleccionar
     tradersAfterMod = [];
-
+    // condicional para bloquear traders despues del primer llamado a configuracion
+    readonlyMode:boolean;
+    // columnas para tabla
     displayedColumns: String[] = ['selectField', 'company.companyCode', 'companyName'];
-
+    // objeto de traders seleccionados para configuracion
     objTraders = [];
-    objToCompareIfTradersChanged = [];
-
+    // Codigo de fabricante
     companyCode;
+    // ID de configuracion
     configId;
 
     dataSource: MatTableDataSource<any>;
@@ -43,14 +47,26 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         let change = changes['registry'];
+        let configurationDone = changes['configurationDone'];
         if (!!change) {
             if (!!change.currentValue) {
                 if (!!change.currentValue.idAlliedCompanyConfig) {
                     this.configId = change.currentValue.idAlliedCompanyConfig;
                     this.companyCode = change.currentValue.company.companyCode;
                     this.fetchTradersWithConfig(this.configId, this.companyCode);
+                    if(change.currentValue.state.idState === 2){
+                        this.readonlyMode = true;
+                    }
                 } else if (!change.currentValue.idAlliedCompanyConfig) {
                     this.fetchTradersWithoutConfig(change.currentValue.company.companyCode);
+                }
+            }
+        }
+        if(configurationDone) {
+            if(configurationDone.currentValue) {
+                this.fetchTradersWithConfig(configurationDone.currentValue.idAlliedCompanyConfig, configurationDone.currentValue.company);
+                if(configurationDone.currentValue.checkMode === true) {
+                    this.readonlyMode = true;
                 }
             }
         }

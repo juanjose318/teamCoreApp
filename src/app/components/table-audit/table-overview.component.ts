@@ -99,8 +99,8 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                 this.auditSub = this.auditService.getAuditListener()
                     .subscribe((filteredAudit) => {
                         this.auditCollection = filteredAudit.audit;
-                        this.updateTable(this.auditCollection)
                         this.displayedColumns = this.allyCompanyAuditColumns;
+                        this.updateTable(this.auditCollection)
                     });
             }
             else if (!!this.selectedAlly && !!this.selectedCompany) {
@@ -112,15 +112,18 @@ export class TableOverviewComponent implements OnInit, OnChanges {
                         this.displayedColumns = this.allyCompanyAuditColumns;
                     });
             }
-        } else if (change) {
-            if (change.currentValue.isDone) {
-                this.auditService.getAuditConfigAllyCompanyByAllyAndCompany(change.currentValue.ally, change.currentValue.company);
-                this.auditSub = this.auditService.getAuditListener()
-                    .subscribe((filteredAudit) => {
-                        this.auditCollection = filteredAudit.audit;
-                        this.updateTable(this.auditCollection)
-                        this.displayedColumns = this.allyCompanyAuditColumns;
-                    });
+            else if (change) {
+                if (change.currentValue) {
+                    if (change.currentValue.isDone) {
+                        this.auditService.getAuditConfigAllyCompanyByAllyAndCompany(change.currentValue.ally, change.currentValue.company);
+                        this.auditSub = this.auditService.getAuditListener().subscribe((filteredAudit) => {
+                                this.auditCollection = filteredAudit.audit;
+                                console.log(this.auditCollection);
+                                this.displayedColumns = this.allyCompanyAuditColumns;
+                                this.updateTable(this.auditCollection);
+                        });
+                    }
+                }
             }
         }
     }
@@ -132,9 +135,9 @@ export class TableOverviewComponent implements OnInit, OnChanges {
             const dataStr = JSON.stringify(data).toLowerCase();
             return dataStr.indexOf(filter) != -1;
         }
+        this.dataSource.sortingDataAccessor = _.get;
+        setTimeout(() => this.dataSource.sort = this.sort, 0.2)
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sortingDataAccessor = _.get; 
-        this.dataSource.sort = this.sort;
     }
 
     exportexcel(): void {
@@ -157,11 +160,12 @@ export class TableOverviewComponent implements OnInit, OnChanges {
         });
     }
 
+    //TODO quitar push
     handleAuditCompanyConfig(configAllyCompAudit) {
         if (configAllyCompAudit) {
             this.auditService.creatAllyCompanyConfig(configAllyCompAudit).subscribe(() => {
                 this.updateTable(this.auditCollection)
-                this.auditCollection.push(configAllyCompAudit);
+                // this.auditCollection.push(configAllyCompAudit);
             });
         }
     }

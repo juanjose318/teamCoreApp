@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { MatSnackBar, MatStepper } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { ConfigService } from 'src/app/services/config/config.service';
-import { ProductService } from 'src/app/services/products/products.service';
 import { AuditService } from 'src/app/services/audit/audit.service';
 import { AliadoService } from 'src/app/services/ally/ally.service';
 import { Subscription } from 'rxjs';
@@ -21,28 +20,36 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
 
   @Output() resetStepper: EventEmitter<boolean> = new EventEmitter();
   @Output() OutisLoading: EventEmitter<boolean> = new EventEmitter();
+  @Output() saved: EventEmitter<boolean> = new EventEmitter();
 
   @Output() registry: EventEmitter<any> = new EventEmitter();
   @Output() comercialPartners: EventEmitter<any> = new EventEmitter();
+  @Output() uploadedFile: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatStepper) stepper: MatStepper;
 
   private allySub: Subscription;
 
   isLoading: boolean;
-
+  // Registro de configuracion seleccionado en paso 1
   registryToConfigure;
-
+  // comercios seleccionados en paso dos
   objTradersConfig;
+  // todos los comercios seleccionados o deseleccionados en base a un idStateTemp que se convierte al id estado dependiendo de la diferencia o similitud de la misma, aplica para paso de edicion
   tradersAfterMod;
+  // objeto para la creacion de auditoria
   objAllyCompanyAuditCollection;
+  // objeto de traders para ser usado en el primer momento de creacion de una configuracion, adjuntando comercios
   objForPointSale = [];
+  // id de configuracion aliado empresa despues de creacion de la misma
   idAllyCompanyConfig;
+  // objeto para crear configuracion de aliado empresa
   objForconfig;
+  // objeto masterfile
   objMasterFile;
-
+  // variable para ip
   clientIp;
-
+  // indica que ya se hizo alguna configuracion
   configurationDone;
 
   /**
@@ -59,9 +66,10 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   wasModified3: boolean = false;
 
   dateNow: Date = new Date();
-
+  // numero de tabla para ser usado en el paso 1
   tableNumber = 2;
   allyAuditTableNumber = 2;
+
   constructor(
     private configurationService: ConfigService,
     private auditService: AuditService,
@@ -73,11 +81,13 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges) {
     let cancel = changes['cleanConfig'];
     let save = changes['saveConfig'];
+
     if (!!cancel) {
       if (cancel.currentValue) {
         this.handleCleanConfig();
       }
     }
+
     if (!!save) {
       if (!!save.currentValue) {
         this.handleSave();
@@ -116,18 +126,26 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
     }
   }
 
+  /**
+   * continuar a paso 2 guardando el registro en variable
+   * @param registry registro para seguir a paso 2
+   */
   continueToSecondStep(registry) {
     this.registryToConfigure = registry;
-    // console.log(this.registryToConfigure);
+    let hasRegistry = {
+      registry: registry,
+      hasRegistry: true
+    }
+    // funciona de manera asincrona
     this.isActive1 = true;
     setTimeout(() => {
       this.stepper.next();
-      this.registry.emit(true);
+      this.registry.emit(hasRegistry);
     }, 0.2);
   }
 
   /**
-   * @param objTradersToConfig Arreglo de traders donde estan los que ya estaba en la tabla y los que se agregaron o quitaron
+ * @param objTradersToConfig Arreglo de traders donde estan los que ya estaba en la tabla y los que se agregaron o quitaron
    */
   handleObjTradersToConfig(objTradersToConfig) {
     this.objTradersConfig = objTradersToConfig;
@@ -139,7 +157,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         idCompany: company.idCompany,
         idState: 1,
         idCountry: company.idCountry
-      }
+      };
 
       this.objForPointSale.push(traderConfig);
 
@@ -151,14 +169,21 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
     }
   }
 
+  /**
+   * objeto de comercios en modo edicion 
+   * @param tradersAfterMod 
+   */
   handleObjToCompare(tradersAfterMod) {
-    // console.log(tradersAfterMod);
     this.tradersAfterMod = tradersAfterMod;
   }
 
-
+  /**
+   * Modificacion del archivo masterfile dependiendo de en que paso se este modificando : edicion/creacion
+   * @param objMasterfile archivo cargado
+   */
   handleLoadedMasterfile(objMasterfile) {
     // console.log(objMasterfile);
+    this.uploadedFile.emit(true);
     let formatedDate = this.datepipe.transform(this.dateNow, 'yMMdHHMMSSm');
     this.wasModified3 = true;
     let userCode = '62454165';
@@ -190,9 +215,11 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         idAlliedCompanyConfig: null,
       }
     }
-    // console.log(this.objMasterFile);
   }
 
+  /**
+   * Limpiar configuraciones y resetear el stepper
+   */
   handleCleanConfig() {
     this.registryToConfigure = null;
     this.objTradersConfig = null;
@@ -214,10 +241,6 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         this.wasModified2 = true;
       }
     });
-
-    setTimeout(() => {
-      this.stepper.next();
-    }, 0.2);
   }
 
   /**
@@ -225,66 +248,83 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
    */
   handleSave() {
     /**
-     * Paso 1 creacióm
+     * Paso 1 creación
      */
     if (!this.registryToConfigure.idAlliedCompanyConfig) {
-      this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
-        if (response === true) {
+      if (this.objMasterFile.master === 'PRODUCTS') {
+        this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
+          if (response === true) {
 
-          let firstConfigObj = {
-            allied: { idAllied: this.registryToConfigure.allied.idAllied },
-            state: { idState: 2 },
-            company: { idCompany: this.registryToConfigure.company.idCompany },
-            configurationDate: this.dateNow
-          }
-
-          if (!!this.registryToConfigure.idAlliedCompanyConfig) {
-            this.objForconfig = {
-              ...firstConfigObj,
-              idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig
+            let firstConfigObj = {
+              allied: { idAllied: this.registryToConfigure.allied.idAllied },
+              state: { idState: 2 },
+              company: { idCompany: this.registryToConfigure.company.idCompany },
+              configurationDate: this.dateNow
             }
-          } else {
-            this.objForconfig = {
-              ...firstConfigObj,
-              idAlliedCompanyConfig: null
+
+            if (!!this.registryToConfigure.idAlliedCompanyConfig) {
+              this.objForconfig = {
+                ...firstConfigObj,
+                idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig
+              }
+            } else {
+              this.objForconfig = {
+                ...firstConfigObj,
+                idAlliedCompanyConfig: null
+              }
             }
-          }
 
-          this.configurationService.postFirstConfiguration(this.objForconfig).subscribe((createdConfig) => {
-            // Agregar cada socio comercial
-            let secondConfigObj = [];
+            this.configurationService.postFirstConfiguration(this.objForconfig).subscribe((createdConfig) => {
+              // Agregar cada socio comercial
+              let secondConfigObj = [];
 
-            this.idAllyCompanyConfig = createdConfig['idAlliedCompanyConfig'];
+              this.idAllyCompanyConfig = createdConfig['idAlliedCompanyConfig'];
 
-            this.objTradersConfig.forEach(company => {
-              let traderConfig = {
-                idAlliedCompanyConfig: this.idAllyCompanyConfig,
-                idCompany: company.idCompany,
-                idState: 1,
-                idCountry: company.idCountry
-              }
-              secondConfigObj.push(traderConfig);
-            });
-
-            this.configurationService.postSecondConfiguration(secondConfigObj).subscribe((createdConfig) => {
-              let objForThirdConfiguration = {
-                ...this.objMasterFile,
-                idAlliedCompanyConfig: this.idAllyCompanyConfig,
-                fileUpload: null
-              }
-
-              this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
-                this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig };
-                this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
-                  duration: 10000,
-                });
+              this.objTradersConfig.forEach(company => {
+                let traderConfig = {
+                  idAlliedCompanyConfig: this.idAllyCompanyConfig,
+                  idCompany: company.idCompany,
+                  idState: 1,
+                  idCountry: company.idCountry
+                }
+                secondConfigObj.push(traderConfig);
               });
-            })
-          });
-        }
-      });
 
+              this.configurationService.postSecondConfiguration(secondConfigObj).subscribe((createdConfig) => {
+                let objForThirdConfiguration = {
+                  ...this.objMasterFile,
+                  idAlliedCompanyConfig: this.idAllyCompanyConfig,
+                  alliedCompanyConfAudit: {
+                    idAlliedCompanyConfAudit: null
+                  },
+                  fileUpload: null
+                }
+
+                this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
+                  this.saved.emit(true);
+                  this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig, company: this.registryToConfigure.company.idCompany, ally: this.registryToConfigure.allied.idAllied, checkMode: true };
+                  this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
+                    duration: 10000,
+                  });
+                });
+              })
+            });
+          }
+        });
+      } else {
+        this.saved.emit(false);
+        this._snackBar.open("Para guardar la configuración se debe tener mínimo un socio comercial seleccionado y un producto", 'cerrar', {
+          duration: 10000,
+        });
+      }
     } else {
+      /**
+       * Verificar que se modifico paso 2 antes de hacer un seguimiento de los demas cambios
+       */
+      this.handleTradersModified();
+      /**
+       * Semodifico paso 2, pero no paso 3
+       */
       if (!!this.wasModified2 && !this.wasModified3) {
 
         /**
@@ -309,7 +349,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         };
 
         /**
-         * Colección para segunda configuració y auditoría
+         * Colección para segunda configuración y auditoría
          */
         let configForTraders = [];
         let configforTradersAudit = [];
@@ -317,7 +357,6 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         this.tradersAfterMod.forEach(trader => {
 
           if (trader.idState !== trader.idStateTemp) {
-            // console.log("guardar en AlliedTraderConfAudit con el idStateTemp: " + trader.idStateTemp);
             let configTradersAudit = {
               idAlliedTraderConfAudit: null,
               state: {
@@ -329,7 +368,121 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
             }
             configforTradersAudit.push(configTradersAudit);
           }
-          // console.log(configforTradersAudit);
+          if (1 === trader.idStateTemp) {
+            let configTraders = {
+              idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
+              idState: trader.idStateTemp,
+              idCompany: trader.idCompany,
+              idCountry: trader.idCountry
+            }
+            configForTraders.push(configTraders);
+          }
+
+        });
+
+        this.configurationService.postSecondConfiguration(configForTraders).subscribe(() => {
+
+          this.auditService.creatAllyCompanyConfig(objForconfig).subscribe((response: any) => {
+            configforTradersAudit.forEach(config => {
+              config.alliedCompanyConfAudit = {
+                idAlliedCompanyConfAudit: response.idAlliedCompanyConfAudit
+              }
+            });
+
+            this.auditService.createTraderAudit(configforTradersAudit).subscribe(() => {
+              //objeto para generar actualizaciones en otros componentes como la auditoria
+              this.saved.emit(true);
+              this.wasModified2 = false;
+              this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig, company: this.registryToConfigure.company.idCompany, ally: this.registryToConfigure.allied.idAllied };
+              this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
+                duration: 10000,
+              });
+            });
+          });
+        });
+        /**
+         * Semodifico paso 3, pero no paso 2
+         */
+      } else if (!this.wasModified2 && !!this.wasModified3) {
+        let objForconfig = {
+          idAlliedCompanyConfAudit: null,
+          allied: {
+            idAllied: this.registryToConfigure.allied.idAllied
+          },
+          state: {
+            idState: this.registryToConfigure.state.idState
+          },
+          company: {
+            idCompany: this.registryToConfigure.company.idCompany
+          },
+          actionExecuted: "NAA",
+          "executor": "ivan hernandez",
+          ipOrigin: this.clientIp,
+          configurationDate: this.registryToConfigure.configurationDate,
+          updateDate: this.dateNow
+        };
+
+        this.auditService.creatAllyCompanyConfig(objForconfig).subscribe((responseAudit: any) => {
+          this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
+            if (response === true) {
+              let objForThirdConfiguration = {
+                ...this.objMasterFile,
+                alliedCompanyConfAudit: {
+                  idAlliedCompanyConfAudit: responseAudit.idAlliedCompanyConfAudit
+                },
+                idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
+                fileUpload: null
+              }
+              this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
+                this.saved.emit(true);
+                this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig };
+                this.wasModified3 = false;
+                this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
+                  duration: 10000,
+                });
+              })
+            }
+          });
+        });
+      } else if (!!this.wasModified2 && !!this.wasModified3) {
+        // poner auditoria de lo que dice la hoja
+        // this.auditService.creatAllyCompanyConfig()
+        let objForconfig = {
+          idAlliedCompanyConfAudit: null,
+          allied: {
+            idAllied: this.registryToConfigure.allied.idAllied
+          },
+          state: {
+            idState: this.registryToConfigure.state.idState
+          },
+          company: {
+            idCompany: this.registryToConfigure.company.idCompany
+          },
+          actionExecuted: "NAA",
+          "executor": "ivan hernandez",
+          ipOrigin: this.clientIp,
+          configurationDate: this.registryToConfigure.configurationDate,
+          updateDate: this.dateNow
+        };
+
+        let configForTraders = [];
+        let configforTradersAudit = [];
+
+        this.tradersAfterMod.forEach(trader => {
+
+          if (trader.idState !== trader.idStateTemp) {
+            // console.log("guardar en AlliedTraderConfAudit con el idStateTemp: " + trader.idStateTemp);
+            let configTradersAudit = {
+              state: {
+                idState: trader.idStateTemp
+              },
+              company: {
+                idCompany: trader.idCompany
+              }
+            }
+            configforTradersAudit.push(configTradersAudit);
+          }
+
           if (1 === trader.idStateTemp) {
             // console.log("guardar en AlliedTraderConfig con el idState: " + trader.idStateTemp);
             let configTraders = {
@@ -342,91 +495,37 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           }
         });
 
-        this.configurationService.postSecondConfiguration(configForTraders).subscribe(() => {
+        this.auditService.creatAllyCompanyConfig(objForconfig).subscribe((responseAudit: any) => {
 
-          this.auditService.creatAllyCompanyConfig(objForconfig).subscribe((response: any) => {
-            configforTradersAudit.forEach(config => {
-              config.alliedCompanyConfAudit = {
-                idAlliedCompanyConfAudit: response.idAlliedCompanyConfAudit
-              }
-            });
-            this.auditService.createTraderAudit(configforTradersAudit).subscribe(() => {
-              //objeto para generar actualizaciones en otros componentes como la auditoria
-              this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig, company: this.registryToConfigure.company.idCompany, ally: this.registryToConfigure.allied.idAllied };
-              this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
-                duration: 10000,
-              });
-            })
-          })
-        })
-
-      } else if (!this.wasModified2 && !!this.wasModified3) {
-        this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
-          if (response === true) {
-            let objForThirdConfiguration = {
-              ...this.objMasterFile,
-              idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
-              fileUpload: null
+          configforTradersAudit.forEach(config => {
+            config.alliedCompanyConfAudit = {
+              idAlliedCompanyConfAudit: responseAudit.idAlliedCompanyConfAudit
             }
-            // console.log(objForThirdConfiguration);
-            this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
-              this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig };
-              this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
-                duration: 10000,
-              });
-            })
-          }
-        });
-      } else if (!!this.wasModified2 && !!this.wasModified3) {
-        this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
-          if (response === true) {
+          });
+          this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
+            if (response === true) {
 
-            let configForTraders = [];
-            let configforTradersAudit = [];
+              this.configurationService.postSecondConfiguration(configForTraders).subscribe(() => {
+                this.auditService.createTraderAudit(configforTradersAudit).subscribe(() => {
+                  let objForThirdConfiguration = {
+                    ...this.objMasterFile,
+                    idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
+                    fileUpload: null
+                  };
 
-            this.tradersAfterMod.forEach(trader => {
-
-              if (trader.idState !== trader.idStateTemp) {
-                // console.log("guardar en AlliedTraderConfAudit con el idStateTemp: " + trader.idStateTemp);
-                let configTradersAudit = {
-                  idAlliedTraderConfAudit: null,
-                  state: {
-                    idState: trader.idStateTemp
-                  },
-                  company: {
-                    idCompany: trader.idCompany
-                  }
-                }
-                configforTradersAudit.push(configTradersAudit);
-              }
-
-              if (1 === trader.idStateTemp) {
-                // console.log("guardar en AlliedTraderConfig con el idState: " + trader.idStateTemp);
-                let configTraders = {
-                  idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
-                  idState: trader.idStateTemp,
-                  idCompany: trader.idCompany,
-                  idCountry: trader.idCountry
-                }
-                configForTraders.push(configTraders);
-              }
-            });
-
-            this.configurationService.postSecondConfiguration(configForTraders).subscribe(() => {
-
-              let objForThirdConfiguration = {
-                ...this.objMasterFile,
-                idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
-                fileUpload: null
-              };
-              this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
-                this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig, company: this.registryToConfigure.company.idCompany, ally: this.registryToConfigure.allied.idAllied };
-                this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
-                  duration: 10000,
+                  this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
+                    this.saved.emit(true);
+                    this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig, company: this.registryToConfigure.company.idCompany, ally: this.registryToConfigure.allied.idAllied };
+                    this.wasModified3 = false;
+                    this.wasModified2 = false;
+                    this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
+                      duration: 10000,
+                    });
+                  });
                 });
-              })
-            });
-          }
+              });
+            }
+          });
         });
       }
     }

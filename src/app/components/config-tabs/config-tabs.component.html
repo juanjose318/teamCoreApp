@@ -3,6 +3,7 @@
 
     <app-results-table 
     [(tableNumber)]="tableNumber" 
+    [configurationDone]="configurationDone"
     [filteredAlly]="selectedAlly" 
     [filteredCompany]="selectedCompany"
     (nextStepWithRegistry)="continueToSecondStep($event)"
@@ -10,6 +11,7 @@
     ></app-results-table>
 
     <app-table-overview 
+    [configurationDone]="configurationDone"
     [allyAuditTableNumber]="allyAuditTableNumber"
     [(objAllyCompanyAudit)]="objAllyCompanyAuditCollection"
     [selectedCompany]="selectedCompany"
@@ -20,18 +22,19 @@
   <mat-step label="Paso 2 - Socio Comercial" [completed]="isActive2 === true ? true : false">
     <div class="btn-wrapper">
       <button  class="btn btn-primary" matStepperPrevious>Volver<i class="bi bi-arrow-left-circle"></i></button>
-      <button  class="btn btn-primary" (click)="handleTradersModified()">Siguiente<i class="bi bi-arrow-right-circle"></i></button>
+      <button  class="btn btn-primary" matStepperNext>Siguiente<i class="bi bi-arrow-right-circle"></i></button>
     </div>
 
-    <app-second-step-table 
+    <app-second-step-table
     [registry] = "registryToConfigure"
+    [configurationDone]="configurationDone"
     (objTradersToConfig)="handleObjTradersToConfig($event)"
     (objToCompare)="handleObjToCompare($event)"
     (hasTradersSelected)="handleHasTraders($event)"
     ></app-second-step-table>
 
     <app-table-overview 
-    [configurationDone]='configurationDone'
+    [configurationDone]="configurationDone"
     [allyAuditTableNumber]="allyAuditTableNumber"
     [selectedCompany]="selectedCompany"
     [selectedAlly]="selectedAlly"></app-table-overview>
@@ -42,7 +45,7 @@
 
     <app-table-third-step
     [registry]="registryToConfigure"
-    [traders]="objForPointSale"
+    [traders]="objTradersConfig"
     [configurationDone]="configurationDone"
     (previousStep)="handlePreviousStep($event)"
     (loadedMasterfile)="handleLoadedMasterfile($event)"
@@ -50,7 +53,7 @@
     ></app-table-third-step>
 
     <app-table-overview 
-    [configurationDone]='configurationDone'
+    [configurationDone]="configurationDone"
     [allyAuditTableNumber]="allyAuditTableNumber"
     [selectedCompany]="selectedCompany"
     [selectedAlly]="selectedAlly"></app-table-overview>

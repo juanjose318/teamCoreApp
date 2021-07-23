@@ -25,6 +25,7 @@ export class TableDataAuditComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.tradersCollection = this.dataSet;
         this.updateDatable(this.tradersCollection);
+        // this.dataSource.sortData;
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -37,24 +38,21 @@ export class TableDataAuditComponent implements OnInit, OnChanges {
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);
             }
             else if (change.currentValue === 'pointsSale') {
-                this.displayedColumns = ['ean', 'name', 'code', 'companyName', 'action'];
+                this.displayedColumns = ['pointSale.ean', 'pointSale.name', 'pointSale.traderCode', 'pointSale.traderName', 'state.state'];
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);
             } else if (change.currentValue === 'products') {
-                this.displayedColumns = ['ean', 'name', 'action'];
+                this.displayedColumns = ['product.ean', 'product.product', 'state.state'];
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);
             }
             else {
-                // Masterfile
-            }
+                this.displayedColumns = ['master.idMasterFile', 'master.master', 'state.state'];
+                setTimeout(() => this.updateDatable(this.dataSet), 0.2);            }
         }
     }
 
     applyFilter(filterValue) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
         console.log(this.dataSource.filter);
-        // if (this.dataSource.paginator) {
-        //     this.dataSource.paginator.firstPage();
-        // }
     }
 
     updateDatable(dataSource) {

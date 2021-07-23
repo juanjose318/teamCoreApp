@@ -85,7 +85,7 @@ export class ConfigService {
 
     getMasterFiles(idAlliedCompanyConfig) {
         return this.http
-            .get<{ masterFiles: any[] }>(`${environment.apiUrl}/masters/` + idAlliedCompanyConfig, httpOptions)
+            .get<{ masterFiles: any[] }>(`${environment.apiUrl}/masters/configurations/` + idAlliedCompanyConfig, httpOptions)
             .pipe(
                 map((data => data))
             ).subscribe((data) => {

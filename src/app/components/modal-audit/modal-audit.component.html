@@ -1,15 +1,18 @@
 <div class="container">
-  <div *ngIf="data?.registry.lstAlliedTradersConfAudit?.length">
-    <app-table-data-audit [dataSet]="data.registry.lstAlliedTradersConfAudit" [dataType]="dataType.traders"></app-table-data-audit>
+  <div *ngIf="data?.registry.lstAlliedTradersConfAudit?.length" class="table-wrapper">
+    <app-table-data-audit [dataSet]="data.registry.lstAlliedTradersConfAudit" [dataType]="dataType.traders">
+    </app-table-data-audit>
   </div>
-  <div *ngIf="data?.registry.lstAlliedProductsConfAudit?.length">
-    <h5>Productos</h5>
-    <app-table-data-audit [dataSet]="data?.registry.lstAlliedProductsConfAudit" [dataType]="dataType.products"></app-table-data-audit>
+  <div *ngIf="data?.registry.lstAlliedProductsConfAudit?.length" class="table-wrapper">
+    <app-table-data-audit [dataSet]="data?.registry.lstAlliedProductsConfAudit" [dataType]="dataType.products">
+    </app-table-data-audit>
   </div>
-  <div *ngIf="data?.registry.lstAlliedPointsSaleConfAudit?.length ">
-    <h5>Puntos de venta</h5>
-    <app-table-data-audit [dataSet]="data?.registry.lstAlliedPointsSaleConfAudit" [dataType]="dataType.pointsSale"></app-table-data-audit>
-  </div> 
-  <!-- <app-table-data-auditMaster></app-table-data-auditMaster>
-</div> -->
-
+  <div *ngIf="data?.registry.lstAlliedPointsSaleConfAudit?.length" class="table-wrapper">
+    <app-table-data-audit [dataSet]="data?.registry.lstAlliedPointsSaleConfAudit" [dataType]="dataType.pointsSale">
+    </app-table-data-audit>
+  </div>
+  <div  *ngIf="data?.registry.lstMasterFiles?.length" class="table-wrapper">
+    <app-table-data-audit [dataSet]="data?.registry.lstAlliedMasterFileConfAudit" [dataType]="dataType.masters">
+    </app-table-data-audit>
+  </div>
+</div>

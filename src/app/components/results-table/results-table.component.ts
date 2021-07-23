@@ -24,6 +24,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() filteredAlly;
   @Input() filteredCompany;
   @Input() registry;
+  @Input() configurationDone;
 
   @Output() deletedAlly: EventEmitter<any> = new EventEmitter();
   @Output() editedAlly: EventEmitter<any> = new EventEmitter();
@@ -86,6 +87,10 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
    */
   @Input() tableNumber: number;
 
+  configAudit = {
+    
+  }
+
   /**
    * Depedencia de modal
    * @param dialog modal
@@ -96,12 +101,13 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
     private companyService: CompanyService,
     private companyConfigService: ConfigService,
     private _snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   /**
    * Si es tabla uno y hay un objeto de aliados como input revisar si es de un solo pais o de todos
    */
   ngOnChanges(changes: SimpleChanges) {
+    let configurationDone = changes['configurationDone'];
     // Tabla 1 configuracion de aliados, hay objeto aliado y no hay ningun aliado filtrado
     if (this.tableNumber === 1 && !!this.allies && !this.filteredAlly) {
       // Todos los paises
@@ -144,10 +150,19 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.fetchConfigsWithAllyAndCompany(this.filteredAlly, this.filteredCompany);
         this.updateDatable(this.companyConfigCollection);
       }
+      else if (!!configurationDone) {
+        if (!!configurationDone.currentValue) {
+          if (!!configurationDone.currentValue.isDone) {
+            this.fetchConfigsWithAllyAndCompany(configurationDone.currentValue.ally, configurationDone.currentValue.company);
+            this.updateDatable(this.companyConfigCollection);
+          }
+        }
+      }
       this.fetchAllAllies();
       this.fetchAllCompanies();
       this.displayedColumns = this.firstConfigColumns;
       this.updateDatable(this.companyConfigCollection);
+
     }
   }
   /**
@@ -158,10 +173,10 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
       this.updateDatable(this.allyCollection);
     }
     else if (this.tableNumber === 2) {
+      this.updateDatable(this.companyConfigCollection);
       this.allyService.getIp();
       this.allySub = this.allyService.getIpListener().subscribe((data) => {
         this.clientIp = data.ip
-        this.updateDatable(this.companyConfigCollection);
       });
     }
   }
@@ -301,7 +316,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
   activateOrDeactivateComercialRelation() {
     const registry = this.configAllyCompanyToActivateOrDeactivate;
     registry.forEach(configAllyCompany => {
-      console.log(configAllyCompany);
+
       if (configAllyCompany.state.idState === 1) {
         const deactivateRelations = [{
           idAlliedCompanyConfig: configAllyCompany.idAlliedCompanyConfig,
@@ -320,6 +335,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
           else if (!!this.filteredAlly && !!this.filteredCompany) {
             this.fetchConfigsWithAllyAndCompany(this.filteredAlly, this.filteredCompany);
           }
+
         });
       } else {
         const activateRelations = [{
@@ -328,7 +344,8 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
           state: { idState: 1 },
           company: { idCompany: configAllyCompany.company.idCompany },
           configurationDate: configAllyCompany.configurationDate
-        }]
+        }];
+
         this.companyConfigService.activateOrDeactivateComercialRelation(activateRelations).subscribe(() => {
           this.handleAuditAllyCompanyConfig(activateRelations);
           if (!!this.filteredAlly && !this.filteredCompany) {
@@ -341,13 +358,12 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
         });
       }
     });
-    this.companyConfigService.getAllyCompanyConfigListener();
   }
-
-
+  
   handleAuditAllyCompanyConfig(configAllyComp) {
     const updateDate: Date = new Date();
     configAllyComp.forEach(configAllyCompElement => {
+
       if (configAllyCompElement.state.idState === 1) {
         const configAudit = {
           idAlliedCompanyConfAudit: null,
@@ -360,8 +376,11 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
           configurationDate: configAllyCompElement.configurationDate,
           updateDate: updateDate
         }
+
         this.createAllyCompanyConfig.emit(configAudit);
+
       } else if (configAllyCompElement.state.idState === 2) {
+
         const configAudit = {
           idAlliedCompanyConfAudit: null,
           allied: { idAllied: configAllyCompElement.allied.idAllied },
@@ -373,7 +392,9 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
           configurationDate: configAllyCompElement.configurationDate,
           updateDate: updateDate
         }
+
         this.createAllyCompanyConfig.emit(configAudit);
+
       }
     });
   }
@@ -395,7 +416,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, AfterViewInit {
    * Abre modal para confirmar que se quiere confirmar registro y permite pasar al siguiente paso de configuracion
    */
   goToConfiguration(registry) {
-    if (registry.state.idState === 1) {
+    if (registry.state.idState === 1 || (registry.isCanActivate === 0 && registry.state.idState === 2)) {
       const dialogRef = this.dialog.open(ModalDescriptionComponent, {
         width: '30%',
         height: '250px',

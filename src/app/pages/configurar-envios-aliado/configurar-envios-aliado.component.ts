@@ -58,8 +58,8 @@ export class ConfigurarEnviosAliadoComponent {
   /**
    * Condicional de registro
    */
-  hasRegistry: boolean;
-
+  hasRegistry: any;
+  hasUploadedFile: boolean;
   hasSelectedComercialPartners: boolean;
 
   isLoading: boolean;
@@ -112,8 +112,9 @@ export class ConfigurarEnviosAliadoComponent {
    * @param hasRegistry boolean que confirma si hay registro seleccionado
    */
   handleRegistry(hasRegistry) {
-    if (hasRegistry === true) {
-      this.hasRegistry = true;
+    if (hasRegistry.hasRegistry === true) {
+      this.hasRegistry = hasRegistry;
+      // console.log(hasRegistry);
     }
   }
 
@@ -123,8 +124,21 @@ export class ConfigurarEnviosAliadoComponent {
     }
   }
 
+  handleUploadedfile(uploadedFile) {
+    if (uploadedFile) {
+      this.hasUploadedFile = true;
+    }
+  }
+
   handleSave() {
+    console.log(this.saveConfig);
     this.saveConfig = true;
+  }
+
+  handleWasSaved(saved) {
+    if(saved){
+      this.saveConfig = false;
+    }
   }
 
   handleReset() {
