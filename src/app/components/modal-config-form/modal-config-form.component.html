@@ -10,7 +10,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Nombre Aliado</mat-label>
       <mat-select [(ngModel)]="allyName" (ngModelChange)="filterByAllyName($event)" required>
-        <mat-option *ngFor="let ally of data?.allyCollection" [value]="ally.name">
+        <mat-option *ngFor="let ally of allyCollectionForConfiguration" [value]="ally.name">
           {{ ally?.name }}
         </mat-option>
       </mat-select>
@@ -19,7 +19,7 @@
     <mat-form-field appearance="fill">
       <mat-label>ID Aliado</mat-label>
       <mat-select [(ngModel)]="idAlly" (ngModelChange)="filterByAllyId($event)" required>
-        <mat-option *ngFor="let ally of data?.allyCollection" [value]="ally.idAllied">
+        <mat-option *ngFor="let ally of allyCollectionForConfiguration" [value]="ally.idAllied">
           {{ ally?.idAllied }}
         </mat-option>
       </mat-select>
@@ -28,7 +28,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Código Empresa</mat-label>
       <mat-select [(ngModel)]="companyCode" (ngModelChange)="filterByCompanyCode($event)" required>
-        <mat-option *ngFor="let company of data?.companyCollection" [value]="company.companyCode">
+        <mat-option *ngFor="let company of companyCollectionForConfiguration" [value]="company.companyCode">
           {{ company?.companyCode }}
         </mat-option>
       </mat-select>
@@ -37,7 +37,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Nombre Empresa</mat-label>
       <mat-select [(ngModel)]="companyName" (ngModelChange)="filterByCompanyName($event)" required>
-        <mat-option *ngFor="let company of data?.companyCollection" [value]="company.companyName">
+        <mat-option *ngFor="let company of companyCollectionForConfiguration" [value]="company.companyName">
           {{ company?.companyName }}
         </mat-option>
       </mat-select>

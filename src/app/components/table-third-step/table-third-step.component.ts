@@ -62,9 +62,9 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (!!changes) {
-            let changeTraders = changes['traders'];
-            let changeRegistry = changes['registry'];
-            let changeConfiguration = changes['configurationDone'];
+            const changeTraders = changes['traders'];
+            const changeRegistry = changes['registry'];
+            const changeConfiguration = changes['configurationDone'];
             if (!!changeTraders) {
                 // check si hay cambios en el primer registro seleccionado o en la cantidad de socios comerciales
                 if (!!changeTraders.currentValue) {
@@ -80,7 +80,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                         this.searchParams = {
                             idCompany: changeRegistry.currentValue.company.companyCode,
                             idAlliedCompanyConfig: changeRegistry.currentValue.idAlliedCompanyConfig
-                        }
+                        };
                         this.fetchMasterFile(this.searchParams.idAlliedCompanyConfig);
                     }
                 }
@@ -91,7 +91,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                         this.searchParams = {
                             idCompany: changeConfiguration.currentValue.company,
                             idAlliedCompanyConfig: changeConfiguration.currentValue.idAlliedCompanyConfig
-                        }
+                        };
                         // this.searchParams.idAlliedCompanyConfig = changeConfiguration.currentValue.idAlliedCompanyConfig;
                         this.idToRefresh = changeConfiguration.currentValue.idAlliedCompanyConfig;
                         this.fetchMasterFile(changeConfiguration.currentValue.idAlliedCompanyConfig);
@@ -128,19 +128,18 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
 
     handleMasterfile(objMasterfile) {
         if (this.selectedMaster === 'PR') {
-            let obj = {
+            const obj = {
                 ...objMasterfile,
                 master: 'PRODUCTS',
                 idRoute: 2,
-            }
+            };
             this.loadedMasterfile.emit(obj);
-        }
-        else if (this.selectedMaster === 'PV') {
-            let obj = {
+        } else if (this.selectedMaster === 'PV') {
+            const obj = {
                 ...objMasterfile,
                 master: 'POINTS_SALE',
                 idRoute: 3,
-            }
+            };
             this.loadedMasterfile.emit(obj);
         } else {
             return;
@@ -156,8 +155,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
     changeMaster(master) {
         if (master === 'PR') {
             this.selectedMaster = 'PR';
-        }
-        else if (master === 'PV') {
+        } else if (master === 'PV') {
             this.selectedMaster = 'PV';
         } else {
             return;
@@ -171,11 +169,11 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                     duration: 2000,
                 });
             } else {
-                let logFileName = 'CenC_' + masterfile.fileName + '_log.csv';
+                const logFileName = 'CenC_' + masterfile.fileName + '_log.csv';
                 // console.log(encodedData);
                 this.exportToCsv(encodedData, logFileName);
             }
-        })
+        });
     }
 
     exportToCsv(data, name) {
@@ -207,20 +205,20 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                     this.productsCollection = productData.products;
                     console.log(this.productsCollection);
 
-                    let options = {
+                    const options = {
                         quoteStrings: '',
-                        headers: ["Id Producto", "EAN Producto", "Descripción", "Estado"]
+                        headers: ['Id Producto', 'EAN Producto', 'Descripción', 'Estado']
                     };
 
                     new AngularCsv(this.productsCollection, 'Reporte Productos', options);
-                })
+                });
             } else {
                 this.productService.getProductsByCompany(this.idForProducts);
                 this.productsSubs = this.productService.getProductListener().subscribe((productData) => {
                     this.productsCollection = productData.products;
-                    let options = {
+                    const options = {
                         quoteStrings: '',
-                        headers: ["Id Producto", "EAN Producto", "Descripción", "Estado"]
+                        headers: ['Id Producto', 'EAN Producto', 'Descripción', 'Estado']
                     };
                     new AngularCsv(this.productsCollection, 'Reporte Productos', options);
                 });
@@ -232,20 +230,19 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                     this.pointsOfSaleService.getPointsOfSale(this.searchParams.idAlliedCompanyConfig);
                     this.pointSaleSub = this.pointsOfSaleService.getPointsOfSaleListener().subscribe((pointSaleData) => {
                         this.pointSaleCollection = pointSaleData.pointsOfSale;
-                        let options = {
+                        const options = {
                             quoteStrings: '',
-                            headers: ["Id Punto de Venta", "EAN", "Punto de Venta", "Código Comercio", "Comercio", "Estado"]
-                        }
+                            headers: ['Id Punto de Venta', 'EAN', 'Punto de Venta', 'Código Comercio', 'Comercio', 'Estado']
+                        };
                         new AngularCsv(this.pointSaleCollection, 'Reporte Puntos de Venta', options);
                     });
                 }
-            }
-            else {
+            } else {
                 this.pointsOfSaleService.postTradersToGetPointSale(this.tradersCollection).subscribe((pointSaleData) => {
-                    let options = {
+                    const options = {
                         quoteStrings: '',
-                        headers: ["Id Punto de Venta", "EAN", "Punto de Venta", "Código Comercio", "Comercio", "Estado"]
-                    }
+                        headers: ['Id Punto de Venta', 'EAN', 'Punto de Venta', 'Código Comercio', 'Comercio', 'Estado']
+                    };
                     new AngularCsv(pointSaleData, 'Reporte Puntos de Venta', options);
                 });
             }
@@ -259,11 +256,9 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
         this.previousStep.emit(true);
     }
 
-    ngOnDestroy(): void {
-        setTimeout(() => {
-            this.masterSub.unsubscribe();
-            this.pointSaleSub.unsubscribe();
-            this.productsSubs.unsubscribe();
-        }, 300000);
+    OnDestroy(): void {
+        this.masterSub.unsubscribe();
+        this.pointSaleSub.unsubscribe();
+        this.productsSubs.unsubscribe();
     }
 }

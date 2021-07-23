@@ -24,12 +24,12 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
     @Output() objToCompare: EventEmitter<any> = new EventEmitter();
 
     private traderSub: Subscription;
-    //coleccion de traders
+    // coleccion de traders
     tradersCollection = [];
-    //traders en modo edicion despues de selccionar y deseleccionar
+    // traders en modo edicion despues de selccionar y deseleccionar
     tradersAfterMod = [];
     // condicional para bloquear traders despues del primer llamado a configuracion
-    readonlyMode:boolean;
+    readonlyMode: boolean;
     // columnas para tabla
     displayedColumns: String[] = ['selectField', 'company.companyCode', 'companyName'];
     // objeto de traders seleccionados para configuracion
@@ -46,15 +46,15 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
     ) { }
 
     ngOnChanges(changes: SimpleChanges) {
-        let change = changes['registry'];
-        let configurationDone = changes['configurationDone'];
+        const change = changes['registry'];
+        const configurationDone = changes['configurationDone'];
         if (!!change) {
             if (!!change.currentValue) {
                 if (!!change.currentValue.idAlliedCompanyConfig) {
                     this.configId = change.currentValue.idAlliedCompanyConfig;
                     this.companyCode = change.currentValue.company.companyCode;
                     this.fetchTradersWithConfig(this.configId, this.companyCode);
-                    if(change.currentValue.state.idState === 2){
+                    if (change.currentValue.state.idState === 2) {
                         this.readonlyMode = true;
                     }
                 } else if (!change.currentValue.idAlliedCompanyConfig) {
@@ -62,10 +62,10 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
                 }
             }
         }
-        if(configurationDone) {
-            if(configurationDone.currentValue) {
+        if (configurationDone) {
+            if (configurationDone.currentValue) {
                 this.fetchTradersWithConfig(configurationDone.currentValue.idAlliedCompanyConfig, configurationDone.currentValue.company);
-                if(configurationDone.currentValue.checkMode === true) {
+                if (configurationDone.currentValue.checkMode === true) {
                     this.readonlyMode = true;
                 }
             }
@@ -80,7 +80,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         this.companyConfigService.getTradersFirstTime(companyCode);
         this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
-            setTimeout(() => this.updateDatable(this.tradersCollection), 500)
+            setTimeout(() => this.updateDatable(this.tradersCollection), 500);
         });
     }
 
@@ -91,7 +91,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
             this.tradersAfterMod = data.traders;
             this.objToCompare.emit(this.tradersAfterMod);
             this.pushTraders(this.tradersCollection);
-            setTimeout(() => this.updateDatable(this.tradersCollection), 500)
+            setTimeout(() => this.updateDatable(this.tradersCollection), 500);
         });
     }
 
@@ -108,8 +108,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
                     traderInCl.idStateTemp = 1;
                 }
             });
-        }
-        else {
+        } else {
             for (let i = this.objTraders.length - 1; i >= 0; --i) {
                 if (this.objTraders[i].companyCode == trader.companyCode) {
                     this.objTraders.splice(i, 1);
@@ -133,7 +132,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         this.dataSource.filterPredicate = (data: any, filter) => {
             const dataStr = JSON.stringify(data).toLowerCase();
             return dataStr.indexOf(filter) != -1;
-        }
+        };
     }
 
     pushTraders(traders) {
@@ -156,11 +155,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnDestroy(): void {
-        setTimeout(() => {
+    OnDestroy(): void {
             this.traderSub.unsubscribe();
-        }, 300000);
-
     }
-
 }

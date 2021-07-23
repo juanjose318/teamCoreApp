@@ -29,10 +29,11 @@ export class AliadoService {
                 map((data => data)),
                 catchError(err => {
                     this.showErrorMessage('No se pudo obtener aliados');
-                    return throwError(err)
+                    return throwError(err);
                 })
             ).subscribe((transformedData) => {
                 this.allies = transformedData;
+                console.log(this.allies);
                 this.allyListener.next({
                     allies: this.allies
                 });
@@ -65,7 +66,7 @@ export class AliadoService {
                 map((data => data),
                     catchError(err => {
                         this.showErrorMessage('No se pudo alcanzar el IP');
-                        return throwError(err)
+                        return throwError(err);
                     }))
             ).subscribe((data) => {
                 this.ipListener.next({
@@ -80,7 +81,7 @@ export class AliadoService {
             .pipe(
                 catchError(err => {
                     this.showErrorMessage('No se pudo actualizar aliado');
-                    return throwError(err)
+                    return throwError(err);
                 }
                 )
             );
@@ -92,7 +93,7 @@ export class AliadoService {
         ).pipe(
             catchError(err => {
                 this.showErrorMessage('No se pudo eliminar aliado');
-                return throwError(err)
+                return throwError(err);
             })
         );
     }
@@ -114,7 +115,7 @@ export class AliadoService {
                 map((data => data),
                     catchError(err => {
                         this.showErrorMessage('No se pudo alcanzar el aliado');
-                        return throwError(err)
+                        return throwError(err);
                     }))
             ).subscribe((transformedData) => {
                 this.allies = transformedData;

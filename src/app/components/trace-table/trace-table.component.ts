@@ -35,10 +35,10 @@ export class TraceTableComponent implements OnInit, OnChanges {
 
 
     ngOnChanges(changes: SimpleChanges) {
-        let change = changes['traceParams']
+        const change = changes['traceParams'];
         if (!!change) {
             if (!!change.currentValue) {
-                this.fetchTrace(change.currentValue.idAlly, change.currentValue.idCompany)
+                this.fetchTrace(change.currentValue.idAlly, change.currentValue.idCompany);
             }
         }
     }
@@ -53,7 +53,7 @@ export class TraceTableComponent implements OnInit, OnChanges {
             this.traceCollection = traceData.trace;
             this.stopLoading.emit(false);
             this.updateTable(this.traceCollection);
-        })
+        });
     }
 
     exportexcel(): void {
@@ -68,5 +68,4 @@ export class TraceTableComponent implements OnInit, OnChanges {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }
-
 }

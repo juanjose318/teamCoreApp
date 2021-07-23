@@ -29,22 +29,20 @@ export class TableDataAuditComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        let change = changes['dataType'];
+        const change = changes['dataType'];
         if (change) {
             console.log(change.currentValue);
             if (change.currentValue === 'traders') {
                 this.displayedColumns = ['company.companyName', 'company.companyCode', 'state.state'];
                 console.log(this.dataSet);
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);
-            }
-            else if (change.currentValue === 'pointsSale') {
+            } else if (change.currentValue === 'pointsSale') {
                 this.displayedColumns = ['pointSale.ean', 'pointSale.name', 'pointSale.traderCode', 'pointSale.traderName', 'state.state'];
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);
             } else if (change.currentValue === 'products') {
                 this.displayedColumns = ['product.ean', 'product.product', 'state.state'];
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);
-            }
-            else {
+            } else {
                 this.displayedColumns = ['master.idMasterFile', 'master.master', 'state.state'];
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);            }
         }
@@ -60,9 +58,9 @@ export class TableDataAuditComponent implements OnInit, OnChanges {
         this.dataSource.filterPredicate = (data: any, filter) => {
             const dataStr = JSON.stringify(data).toLowerCase();
             return dataStr.indexOf(filter) != -1;
-        }
+        };
         // implementa funcion lodash para tener acceso a objetos dentro de objetos
-            this.dataSource.sortingDataAccessor = _.get; 
+            this.dataSource.sortingDataAccessor = _.get;
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
     }

@@ -35,6 +35,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   registryToConfigure;
   // comercios seleccionados en paso dos
   objTradersConfig;
+  // tslint:disable-next-line: max-line-length
   // todos los comercios seleccionados o deseleccionados en base a un idStateTemp que se convierte al id estado dependiendo de la diferencia o similitud de la misma, aplica para paso de edicion
   tradersAfterMod;
   // objeto para la creacion de auditoria
@@ -62,8 +63,8 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   /**
    * Condicionales para indicar si se modifico algo en el paso 2 o 3 de las configuraciones
    */
-  wasModified2: boolean = false;
-  wasModified3: boolean = false;
+  wasModified2 = false;
+  wasModified3 = false;
 
   dateNow: Date = new Date();
   // numero de tabla para ser usado en el paso 1
@@ -79,8 +80,8 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    let cancel = changes['cleanConfig'];
-    let save = changes['saveConfig'];
+    const cancel = changes['cleanConfig'];
+    const save = changes['saveConfig'];
 
     if (!!cancel) {
       if (cancel.currentValue) {
@@ -103,7 +104,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   }
 
   /**
-   * 
+   *
    * @param step TODO poner numeros con constantes
    */
   changeStep(step) {
@@ -132,10 +133,10 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
    */
   continueToSecondStep(registry) {
     this.registryToConfigure = registry;
-    let hasRegistry = {
+    const hasRegistry = {
       registry: registry,
       hasRegistry: true
-    }
+    };
     // funciona de manera asincrona
     this.isActive1 = true;
     setTimeout(() => {
@@ -152,7 +153,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
 
     this.objTradersConfig.forEach(company => {
 
-      let traderConfig = {
+      const traderConfig = {
         idAlliedCompanyConfig: null,
         idCompany: company.idCompany,
         idState: 1,
@@ -170,8 +171,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   }
 
   /**
-   * objeto de comercios en modo edicion 
-   * @param tradersAfterMod 
+   * @param tradersAfterMod  objeto de comercios en modo edicion
    */
   handleObjToCompare(tradersAfterMod) {
     this.tradersAfterMod = tradersAfterMod;
@@ -184,36 +184,36 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   handleLoadedMasterfile(objMasterfile) {
     // console.log(objMasterfile);
     this.uploadedFile.emit(true);
-    let formatedDate = this.datepipe.transform(this.dateNow, 'yMMdHHMMSSm');
+    const formatedDate = this.datepipe.transform(this.dateNow, 'yMMdHHMMSSm');
     this.wasModified3 = true;
-    let userCode = '62454165';
+    const userCode = '62454165';
     // console.log(this.registryToConfigure);
-    let objBeforeConfig = {
+    const objBeforeConfig = {
       idMasterFile: null,
       idAlliedCompanyConfAudit: null,
       state: {
         idState: 5
       },
       idRoute: objMasterfile.idRoute,
-      userName: "ivaherco",
+      userName: 'ivaherco',
       master: objMasterfile.master,
       fileName: objMasterfile.fileInfo + '_' + formatedDate + '_' + userCode + '.csv',
       detail: null,
       startDateLoad: null,
       endDateLoad: null,
       fileUpload: objMasterfile.codedfile
-    }
+    };
 
     if (this.registryToConfigure.idAlliedCompanyConfig) {
       this.objMasterFile = {
         ...objBeforeConfig,
         idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
-      }
+      };
     } else {
       this.objMasterFile = {
         ...objBeforeConfig,
         idAlliedCompanyConfig: null,
-      }
+      };
     }
   }
 
@@ -223,7 +223,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   handleCleanConfig() {
     this.registryToConfigure = null;
     this.objTradersConfig = null;
-    this.objMasterFile = null
+    this.objMasterFile = null;
     this.stepper.reset();
     this.isActive1 = false;
     this.isActive2 = false;
@@ -255,67 +255,69 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
           if (response === true) {
 
-            let firstConfigObj = {
+            const firstConfigObj = {
               allied: { idAllied: this.registryToConfigure.allied.idAllied },
               state: { idState: 2 },
               company: { idCompany: this.registryToConfigure.company.idCompany },
               configurationDate: this.dateNow
-            }
+            };
 
             if (!!this.registryToConfigure.idAlliedCompanyConfig) {
               this.objForconfig = {
                 ...firstConfigObj,
                 idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig
-              }
+              };
             } else {
               this.objForconfig = {
                 ...firstConfigObj,
                 idAlliedCompanyConfig: null
-              }
+              };
             }
 
             this.configurationService.postFirstConfiguration(this.objForconfig).subscribe((createdConfig) => {
               // Agregar cada socio comercial
-              let secondConfigObj = [];
+              const secondConfigObj = [];
 
               this.idAllyCompanyConfig = createdConfig['idAlliedCompanyConfig'];
 
               this.objTradersConfig.forEach(company => {
-                let traderConfig = {
+                const traderConfig = {
                   idAlliedCompanyConfig: this.idAllyCompanyConfig,
                   idCompany: company.idCompany,
                   idState: 1,
                   idCountry: company.idCountry
-                }
+                };
                 secondConfigObj.push(traderConfig);
               });
 
-              this.configurationService.postSecondConfiguration(secondConfigObj).subscribe((createdConfig) => {
-                let objForThirdConfiguration = {
+              this.configurationService.postSecondConfiguration(secondConfigObj).subscribe( () => {
+                const objForThirdConfiguration = {
                   ...this.objMasterFile,
                   idAlliedCompanyConfig: this.idAllyCompanyConfig,
                   alliedCompanyConfAudit: {
                     idAlliedCompanyConfAudit: null
                   },
                   fileUpload: null
-                }
+                };
 
                 this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
                   this.saved.emit(true);
-                  this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig, company: this.registryToConfigure.company.idCompany, ally: this.registryToConfigure.allied.idAllied, checkMode: true };
-                  this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
-                    duration: 10000,
-                  });
+                  this.configurationDone = {
+                    isDone: true,
+                    idAlliedCompanyConfig: this.idAllyCompanyConfig,
+                    company: this.registryToConfigure.company.idCompany,
+                    ally: this.registryToConfigure.allied.idAllied,
+                    checkMode: true
+                  };
+                  this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
                 });
-              })
+              });
             });
           }
         });
       } else {
         this.saved.emit(false);
-        this._snackBar.open("Para guardar la configuración se debe tener mínimo un socio comercial seleccionado y un producto", 'cerrar', {
-          duration: 10000,
-        });
+        this.showMessage('Para guardar la configuración se debe tener mínimo un socio comercial seleccionado y un producto');
       }
     } else {
       /**
@@ -330,7 +332,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         /**
          * Objeto para primera auditoria
          */
-        let objForconfig = {
+        const objForconfig = {
           idAlliedCompanyConfAudit: null,
           allied: {
             idAllied: this.registryToConfigure.allied.idAllied
@@ -341,8 +343,8 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           company: {
             idCompany: this.registryToConfigure.company.idCompany
           },
-          actionExecuted: "NAA",
-          "executor": "ivan hernandez",
+          actionExecuted: 'NAA',
+          executor: 'ivan hernandez',
           ipOrigin: this.clientIp,
           configurationDate: this.registryToConfigure.configurationDate,
           updateDate: this.dateNow
@@ -351,13 +353,13 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         /**
          * Colección para segunda configuración y auditoría
          */
-        let configForTraders = [];
-        let configforTradersAudit = [];
+        const configForTraders = [];
+        const configforTradersAudit = [];
 
         this.tradersAfterMod.forEach(trader => {
 
           if (trader.idState !== trader.idStateTemp) {
-            let configTradersAudit = {
+            const configTradersAudit = {
               idAlliedTraderConfAudit: null,
               state: {
                 idState: trader.idStateTemp
@@ -365,16 +367,16 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
               company: {
                 idCompany: trader.idCompany
               }
-            }
+            };
             configforTradersAudit.push(configTradersAudit);
           }
           if (1 === trader.idStateTemp) {
-            let configTraders = {
+            const configTraders = {
               idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
               idState: trader.idStateTemp,
               idCompany: trader.idCompany,
               idCountry: trader.idCountry
-            }
+            };
             configForTraders.push(configTraders);
           }
 
@@ -386,25 +388,28 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
             configforTradersAudit.forEach(config => {
               config.alliedCompanyConfAudit = {
                 idAlliedCompanyConfAudit: response.idAlliedCompanyConfAudit
-              }
+              };
             });
 
             this.auditService.createTraderAudit(configforTradersAudit).subscribe(() => {
-              //objeto para generar actualizaciones en otros componentes como la auditoria
+              // Objeto para generar actualizaciones en otros componentes como la auditoria
               this.saved.emit(true);
               this.wasModified2 = false;
-              this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig, company: this.registryToConfigure.company.idCompany, ally: this.registryToConfigure.allied.idAllied };
-              this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
-                duration: 10000,
-              });
+              this.configurationDone = {
+                isDone: true,
+                idAlliedCompanyConfig: this.idAllyCompanyConfig,
+                company: this.registryToConfigure.company.idCompany,
+                ally: this.registryToConfigure.allied.idAllied
+              };
+              this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
             });
           });
         });
         /**
-         * Semodifico paso 3, pero no paso 2
+         * Se modifico paso 3, pero no paso 2
          */
       } else if (!this.wasModified2 && !!this.wasModified3) {
-        let objForconfig = {
+        const objForconfig = {
           idAlliedCompanyConfAudit: null,
           allied: {
             idAllied: this.registryToConfigure.allied.idAllied
@@ -415,8 +420,8 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           company: {
             idCompany: this.registryToConfigure.company.idCompany
           },
-          actionExecuted: "NAA",
-          "executor": "ivan hernandez",
+          actionExecuted: 'NAA',
+          executor: 'ivan hernandez',
           ipOrigin: this.clientIp,
           configurationDate: this.registryToConfigure.configurationDate,
           updateDate: this.dateNow
@@ -425,29 +430,27 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         this.auditService.creatAllyCompanyConfig(objForconfig).subscribe((responseAudit: any) => {
           this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
             if (response === true) {
-              let objForThirdConfiguration = {
+              const objForThirdConfiguration = {
                 ...this.objMasterFile,
                 alliedCompanyConfAudit: {
                   idAlliedCompanyConfAudit: responseAudit.idAlliedCompanyConfAudit
                 },
                 idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
                 fileUpload: null
-              }
+              };
               this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
                 this.saved.emit(true);
                 this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig };
                 this.wasModified3 = false;
-                this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
-                  duration: 10000,
-                });
-              })
+                this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
+              });
             }
           });
         });
       } else if (!!this.wasModified2 && !!this.wasModified3) {
         // poner auditoria de lo que dice la hoja
         // this.auditService.creatAllyCompanyConfig()
-        let objForconfig = {
+        const objForconfig = {
           idAlliedCompanyConfAudit: null,
           allied: {
             idAllied: this.registryToConfigure.allied.idAllied
@@ -458,39 +461,39 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           company: {
             idCompany: this.registryToConfigure.company.idCompany
           },
-          actionExecuted: "NAA",
-          "executor": "ivan hernandez",
+          actionExecuted: 'NAA',
+          executor: 'ivan hernandez',
           ipOrigin: this.clientIp,
           configurationDate: this.registryToConfigure.configurationDate,
           updateDate: this.dateNow
         };
 
-        let configForTraders = [];
-        let configforTradersAudit = [];
+        const configForTraders = [];
+        const configforTradersAudit = [];
 
         this.tradersAfterMod.forEach(trader => {
 
           if (trader.idState !== trader.idStateTemp) {
             // console.log("guardar en AlliedTraderConfAudit con el idStateTemp: " + trader.idStateTemp);
-            let configTradersAudit = {
+            const configTradersAudit = {
               state: {
                 idState: trader.idStateTemp
               },
               company: {
                 idCompany: trader.idCompany
               }
-            }
+            };
             configforTradersAudit.push(configTradersAudit);
           }
 
           if (1 === trader.idStateTemp) {
             // console.log("guardar en AlliedTraderConfig con el idState: " + trader.idStateTemp);
-            let configTraders = {
+            const configTraders = {
               idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
               idState: trader.idStateTemp,
               idCompany: trader.idCompany,
               idCountry: trader.idCountry
-            }
+            };
             configForTraders.push(configTraders);
           }
         });
@@ -500,14 +503,14 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           configforTradersAudit.forEach(config => {
             config.alliedCompanyConfAudit = {
               idAlliedCompanyConfAudit: responseAudit.idAlliedCompanyConfAudit
-            }
+            };
           });
           this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
             if (response === true) {
 
               this.configurationService.postSecondConfiguration(configForTraders).subscribe(() => {
                 this.auditService.createTraderAudit(configforTradersAudit).subscribe(() => {
-                  let objForThirdConfiguration = {
+                  const objForThirdConfiguration = {
                     ...this.objMasterFile,
                     idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
                     fileUpload: null
@@ -515,12 +518,17 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
 
                   this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
                     this.saved.emit(true);
-                    this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig, company: this.registryToConfigure.company.idCompany, ally: this.registryToConfigure.allied.idAllied };
+
+                    this.configurationDone = {
+                      isDone: true,
+                      idAlliedCompanyConfig: this.idAllyCompanyConfig,
+                      company: this.registryToConfigure.company.idCompany,
+                      ally: this.registryToConfigure.allied.idAllied
+                    };
+
                     this.wasModified3 = false;
                     this.wasModified2 = false;
-                    this._snackBar.open("El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese", 'cerrar', {
-                      duration: 10000,
-                    });
+                    this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
                   });
                 });
               });
@@ -543,12 +551,16 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
     }
   }
 
+  showMessage(message) {
+    this._snackBar.open( message , 'cerrar', {
+      duration: 10000,
+    });
+  }
+
   createAllyCompanyConfig(objAllyCompanyAudit) {
     this.objAllyCompanyAuditCollection = objAllyCompanyAudit;
   }
-
   // handleIsloading(loading) {
   //   (loading === true) ? this.isLoading = true : this.isLoading = false
   // }
-
 }

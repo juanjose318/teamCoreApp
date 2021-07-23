@@ -63,7 +63,7 @@ export class ConfigurarAliadosComponent implements OnInit {
   ngOnInit() {
     this.aliadoService.getIp();
     this.allySub = this.aliadoService.getIpListener().subscribe((data) => {
-      this.clientIp = data.ip
+      this.clientIp = data.ip;
     });
   }
   /**
@@ -171,7 +171,7 @@ export class ConfigurarAliadosComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    * TODO cambiar ruta y canal canal 2 y ruta 4
    */
   /**
@@ -207,6 +207,6 @@ export class ConfigurarAliadosComponent implements OnInit {
   }
 
   handleIsloading(loading) {
-    (loading === true) ? this.isLoading = true : this.isLoading = false
+    (loading === true) ? this.isLoading = true : this.isLoading = false;
   }
 }

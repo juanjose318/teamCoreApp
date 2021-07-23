@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { AuditService } from 'src/app/services/audit/audit.service';
 import { ModalAuditComponent } from '../modal-audit/modal-audit.component';
+import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 
 /**
  * @title Data table with sorting, pagination, and filtering.
@@ -79,7 +79,7 @@ export class TableOverviewComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        let change = changes['configurationDone'];
+        const change = changes['configurationDone'];
 
         if (!!this.objAllyCompanyAudit) {
             this.handleAuditCompanyConfig(this.objAllyCompanyAudit);
@@ -89,30 +89,27 @@ export class TableOverviewComponent implements OnInit, OnChanges {
             this.auditSub = this.auditService.getAuditListener()
                 .subscribe((filteredAudit) => {
                     this.auditCollection = filteredAudit.audit;
-                    this.updateTable(this.auditCollection)
+                    this.updateTable(this.auditCollection);
                     this.displayedColumns = this.allyAuditColumns;
                 });
-        }
-        else if (this.allyAuditTableNumber === 2) {
+        } else if (this.allyAuditTableNumber === 2) {
             if (!!this.selectedAlly && !this.selectedCompany) {
                 this.auditService.getAuditConfigAllyCompanyByAlly(this.selectedAlly);
                 this.auditSub = this.auditService.getAuditListener()
                     .subscribe((filteredAudit) => {
                         this.auditCollection = filteredAudit.audit;
                         this.displayedColumns = this.allyCompanyAuditColumns;
-                        this.updateTable(this.auditCollection)
+                        this.updateTable(this.auditCollection);
                     });
-            }
-            else if (!!this.selectedAlly && !!this.selectedCompany) {
+            } else if (!!this.selectedAlly && !!this.selectedCompany) {
                 this.auditService.getAuditConfigAllyCompanyByAllyAndCompany(this.selectedAlly, this.selectedCompany);
                 this.auditSub = this.auditService.getAuditListener()
                     .subscribe((filteredAudit) => {
                         this.auditCollection = filteredAudit.audit;
-                        this.updateTable(this.auditCollection)
+                        this.updateTable(this.auditCollection);
                         this.displayedColumns = this.allyCompanyAuditColumns;
                     });
-            }
-            else if (change) {
+            } else if (change) {
                 if (change.currentValue) {
                     if (change.currentValue.isDone) {
                         this.auditService.getAuditConfigAllyCompanyByAllyAndCompany(change.currentValue.ally, change.currentValue.company);
@@ -134,17 +131,19 @@ export class TableOverviewComponent implements OnInit, OnChanges {
         this.dataSource.filterPredicate = (data: any, filter) => {
             const dataStr = JSON.stringify(data).toLowerCase();
             return dataStr.indexOf(filter) != -1;
-        }
+        };
         this.dataSource.sortingDataAccessor = _.get;
-        setTimeout(() => this.dataSource.sort = this.sort, 0.2)
+        setTimeout(() => this.dataSource.sort = this.sort, 0.2);
         this.dataSource.paginator = this.paginator;
     }
 
     exportexcel(): void {
-        const ws = XLSX.utils.json_to_sheet(this.auditCollection);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, this.fileName);
+        const options = {
+            quoteStrings: '',
+            headers: ['ID Aliado', 'Aliado', 'Estado', 'Compañía', 'Acción Ejecutada', 'Ejecutado por',
+             'Fecha de Configuración', 'Fecha de Actualización']
+        };
+        new AngularCsv(this.auditCollection, 'Reporte Puntos de Venta', options);
     }
 
     applyFilter(filterValue) {
@@ -160,12 +159,10 @@ export class TableOverviewComponent implements OnInit, OnChanges {
         });
     }
 
-    //TODO quitar push
     handleAuditCompanyConfig(configAllyCompAudit) {
         if (configAllyCompAudit) {
             this.auditService.creatAllyCompanyConfig(configAllyCompAudit).subscribe(() => {
-                this.updateTable(this.auditCollection)
-                // this.auditCollection.push(configAllyCompAudit);
+                this.updateTable(this.auditCollection);
             });
         }
     }

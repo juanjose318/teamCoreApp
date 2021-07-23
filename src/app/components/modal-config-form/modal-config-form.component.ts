@@ -1,5 +1,8 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { AliadoService } from 'src/app/services/ally/ally.service';
+import { CompanyService } from 'src/app/services/company/company.service';
 
 @Component({
     selector: 'app-modal-config-form',
@@ -16,31 +19,47 @@ export class ModalConfigFormComponent implements OnInit {
     private idCompany;
     private companyCode;
     private companyName;
-    private configurationDate: Date = new Date();;
+    private configurationDate: Date = new Date();
+
+    private allyCollectionForConfiguration = [];
+    private companyCollectionForConfiguration = [];
+
+    private allySub: Subscription;
+    private companySub: Subscription;
+
+
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data,
+        private allyService: AliadoService,
         private dialogRef: MatDialogRef<ModalConfigFormComponent>,
+        private companyService: CompanyService,
     ) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.allyService.getAllies();
+        this.allySub = this.allyService.getAllyListener()
+        .subscribe((data) => this.allyCollectionForConfiguration = data.allies);
+        this.companyService.getCompanies();
+        this.companySub = this.companyService.getCompanyListener()
+        .subscribe((data) => this.companyCollectionForConfiguration = data.companies);
+    }
 
     save() {
         // Registro para guardar en memoria local
         const configOne = {
             idAlliedCompanyConfig: null,
-            allied: { 
-                idAllied: this.idAlly 
+            allied: {
+                idAllied: this.idAlly
             },
-            company: { 
-                idCompany: this.idCompany 
+            company: {
+                idCompany: this.idCompany
             },
-            state: { 
-                idState: 2 
+            state: {
+                idState: 2
             },
             configurationDate: this.configurationDate
         }
-        // Registro para seguir a paso 2 
+        // Registro para seguir a paso 2
         const registryToPush = {
             allied: {
                 idAllied: this.idAlly,
@@ -63,7 +82,7 @@ export class ModalConfigFormComponent implements OnInit {
     }
 
     filterByCompanyCode(companyCode) {
-        const filtered = this.data.companyCollection.filter(company => company.companyCode == companyCode);
+        const filtered = this.companyCollectionForConfiguration.filter(company => company.companyCode == companyCode);
         filtered.forEach(item => {
             this.idCompany = item.idCompany;
             this.companyName = item.companyName;
@@ -71,7 +90,7 @@ export class ModalConfigFormComponent implements OnInit {
     }
 
     filterByCompanyId(companyId) {
-        const filtered = this.data.companyCollection.filter(company => company.idCompany == companyId);
+        const filtered = this.companyCollectionForConfiguration.filter(company => company.idCompany == companyId);
         filtered.forEach(item => {
             this.companyCode = item.companyCode;
             this.companyName = item.companyName;
@@ -79,7 +98,7 @@ export class ModalConfigFormComponent implements OnInit {
     }
 
     filterByCompanyName(companyName) {
-        const filtered = this.data.companyCollection.filter(company => company.companyName == companyName);
+        const filtered = this.companyCollectionForConfiguration.filter(company => company.companyName == companyName);
         filtered.forEach(item => {
             this.companyCode = item.companyCode;
             this.idCompany = item.idCompany;
@@ -87,14 +106,14 @@ export class ModalConfigFormComponent implements OnInit {
     }
 
     filterByAllyName(allyName) {
-        const filtered = this.data.allyCollection.filter(ally => ally.name == allyName);
+        const filtered = this.allyCollectionForConfiguration.filter(ally => ally.name == allyName);
         filtered.forEach(item => {
             this.idAlly = item.idAllied;
         });
     }
 
     filterByAllyId(allyId) {
-        const filtered = this.data.allyCollection.filter(ally => ally.idAllied == allyId);
+        const filtered = this.allyCollectionForConfiguration.filter(ally => ally.idAllied == allyId);
         filtered.forEach(item => {
             this.allyName = item.name;
         });
