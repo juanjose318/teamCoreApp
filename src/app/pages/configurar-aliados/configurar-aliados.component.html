@@ -18,10 +18,9 @@
 
       <!-- Tabla aliados -->
       <div *ngIf="!!allies; else notAvailable">
-        <app-results-table [allies]="allies" [filteredAlly]="selectedAlly" [tableNumber]="tableNumber"
-          (isLoading)="handleIsloading($event)" (deletedAlly)="handleDeleteAlly($event)"
-          (editedAlly)="handleEditedAlly($event)">
-        </app-results-table>
+        <app-table-allies [allies]="allies" [filteredAlly]="selectedAlly" (isLoading)="handleIsloading($event)"
+          (deletedAlly)="handleDeleteAlly($event)" (editedAlly)="handleEditedAlly($event)">
+        </app-table-allies>
       </div>
 
       <ng-template #notAvailable>
@@ -36,7 +35,7 @@
     <!-- Tabla Auditoria -->
     <div class="card">
       <div class="card-body">
-        <app-table-overview [audit]="audit" [allyAuditTableNumber]="allyAuditTableNumber"></app-table-overview>
+        <app-table-allies-audit [audit]="audit"></app-table-allies-audit>
       </div>
     </div>
   </div>

@@ -33,21 +33,18 @@ export class ConfigurarAliadosComponent implements OnInit {
    */
   private audit: any;
   private auditSub: Subscription;
-  /**
-   * tableNumber define desde que componente se va a reutilizar la tabla de display de informacion
-   */
-  tableNumber = 1;
-  allyAuditTableNumber = 1;
+
   /**
    * Mensajes para textBox component
-   * TODO: Ponerlos en archivo aparte como mock
    */
   descriptionBoxText = 'Herramienta que permite crear y/o editar información de los aliados';
   descriptionAudit = 'El último cambio efectuado sobre la información de aliado';
+
   /**
    * Config envio de aliados
   */
   private configInfoSending = false;
+  
   /**
    * Spinner condicional por medio de variable boolean
    */

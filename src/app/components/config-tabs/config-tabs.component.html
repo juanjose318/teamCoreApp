@@ -2,27 +2,28 @@
   <mat-step label="Paso 1 - Empresas" [completed]="isActive1 === true ? true : false">
 
     <app-results-table 
-    [(tableNumber)]="tableNumber" 
     [configurationDone]="configurationDone"
+    [registry]="registryToConfigure"
     [filteredAlly]="selectedAlly" 
     [filteredCompany]="selectedCompany"
     (nextStepWithRegistry)="continueToSecondStep($event)"
     (createAllyCompanyConfig)="createAllyCompanyConfig($event)"
     ></app-results-table>
 
-    <app-table-overview 
+    <app-table-configs-audit 
     [configurationDone]="configurationDone"
-    [allyAuditTableNumber]="allyAuditTableNumber"
-    [(objAllyCompanyAudit)]="objAllyCompanyAuditCollection"
+    [updatedAudit]="updatedAudit"
     [selectedCompany]="selectedCompany"
     [selectedAlly]="selectedAlly"
-    ></app-table-overview>
+    ></app-table-configs-audit>
 
   </mat-step>
   <mat-step label="Paso 2 - Socio Comercial" [completed]="isActive2 === true ? true : false">
     <div class="btn-wrapper">
       <button  class="btn btn-primary" matStepperPrevious>Volver<i class="bi bi-arrow-left-circle"></i></button>
-      <button  class="btn btn-primary" matStepperNext>Siguiente<i class="bi bi-arrow-right-circle"></i></button>
+      <button  *ngIf= "objTradersConfig?.length" class="btn btn-primary" matStepperNext>Siguiente<i class="bi bi-arrow-right-circle"></i></button>
+      <button  *ngIf= "!objTradersConfig?.length" class="btn btn-primary" matStepperNext disabled>Siguiente<i class="bi bi-arrow-right-circle" read></i></button>
+
     </div>
 
     <app-second-step-table
@@ -33,15 +34,14 @@
     (hasTradersSelected)="handleHasTraders($event)"
     ></app-second-step-table>
 
-    <app-table-overview 
+    <app-table-configs-audit 
     [configurationDone]="configurationDone"
-    [allyAuditTableNumber]="allyAuditTableNumber"
     [selectedCompany]="selectedCompany"
-    [selectedAlly]="selectedAlly"></app-table-overview>
+    [selectedAlly]="selectedAlly"></app-table-configs-audit>
 
   </mat-step>
 
-  <mat-step label="Paso 3 - Productos" [completed]="isActive3 === true ? true : false">
+  <mat-step label="Paso 3 - Productos y Puntos de Venta" [completed]="isActive3 === true ? true : false"  matStepperIcon="">
 
     <app-table-third-step
     [registry]="registryToConfigure"
@@ -52,11 +52,10 @@
     (downloadCsv)="handleDownload($event)"
     ></app-table-third-step>
 
-    <app-table-overview 
+    <app-table-configs-audit 
     [configurationDone]="configurationDone"
-    [allyAuditTableNumber]="allyAuditTableNumber"
     [selectedCompany]="selectedCompany"
-    [selectedAlly]="selectedAlly"></app-table-overview>
+    [selectedAlly]="selectedAlly"></app-table-configs-audit>
 
   </mat-step>
 </mat-horizontal-stepper>

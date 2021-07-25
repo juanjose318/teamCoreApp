@@ -1,8 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
-import * as XLSX from 'xlsx';
+import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 import { TraceService } from 'src/app/services/trace/trace.service';
+import * as _ from 'lodash';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
     selector: 'app-trace-table',
@@ -22,15 +25,16 @@ export class TraceTableComponent implements OnInit, OnChanges {
 
     private traceSub: Subscription;
 
-    fileName = 'ExcelSheet.xlsx';
 
     private traceCollection = [];
 
-    displayedColumns = ['companyCode', 'companyName', 'fileName', 'creationFileDate', 'fileSentDate',
-        'amountComercialPartners', 'amountRetailStore', 'amountRegistries', 'fileType', 'detail'];
+    displayedColumns = ['company.companyCode', 'company.companyName', 'fileName', 'generationDate', 'sendDate',
+        'numberTraders', 'numberPointsSale', 'numberProducts', 'numberRecords', 'fileType', 'detail'];
 
     constructor(
-        private traceService: TraceService
+        private traceService: TraceService,
+        private datepipe: DatePipe,
+
     ) { }
 
 
@@ -57,15 +61,35 @@ export class TraceTableComponent implements OnInit, OnChanges {
     }
 
     exportexcel(): void {
-        const ws = XLSX.utils.json_to_sheet(this.traceCollection);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, this.fileName);
+        const options = {
+            quoteStrings: '',
+            headers: ['Código Empresa', 'Nombre Empresa', 'Nombre del Archivo', 'Fecha de Generación del Archivo',
+             'Fecha Envío del Archivo', 'Nro. Pto Vta Incluidos', 
+             'Nro. Socios Comerciales Incluidos', 'Nro. Productos', 'Nro. de Registros', 'Tipo de Archivo']
+        };
+
+        const mappedTraceCollection = this.traceCollection.map((item) => {
+          return {
+              compayCode: item.company.companyCode,
+              companyName: item.company.companyName,
+              fileName: item.fileName,
+              generationDate:  this.datepipe.transform(item.generationDate, 'yMMdHHMMSSm'),
+              sendDate: item.sendDate,
+              numberPointsSale: item.numberPointsSale,
+              numberTraders: item.numberTraders,
+              numberProducts: item.numberProducts,
+              numberRecords: item.numberRecords,
+              fileType: item.fileType,
+            }
+        });
+
+        new AngularCsv(mappedTraceCollection, 'Reporte', options);
     }
 
     updateTable(collection) {
         this.dataSource = new MatTableDataSource<any>(collection);
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sortingDataAccessor = _.get;
         this.dataSource.sort = this.sort;
     }
 }

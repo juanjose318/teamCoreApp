@@ -1,0 +1,37 @@
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  td, th , .mat-sort-header-button{
+    font-size: 0.6rem;
+    text-align: center;
+  }
+
+  .wrapper {
+    margin: 2% 0;
+  }
+  
+  .audit-table {
+    margin: 2% 0;
+  }
+
+  .clickable {
+    color: #0011f8;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .download {
+    margin-bottom: 3%;
+  }
+
+  ::ng-deep .mat-sort-header-container {
+    justify-content: center !important;
+  }

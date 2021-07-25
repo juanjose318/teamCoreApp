@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { MasterFile } from 'src/app/models/MasterFile.interface';
 
 @Component({
@@ -17,6 +18,7 @@ export class UploadMasterFileComponent {
   @Output() masterfile: EventEmitter<{ codedfile: MasterFile, fileInfo: string }> = new EventEmitter<{ codedfile: MasterFile, fileInfo: string }>();
 
   constructor(
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -25,11 +27,17 @@ export class UploadMasterFileComponent {
   // TODO AGREGAR SPINNER
   convertToBase64() {
     const reader = new FileReader();
-    reader.readAsDataURL(this.selectedFile as Blob);
+    if (this.selectedFile) {
+      reader.readAsDataURL(this.selectedFile as Blob);
+    } else {
+      this._snackBar.open('Selecciona un archivo para subir', 'cerrar', {
+        duration: 2000,
+      });
+    }
     reader.onloadend = () => {
-      let read = reader.result as string;
+      const read = reader.result as string;
       this.base64File = read.replace('data:application/vnd.ms-excel;base64,', '');
-      let fileName = this.selectedFile.name.replace('.csv', '');
+      const fileName = this.selectedFile.name.replace('.csv', '');
       this.masterfile.emit({ codedfile: this.base64File, fileInfo: fileName });
     }
   }

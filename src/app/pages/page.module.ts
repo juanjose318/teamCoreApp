@@ -20,7 +20,7 @@ import { ConfigurarAliadosComponent } from './configurar-aliados/configurar-alia
 import { SearchCreateAllyComponent } from '../components/search-create-ally/search-create-ally.component';
 import { ResultsTableComponent } from '../components/results-table/results-table.component';
 import { ModalDescriptionComponent } from '../components/modal-description/modal-description.component';
-import { TableOverviewComponent } from '../components/table-audit/table-overview.component';
+import { TableConfigsAuditComponent } from '../components/table-configs-audit/table-configs-audit.component';
 import { ConfigurarEnviosAliadoComponent } from './configurar-envios-aliado/configurar-envios-aliado.component';
 import { ConfigTabsComponent } from '../components/config-tabs/config-tabs.component';
 import { AuditConfigComponent } from '../components/audit-config/audit-config.component';
@@ -36,6 +36,8 @@ import { TraceTableComponent } from '../components/trace-table/trace-table.compo
 import { ThirdStepTableComponent } from '../components/table-third-step/table-third-step.component';
 import { ModalAuditComponent } from '../components/modal-audit/modal-audit.component';
 import { TableDataAuditComponent } from '../components/table-data-audit/table-data-audit.component';
+import { TableAlliesComponent } from '../components/table-allies/table-allies.component';
+import { TableAlliesAuditComponent } from '../components/table-allies-audit/table-allies-audit.component';
 
 @NgModule({
   declarations: [
@@ -52,14 +54,16 @@ import { TableDataAuditComponent } from '../components/table-data-audit/table-da
     ModalAllyFormComponent,
     ModalDescriptionComponent,
     ModalAuditComponent,
-    TableOverviewComponent,
+    TableConfigsAuditComponent,
     SidebarComponent,
     ModalConfigFormComponent,
     SecondStepTableComponent,
     SearchTraceComponent,
     TraceTableComponent,
     ThirdStepTableComponent,
+    TableAlliesAuditComponent,
     TableDataAuditComponent,
+    TableAlliesComponent
   ],
   imports: [
     CommonModule,

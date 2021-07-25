@@ -82,14 +82,11 @@ export class SearchCreateAllyComponent implements OnChanges {
       } else {
         return;
       }
-    }
-    else if (!!this.hasRegistry.registry) {
+    } else if (!!this.hasRegistry.registry.idAlliedCompanyConfig) {
       this.isButtonEnabled = true;
-    }
-    else if( this.hasRegistry.hasRegistry && this.hasSelectedComercialPartners && this.hasUploadedFile){
+    } else if( this.hasRegistry.hasRegistry && this.hasSelectedComercialPartners && this.hasUploadedFile) {
       this.isButtonEnabled = true;
-    }
-    else {
+    } else {
       this.isButtonEnabled = false;
     }
   }
@@ -172,8 +169,7 @@ export class SearchCreateAllyComponent implements OnChanges {
       this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
         this.allyCollection = alliesData.allies;
       });
-    }
-    else {
+    } else {
       this.allyService.getAllyByCountry(country);
       this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
         this.allyCollection = alliesData.allies;
@@ -231,10 +227,10 @@ export class SearchCreateAllyComponent implements OnChanges {
       if (!!result) {
         result = {
           ...result,
-          channel: { idChannel: 1 },
+          channel: { idChannel: 2 },
           route: { idRoute: 1 },
           idState: 1
-        }
+        };
         this.createdAlly.emit(result);
         this._snackBar.open('La informacion se almaceno satisfactoriamente', 'cerrar', {
           duration: 2000,
@@ -263,7 +259,7 @@ export class SearchCreateAllyComponent implements OnChanges {
     this.saveConfiguration.emit(true);
   }
 
-  ngOnDestroy(): void {
+  OnDestroy(): void {
     this.allySub.unsubscribe();
     this.companySub.unsubscribe();
   }

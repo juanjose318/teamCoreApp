@@ -15,14 +15,14 @@
   <table mat-table [dataSource]="dataSource" matSort matSortActive="company.idCompany" matSortDirection="desc"
     matSortDisableClear class="card-body">
 
-    <ng-container matColumnDef="companyCode">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Codigo Empresa</th>
+    <ng-container matColumnDef="company.companyCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Código Empresa</th>
       <td mat-cell *matCellDef="let row">
         {{ row.company.companyCode }}
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="companyName">
+    <ng-container matColumnDef="company.companyName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Empresa</th>
       <td mat-cell *matCellDef="let row">
         {{ row.company.companyName }}</td>
@@ -34,31 +34,37 @@
         {{ row.fileName }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="creationFileDate">
+    <ng-container matColumnDef="generationDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Generacion del Archivo</th>
       <td mat-cell *matCellDef="let row">
         {{ row.generationDate | date:'d/MMM/y HH:mm' }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="fileSentDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Envio del Archivo</th>
+    <ng-container matColumnDef="sendDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Envío del Archivo</th>
       <td mat-cell *matCellDef="let row">
         {{ row.sendDate | date:'d/MMM/y HH:mm' }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="amountRetailStore">
+    <ng-container matColumnDef="numberPointsSale">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nro. Pto Vta Incluidos</th>
       <td mat-cell *matCellDef="let row">
         {{ row.numberPointsSale }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="amountComercialPartners">
+    <ng-container matColumnDef="numberTraders">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nro. Socios Comerciales Incluidos</th>
       <td mat-cell *matCellDef="let row">
         {{ row.numberTraders }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="amountRegistries">
+    <ng-container matColumnDef="numberProducts">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nro. Productos</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.numberProducts }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="numberRecords">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nro. de Registros</th>
       <td mat-cell *matCellDef="let row">
         {{ row.numberRecords }}</td>
@@ -79,5 +85,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+  <mat-paginator [length]="dataSource?.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 30, 40]"></mat-paginator>
 
 </div>

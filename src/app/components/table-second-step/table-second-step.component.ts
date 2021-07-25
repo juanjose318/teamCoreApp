@@ -3,6 +3,7 @@ import { MatCheckboxChange, MatPaginator, MatSort } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { ConfigService } from 'src/app/services/config/config.service';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-second-step-table',
@@ -57,6 +58,9 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
                     if (change.currentValue.state.idState === 2) {
                         this.readonlyMode = true;
                     }
+                    if (change.currentValue.idAlliedCompanyConfig && change.currentValue.state.idState === 1) {
+                        this.readonlyMode = false;
+                    }
                 } else if (!change.currentValue.idAlliedCompanyConfig) {
                     this.fetchTradersWithoutConfig(change.currentValue.company.companyCode);
                 }
@@ -80,6 +84,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         this.companyConfigService.getTradersFirstTime(companyCode);
         this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
+            this.readonlyMode = false;
             setTimeout(() => this.updateDatable(this.tradersCollection), 500);
         });
     }
@@ -95,6 +100,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         });
     }
 
+     
     /**
      * Funcion para agregar y quitar comercios y la vez generar un estado temporal para su activación o desactivación
      * @param event clicked
@@ -128,6 +134,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
     updateDatable(dataSource) {
         this.dataSource = new MatTableDataSource<any>(dataSource);
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sortingDataAccessor = _.get;
         this.dataSource.sort = this.sort;
         this.dataSource.filterPredicate = (data: any, filter) => {
             const dataStr = JSON.stringify(data).toLowerCase();

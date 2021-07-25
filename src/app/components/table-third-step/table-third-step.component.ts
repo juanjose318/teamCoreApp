@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { PointsOfSaleService } from 'src/app/services/pointsOfSale/pointsOfSale.service';
 import { ConfigService } from 'src/app/services/config/config.service';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-table-third-step',
@@ -75,7 +76,6 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
                     // check para asignacion de ID de busqueda para productos dependiendo si hay una configuracion establecida o no
                     if (!changeRegistry.currentValue.idAlliedCompanyConfig) {
                         this.idForProducts = changeRegistry.currentValue.company.companyCode;
-                        console.log(this.idForProducts);
                     } else if (!!changeRegistry.currentValue.idAlliedCompanyConfig) {
                         this.searchParams = {
                             idCompany: changeRegistry.currentValue.company.companyCode,
@@ -149,6 +149,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
     updateDatable(dataSource) {
         this.dataSource = new MatTableDataSource<any>(dataSource);
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sortingDataAccessor = _.get;
         this.dataSource.sort = this.sort;
     }
 

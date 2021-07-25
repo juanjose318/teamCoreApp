@@ -52,6 +52,8 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   clientIp;
   // indica que ya se hizo alguna configuracion
   configurationDone;
+  // indica que se actualizo la tabla de auditoria
+  updatedAudit: boolean;
 
   /**
    * Condicional para activar pasos de stepper
@@ -290,7 +292,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
                 secondConfigObj.push(traderConfig);
               });
 
-              this.configurationService.postSecondConfiguration(secondConfigObj).subscribe( () => {
+              this.configurationService.postSecondConfiguration(secondConfigObj).subscribe(() => {
                 const objForThirdConfiguration = {
                   ...this.objMasterFile,
                   idAlliedCompanyConfig: this.idAllyCompanyConfig,
@@ -317,7 +319,9 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         });
       } else {
         this.saved.emit(false);
-        this.showMessage('Para guardar la configuración se debe tener mínimo un socio comercial seleccionado y un producto');
+        setTimeout(() => {
+          this.showMessage('Para guardar la configuración se debe tener mínimo un socio comercial seleccionado y un producto');
+        }, 500);
       }
     } else {
       /**
@@ -343,7 +347,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           company: {
             idCompany: this.registryToConfigure.company.idCompany
           },
-          actionExecuted: 'NAA',
+          actionExecuted: null,
           executor: 'ivan hernandez',
           ipOrigin: this.clientIp,
           configurationDate: this.registryToConfigure.configurationDate,
@@ -420,7 +424,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           company: {
             idCompany: this.registryToConfigure.company.idCompany
           },
-          actionExecuted: 'NAA',
+          actionExecuted: null,
           executor: 'ivan hernandez',
           ipOrigin: this.clientIp,
           configurationDate: this.registryToConfigure.configurationDate,
@@ -461,7 +465,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           company: {
             idCompany: this.registryToConfigure.company.idCompany
           },
-          actionExecuted: 'NAA',
+          actionExecuted: null,
           executor: 'ivan hernandez',
           ipOrigin: this.clientIp,
           configurationDate: this.registryToConfigure.configurationDate,
@@ -552,15 +556,16 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   }
 
   showMessage(message) {
-    this._snackBar.open( message , 'cerrar', {
+    this._snackBar.open(message, 'cerrar', {
       duration: 10000,
     });
   }
 
-  createAllyCompanyConfig(objAllyCompanyAudit) {
-    this.objAllyCompanyAuditCollection = objAllyCompanyAudit;
+  createAllyCompanyConfig(updatedAudit) {
+    if (updatedAudit) {
+      this.configurationDone = {
+        isDone: true,
+      };
+    }
   }
-  // handleIsloading(loading) {
-  //   (loading === true) ? this.isLoading = true : this.isLoading = false
-  // }
 }
