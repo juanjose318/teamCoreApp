@@ -265,10 +265,10 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
       if (result === true) {
         this.handleSave();
       } else {
-       setTimeout(() => {
-        this.showMessage('Operación Cancelada');
-       }, 0.5);
-       this.saved.emit(false);
+        setTimeout(() => {
+          this.showMessage('Operación Cancelada');
+        }, 0.5);
+        this.saved.emit(false);
       }
     });
   }
@@ -570,7 +570,11 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           });
         });
       } else if (!this.wasModified3 && !this.wasModified2) {
-        this.saved.emit(false);
+        setTimeout(() => {
+          this.showMessage('No se presentaron cambios, proceso de guardado cancelado');
+          this.saved.emit(false);
+        }, 0.2);
+
       }
     }
   }
