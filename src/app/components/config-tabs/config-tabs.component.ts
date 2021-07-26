@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { MatSnackBar, MatStepper } from '@angular/material';
+import { MatDialog, MatSnackBar, MatStepper } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { ConfigService } from 'src/app/services/config/config.service';
 import { AuditService } from 'src/app/services/audit/audit.service';
 import { AliadoService } from 'src/app/services/ally/ally.service';
 import { Subscription } from 'rxjs';
+import { ModalSaveConfirmationComponent } from '../modal-save-confirmation/modal-save-confirmation.component';
 
 
 @Component({
@@ -54,6 +55,8 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
   configurationDone;
   // indica que se actualizo la tabla de auditoria
   updatedAudit: boolean;
+  // Borrar registro de primer paso
+  cleanRegister: boolean;
 
   /**
    * Condicional para activar pasos de stepper
@@ -78,7 +81,9 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
     private auditService: AuditService,
     private datepipe: DatePipe,
     private allyService: AliadoService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog,
+
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -93,7 +98,9 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
 
     if (!!save) {
       if (!!save.currentValue) {
-        this.handleSave();
+        setTimeout(() => {
+          this.handleSaveConfirmation();
+        }, 0.2);
       }
     }
   }
@@ -152,7 +159,6 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
    */
   handleObjTradersToConfig(objTradersToConfig) {
     this.objTradersConfig = objTradersToConfig;
-
     this.objTradersConfig.forEach(company => {
 
       const traderConfig = {
@@ -233,6 +239,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
     this.isActive1 = false;
     this.isActive2 = false;
     this.isActive3 = false;
+    this.cleanConfig = true;
     this.resetStepper.emit(true);
   }
 
@@ -244,6 +251,24 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
     this.tradersAfterMod.forEach(trader => {
       if (trader.idState !== trader.idStateTemp) {
         this.wasModified2 = true;
+      }
+    });
+  }
+
+  handleSaveConfirmation() {
+    const dialogRef = this.dialog.open(ModalSaveConfirmationComponent, {
+      width: '25%',
+      data: { confirm: true, cancel: false }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
+      if (result === true) {
+        this.handleSave();
+      } else {
+       setTimeout(() => {
+        this.showMessage('Operación Cancelada');
+       }, 0.5);
+       this.saved.emit(false);
       }
     });
   }
@@ -314,7 +339,9 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
                     ally: this.registryToConfigure.allied.idAllied,
                     checkMode: true
                   };
-                  this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
+                  setTimeout(() => {
+                    this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
+                  }, 0.8);
                 });
               });
             });
@@ -543,7 +570,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           });
         });
       } else if (!this.wasModified3 && !this.wasModified2) {
-          this.saved.emit(false);
+        this.saved.emit(false);
       }
     }
   }

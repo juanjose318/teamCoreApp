@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { of, Subject, throwError } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
@@ -31,9 +31,8 @@ export class AliadoService {
                     this.showErrorMessage('No se pudo obtener aliados');
                     return throwError(err);
                 })
-            ).subscribe((transformedData) => {
+            ).subscribe((transformedData: any) => {
                 this.allies = transformedData;
-                console.log(this.allies);
                 this.allyListener.next({
                     allies: this.allies
                 });
@@ -87,9 +86,9 @@ export class AliadoService {
             );
     }
 
-    deleteAlly(idAllied) {
+    deleteAlly(ally) {
         return this.http.delete(
-            `${environment.apiUrl}/allies/` + idAllied, httpOptions
+            `${environment.apiUrl}/allies/` + ally.idAllied, httpOptions
         ).pipe(
             catchError(err => {
                 this.showErrorMessage('No se pudo eliminar aliado');

@@ -91,10 +91,10 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
     exportexcel(): void {
         const options = {
             quoteStrings: '',
-            headers: ['ID Aliado', 'Aliado', 'Estado', 'Compañía', 'Acción Ejecutada', 'Ejecutado por',
-                'Fecha de Configuración', 'Fecha de Actualización']
+            headers: ['ID Registro', 'ID Aliado', 'Estado', 'Código País', 'Acción Ejecutada', 'Ejecutado por',
+                'Campo Afectado', 'Valor Antes', 'Valor Después', 'IP Origen', 'Fecha de Configuración', 'Fecha de Actualización']
         };
-        new AngularCsv(this.auditCollection, 'Reporte Puntos de Venta', options);
+        new AngularCsv(this.auditCollection, 'Auditoría', options);
     }
 
     applyFilter(filterValue) {
@@ -102,6 +102,10 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
+    }
+
+    handleClick() {
+        this.dataSource.sort = this.sort;
     }
 
     handleCreateAudit(allyAudit) {

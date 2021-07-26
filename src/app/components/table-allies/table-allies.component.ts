@@ -3,11 +3,11 @@ import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
+import { AuditService } from 'src/app/services/audit/audit.service';
+import * as _ from 'lodash';
 
 import { ModalDescriptionComponent } from '../modal-description/modal-description.component';
 import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.component';
-import * as _ from 'lodash';
-import { AuditService } from 'src/app/services/audit/audit.service';
 
 @Component({
   selector: 'app-table-allies',
@@ -97,6 +97,7 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
   updateDatable(dataSource) {
     this.dataSource = new MatTableDataSource<any>(dataSource);
     this.dataSource.paginator = this.paginator;
+    this.paginator._intl.itemsPerPageLabel = 'Registros por página';
     this.dataSource.sortingDataAccessor = _.get;
     this.dataSource.sort = this.sort;
   }

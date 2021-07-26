@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl:'http://172.16.32.140:8098/aliado-api/v1'
+  apiUrl: 'http://192.168.5.116:8098/aliado-api/v1'
 };

@@ -31,7 +31,7 @@
           </ng-container>
 
           <ng-container matColumnDef="creationDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creación</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="handleClick()">Fecha de Creación</th>
             <td mat-cell *matCellDef="let row">
               {{ row.creationDate  | date: 'd/MMM/y HH:mm' }} </td>
           </ng-container>
@@ -76,7 +76,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;">
           </tr>
         </table>
-      
+
       </div>
       <mat-paginator [length]="dataSource?.length" [pageSize]="10" [pageSizeOptions]="[10, 20, 30, 40]">
       </mat-paginator>

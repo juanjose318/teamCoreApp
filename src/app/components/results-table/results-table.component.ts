@@ -24,6 +24,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() filteredCompany;
   @Input() registry;
   @Input() configurationDone;
+  @Input() cleanRegister;
 
 
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter();
@@ -71,7 +72,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
    * @param dialog modal
    */
   constructor(
-    public dialog: MatDialog,
+    private dialog: MatDialog,
     private allyService: AliadoService,
     private auditService: AuditService,
     private companyConfigService: ConfigService,
@@ -84,6 +85,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     const configurationDone = changes['configurationDone'];
     const registry = changes['registry'];
+    const cancelled = changes['cleanRegister'];
 
     if (!this.filteredAlly && !this.filteredCompany) {
       // Fetch de aliados y empresas para creacion de configuraciones
@@ -107,6 +109,19 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
         console.log(registry.currentValue);
       }
     }
+    if (cancelled) {
+      if (cancelled.currentValue) {
+        console.log('hit');
+        if (!this.filteredAlly && !this.filteredCompany) {
+          this.companyConfigCollection = [];
+          this.updateDatable(this.companyConfigCollection);
+        } else if (!!this.filteredAlly && !this.filteredCompany) {
+          this.fetchConfigsWithNoCompany(this.filteredAlly);
+        } else if (!!this.filteredAlly && !!this.filteredCompany) {
+          this.fetchConfigsWithAllyAndCompany(this.filteredAlly, this.filteredCompany);
+        }
+      }
+    }
   }
 
   /**
@@ -127,6 +142,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
   updateDatable(dataSource) {
     this.dataSource = new MatTableDataSource<any>(dataSource);
     this.dataSource.paginator = this.paginator;
+    this.paginator._intl.itemsPerPageLabel = 'Registros por página';
     this.dataSource.sortingDataAccessor = _.get;
     this.dataSource.sort = this.sort;
   }

@@ -90,6 +90,7 @@ export class TraceTableComponent implements OnInit, OnChanges, OnDestroy {
     updateTable(collection) {
         this.dataSource = new MatTableDataSource<any>(collection);
         this.dataSource.paginator = this.paginator;
+        this.paginator._intl.itemsPerPageLabel = 'Registros por página';
         this.dataSource.sortingDataAccessor = _.get;
         this.dataSource.sort = this.sort;
     }
