@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.compo
   styleUrls: ['./search-create-ally.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SearchCreateAllyComponent implements OnChanges {
+export class SearchCreateAllyComponent implements OnChanges, OnDestroy {
 
   /**
    * Inputs
@@ -73,7 +73,7 @@ export class SearchCreateAllyComponent implements OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    let change = changes['allies'];
+    const change = changes['allies'];
 
     if (change) {
       if (change.currentValue !== null) {
@@ -84,7 +84,7 @@ export class SearchCreateAllyComponent implements OnChanges {
       }
     } else if (!!this.hasRegistry.registry.idAlliedCompanyConfig) {
       this.isButtonEnabled = true;
-    } else if( this.hasRegistry.hasRegistry && this.hasSelectedComercialPartners && this.hasUploadedFile) {
+    } else if (this.hasRegistry.hasRegistry && this.hasSelectedComercialPartners && this.hasUploadedFile) {
       this.isButtonEnabled = true;
     } else {
       this.isButtonEnabled = false;
@@ -259,8 +259,11 @@ export class SearchCreateAllyComponent implements OnChanges {
     this.saveConfiguration.emit(true);
   }
 
-  OnDestroy(): void {
-    this.allySub.unsubscribe();
-    this.companySub.unsubscribe();
+  ngOnDestroy(): void {
+    if (this.allySub || this.companySub) {
+      this.allySub.unsubscribe();
+      this.companySub.unsubscribe();
+    }
+
   }
 }

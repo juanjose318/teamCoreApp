@@ -26,7 +26,6 @@ import { ConfigTabsComponent } from '../components/config-tabs/config-tabs.compo
 import { AuditConfigComponent } from '../components/audit-config/audit-config.component';
 import { UploadMasterFileComponent } from '../components/upload-master-file/upload-master-file.component';
 import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
-import { NavigationComponent } from '../components/navigation/navigation.component';
 import { ModalAllyFormComponent } from '../components/modal-ally-form/modal-ally-form.component';
 import { SidebarComponent } from '../shared/components/sidebar/sidebar.component';
 import { ModalConfigFormComponent } from '../components/modal-config-form/modal-config-form.component';
@@ -50,7 +49,6 @@ import { TableAlliesAuditComponent } from '../components/table-allies-audit/tabl
     ConfigTabsComponent,
     UploadMasterFileComponent,
     TrazabilidadComponent,
-    NavigationComponent,
     ModalAllyFormComponent,
     ModalDescriptionComponent,
     ModalAuditComponent,

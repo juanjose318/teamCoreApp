@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { MasterFile } from 'src/app/models/MasterFile.interface';
 
@@ -7,9 +7,10 @@ import { MasterFile } from 'src/app/models/MasterFile.interface';
   templateUrl: './upload-master-file.component.html',
   styleUrls: ['./upload-master-file.component.scss']
 })
-export class UploadMasterFileComponent {
+export class UploadMasterFileComponent implements OnChanges {
 
   @ViewChild('file') file: ElementRef;
+  @Input() configurationDone;
 
   base64File;
   selectedFile;
@@ -22,6 +23,16 @@ export class UploadMasterFileComponent {
   ) { }
 
   ngOnInit() {
+
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const configurationDone = changes['configurationDone'];
+    if (configurationDone) {
+      if (configurationDone.currentValue) {
+        this.selectedFile = null;
+      }
+    }
 
   }
   // TODO AGREGAR SPINNER

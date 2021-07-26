@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
@@ -10,7 +10,7 @@ import { CompanyService } from 'src/app/services/company/company.service';
     styleUrls: ['./modal-config-form.component.scss']
 })
 
-export class ModalConfigFormComponent implements OnInit {
+export class ModalConfigFormComponent implements OnInit, OnDestroy {
     /**
      * Campos para data binding y creacion de objetos
      */
@@ -38,10 +38,10 @@ export class ModalConfigFormComponent implements OnInit {
     ngOnInit() {
         this.allyService.getAllies();
         this.allySub = this.allyService.getAllyListener()
-        .subscribe((data) => this.allyCollectionForConfiguration = data.allies);
+            .subscribe((data) => this.allyCollectionForConfiguration = data.allies);
         this.companyService.getCompanies();
         this.companySub = this.companyService.getCompanyListener()
-        .subscribe((data) => this.companyCollectionForConfiguration = data.companies);
+            .subscribe((data) => this.companyCollectionForConfiguration = data.companies);
     }
 
     save() {
@@ -72,9 +72,9 @@ export class ModalConfigFormComponent implements OnInit {
             },
             state: { idState: 2 },
             // configurationDate: this.configurationDate
-        }
+        };
         // Pasar ambos objetos a componente tabla
-        this.dialogRef.close({configOne, registryToPush});
+        this.dialogRef.close({ configOne, registryToPush });
     }
 
     close() {
@@ -117,5 +117,12 @@ export class ModalConfigFormComponent implements OnInit {
         filtered.forEach(item => {
             this.allyName = item.name;
         });
+    }
+
+    ngOnDestroy(): void {
+        if (this.allySub || this.companySub) {
+            this.allySub.unsubscribe();
+            this.companySub.unsubscribe();
+        }
     }
 }

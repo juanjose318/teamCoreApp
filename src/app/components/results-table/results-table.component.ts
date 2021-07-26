@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { AuditService } from 'src/app/services/audit/audit.service';
   styleUrls: ['./results-table.component.scss'],
 })
 
-export class ResultsTableComponent implements OnInit, OnChanges {
+export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
   /**
   * Allies es el pais del que se tiene que hacer el fetch
   */
@@ -25,8 +25,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   @Input() registry;
   @Input() configurationDone;
 
-  @Output() deletedAlly: EventEmitter<any> = new EventEmitter();
-  @Output() editedAlly: EventEmitter<any> = new EventEmitter();
+
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter();
   @Output() nextStepWithRegistry: EventEmitter<any> = new EventEmitter();
   @Output() createAllyCompanyConfig: EventEmitter<any> = new EventEmitter();
@@ -34,8 +33,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
 
 
   private allySub: Subscription;
-  private allySubForConfiguration: Subscription;
-  private companySub: Subscription;
   private companyAllyConfigSub: Subscription;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -51,9 +48,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   /**
    * Colecciones
    */
-  private allyCollection = [];
-  private companyCollection = [];
-  private companyCollectionToCreateAlliance = [];
   private configAllyCompanyToActivateOrDeactivate = [];
   private companyConfigCollection = [];
 
@@ -71,16 +65,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
    * Collecion de configuraciones
    */
   configOne;
-  companyId = 626;
-  idAlliedCompanyConfig = 200;
-
-  /**
-   * Para condicionar de que componenente se trata
-   * 1 = Configuracion aliado
-   * 2 = Configuracion socio comercial
-   * 4 = Configuracion productos
-   */
-  @Input() tableNumber: number;
 
   /**
    * Depedencia de modal
@@ -124,6 +108,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
       }
     }
   }
+
   /**
    * Opciones de tabla + asignacion de data a la tabla
    */
@@ -133,6 +118,7 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     this.allySub = this.allyService.getIpListener().subscribe((data) => {
       this.clientIp = data.ip;
     });
+    this.companyAllyConfigSub = new Subscription;
   }
 
   /**
@@ -358,11 +344,11 @@ export class ResultsTableComponent implements OnInit, OnChanges {
     });
   }
 
-  OnDestroy(): void {
-    this.allySub.unsubscribe();
-    this.allySubForConfiguration.unsubscribe();
-    this.companySub.unsubscribe();
-    this.companyAllyConfigSub.unsubscribe();
+  ngOnDestroy(): void {
+    if (this.companyAllyConfigSub || this.allySub) {
+      this.companyAllyConfigSub.unsubscribe();
+      this.allySub.unsubscribe();
+    }
   }
 
 }

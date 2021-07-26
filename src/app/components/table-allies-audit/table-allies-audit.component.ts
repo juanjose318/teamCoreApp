@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
     styleUrls: ['table-allies-audit.component.scss'],
 
 })
-export class TableAlliesAuditComponent implements OnInit, OnChanges {
+export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
 
     /**
     * audit es el pais seleccionado para filtrar
@@ -109,6 +109,12 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges {
             this.auditService.creatAllyCompanyConfig(allyAudit).subscribe(() => {
                 this.fetchAuditByCountry(this.selectedCountry);
             });
+        }
+    }
+
+    ngOnDestroy() {
+        if (this.auditSub) {
+            this.auditSub.unsubscribe();
         }
     }
 }

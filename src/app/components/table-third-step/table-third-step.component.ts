@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { ProductService } from 'src/app/services/products/products.service';
 import { Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import * as _ from 'lodash';
 })
 
 
-export class ThirdStepTableComponent implements OnInit, OnChanges {
+export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() registry;
     @Input() traders;
@@ -103,6 +103,9 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.updateDatable(this.masterFileCollection);
+        this.pointSaleSub = new Subscription;
+        this.productsSubs = new Subscription;
+        this.masterSub = new Subscription;
     }
 
     /**
@@ -257,9 +260,11 @@ export class ThirdStepTableComponent implements OnInit, OnChanges {
         this.previousStep.emit(true);
     }
 
-    OnDestroy(): void {
-        this.masterSub.unsubscribe();
-        this.pointSaleSub.unsubscribe();
-        this.productsSubs.unsubscribe();
+    ngOnDestroy(): void {
+        if (this.masterSub || this.pointSaleSub || this.productsSubs) {
+            this.masterSub.unsubscribe();
+            this.pointSaleSub.unsubscribe();
+            this.productsSubs.unsubscribe();
+        }
     }
 }

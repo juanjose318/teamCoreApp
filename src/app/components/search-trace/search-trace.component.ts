@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { SearchParams } from 'src/app/models/searchParams';
@@ -12,7 +12,7 @@ import { CompanyService } from 'src/app/services/company/company.service';
     styleUrls: ['./search-trace.component.scss'],
 })
 
-export class SearchTraceComponent implements OnInit {
+export class SearchTraceComponent implements OnInit, OnDestroy {
     constructor(
         private companyService: CompanyService,
         private allyService: AliadoService,
@@ -38,11 +38,13 @@ export class SearchTraceComponent implements OnInit {
     /**
      * Colecciones
      */
-    private allyCollection;
     private companyCollection;
-    private tradersCollection;
+    private allyCollection;
 
     ngOnInit() {
+        this.auditSub = new Subscription;
+        this.companySub = new Subscription;
+        this.allySub = new Subscription;
     }
 
     submitSearch() {
@@ -77,8 +79,7 @@ export class SearchTraceComponent implements OnInit {
                 if (this.companyType === 'F') {
                     const filteredCompanyCollection = this.companyCollection.filter(company => company.companyType === 'F');
                     this.companyCollection = filteredCompanyCollection;
-                }
-                else {
+                } else {
                     const filteredCompanyCollection = this.companyCollection.filter(company => company.companyType === 'C');
                     this.companyCollection = filteredCompanyCollection;
                 }
@@ -111,8 +112,7 @@ export class SearchTraceComponent implements OnInit {
             this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
                 this.allyCollection = alliesData.allies;
             });
-        }
-        else {
+        } else {
             this.allyService.getAllyByCountry(country);
             this.allySub = this.allyService.getAllyListener().subscribe((alliesData) => {
                 this.allyCollection = alliesData.allies;
@@ -121,10 +121,10 @@ export class SearchTraceComponent implements OnInit {
     }
 
     ngOnDestroy(): void {
-        setTimeout(() => {
+        if (this.allySub || this.companySub || this.auditSub) {
             this.allySub.unsubscribe();
             this.companySub.unsubscribe();
             this.auditSub.unsubscribe();
-        }, 300000);
+        }
     }
 }

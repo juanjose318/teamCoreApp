@@ -169,6 +169,9 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
     if (this.objTradersConfig && this.objTradersConfig.length !== 0) {
       this.isActive2 = true;
       this.comercialPartners.emit(true);
+    } else {
+      this.isActive2 = false;
+      this.comercialPartners.emit(false);
     }
   }
 
@@ -307,7 +310,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
                   this.configurationDone = {
                     isDone: true,
                     idAlliedCompanyConfig: this.idAllyCompanyConfig,
-                    company: this.registryToConfigure.company.idCompany,
+                    company: this.registryToConfigure.company.companyCode,
                     ally: this.registryToConfigure.allied.idAllied,
                     checkMode: true
                   };
@@ -347,7 +350,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           company: {
             idCompany: this.registryToConfigure.company.idCompany
           },
-          actionExecuted: null,
+          actionExecuted: 'Modificación',
           executor: 'ivan hernandez',
           ipOrigin: this.clientIp,
           configurationDate: this.registryToConfigure.configurationDate,
@@ -424,7 +427,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           company: {
             idCompany: this.registryToConfigure.company.idCompany
           },
-          actionExecuted: null,
+          actionExecuted: 'Modificación',
           executor: 'ivan hernandez',
           ipOrigin: this.clientIp,
           configurationDate: this.registryToConfigure.configurationDate,
@@ -526,7 +529,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
                     this.configurationDone = {
                       isDone: true,
                       idAlliedCompanyConfig: this.idAllyCompanyConfig,
-                      company: this.registryToConfigure.company.idCompany,
+                      company: this.registryToConfigure.company.companyCode,
                       ally: this.registryToConfigure.allied.idAllied
                     };
 
@@ -539,6 +542,8 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
             }
           });
         });
+      } else if (!this.wasModified3 && !this.wasModified2) {
+          this.saved.emit(false);
       }
     }
   }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatPaginator, MatSort } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,7 @@ import * as _ from 'lodash';
     styleUrls: ['./table-second-step.component.scss'],
 })
 
-export class SecondStepTableComponent implements OnInit, OnChanges {
+export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() registry;
     @Input() tableNumber;
@@ -30,7 +30,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
     // traders en modo edicion despues de selccionar y deseleccionar
     tradersAfterMod = [];
     // condicional para bloquear traders despues del primer llamado a configuracion
-    readonlyMode: boolean;
+    readonlyMode = false;
     // columnas para tabla
     displayedColumns: String[] = ['selectField', 'company.companyCode', 'companyName'];
     // objeto de traders seleccionados para configuracion
@@ -59,21 +59,24 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
                         this.readonlyMode = true;
                     }
                     if (change.currentValue.idAlliedCompanyConfig && change.currentValue.state.idState === 1) {
+                        console.log(change.currentValue);
                         this.readonlyMode = false;
                     }
-                } else if (!change.currentValue.idAlliedCompanyConfig) {
+                } else if (!change.currentValue.idAlliedCompanyConfig && !this.readonlyMode) {
+                    console.log(change.currentValue);
                     this.fetchTradersWithoutConfig(change.currentValue.company.companyCode);
                 }
             }
-        }
-        if (configurationDone) {
+        } else if (configurationDone) {
             if (configurationDone.currentValue) {
                 this.fetchTradersWithConfig(configurationDone.currentValue.idAlliedCompanyConfig, configurationDone.currentValue.company);
                 if (configurationDone.currentValue.checkMode === true) {
+                    console.log('readonly');
                     this.readonlyMode = true;
                 }
             }
         }
+        console.log(this.readonlyMode);
     }
 
     ngOnInit() {
@@ -85,6 +88,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
             this.readonlyMode = false;
+            console.log(this.readonlyMode);
             setTimeout(() => this.updateDatable(this.tradersCollection), 500);
         });
     }
@@ -94,13 +98,17 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
             this.tradersAfterMod = data.traders;
+            if (this.registry.state.state === 2) {
+                this.readonlyMode = true;
+                console.log('true');
+            }
             this.objToCompare.emit(this.tradersAfterMod);
             this.pushTraders(this.tradersCollection);
             setTimeout(() => this.updateDatable(this.tradersCollection), 500);
         });
     }
 
-     
+
     /**
      * Funcion para agregar y quitar comercios y la vez generar un estado temporal para su activación o desactivación
      * @param event clicked
@@ -162,7 +170,9 @@ export class SecondStepTableComponent implements OnInit, OnChanges {
         }
     }
 
-    OnDestroy(): void {
+    ngOnDestroy(): void {
+        if (this.traderSub) {
             this.traderSub.unsubscribe();
+        }
     }
 }

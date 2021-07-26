@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
@@ -13,7 +13,7 @@ import { DatePipe } from '@angular/common';
     styleUrls: ['./trace-table.component.scss']
 })
 
-export class TraceTableComponent implements OnInit, OnChanges {
+export class TraceTableComponent implements OnInit, OnChanges, OnDestroy {
     @Input() traceParams;
     @Input() isLoading: boolean;
 
@@ -49,6 +49,7 @@ export class TraceTableComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.updateTable(this.traceCollection);
+        this.traceSub = new Subscription;
     }
 
     fetchTrace(idAlly, idCompany) {
@@ -64,23 +65,23 @@ export class TraceTableComponent implements OnInit, OnChanges {
         const options = {
             quoteStrings: '',
             headers: ['Código Empresa', 'Nombre Empresa', 'Nombre del Archivo', 'Fecha de Generación del Archivo',
-             'Fecha Envío del Archivo', 'Nro. Pto Vta Incluidos', 
-             'Nro. Socios Comerciales Incluidos', 'Nro. Productos', 'Nro. de Registros', 'Tipo de Archivo']
+                'Fecha Envío del Archivo', 'Nro. Pto Vta Incluidos',
+                'Nro. Socios Comerciales Incluidos', 'Nro. Productos', 'Nro. de Registros', 'Tipo de Archivo']
         };
 
         const mappedTraceCollection = this.traceCollection.map((item) => {
-          return {
-              compayCode: item.company.companyCode,
-              companyName: item.company.companyName,
-              fileName: item.fileName,
-              generationDate:  this.datepipe.transform(item.generationDate, 'yMMdHHMMSSm'),
-              sendDate: item.sendDate,
-              numberPointsSale: item.numberPointsSale,
-              numberTraders: item.numberTraders,
-              numberProducts: item.numberProducts,
-              numberRecords: item.numberRecords,
-              fileType: item.fileType,
-            }
+            return {
+                compayCode: item.company.companyCode,
+                companyName: item.company.companyName,
+                fileName: item.fileName,
+                generationDate: this.datepipe.transform(item.generationDate, 'yMMdHHMMSSm'),
+                sendDate: item.sendDate,
+                numberPointsSale: item.numberPointsSale,
+                numberTraders: item.numberTraders,
+                numberProducts: item.numberProducts,
+                numberRecords: item.numberRecords,
+                fileType: item.fileType,
+            };
         });
 
         new AngularCsv(mappedTraceCollection, 'Reporte', options);
@@ -91,5 +92,11 @@ export class TraceTableComponent implements OnInit, OnChanges {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sortingDataAccessor = _.get;
         this.dataSource.sort = this.sort;
+    }
+
+    ngOnDestroy(): void {
+        if (this.traceSub) {
+            this.traceSub.unsubscribe();
+        }
     }
 }

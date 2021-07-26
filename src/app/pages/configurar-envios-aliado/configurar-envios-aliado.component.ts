@@ -132,13 +132,14 @@ export class ConfigurarEnviosAliadoComponent {
   }
 
   handleSave() {
-    console.log(this.saveConfig);
     this.saveConfig = true;
   }
 
   handleWasSaved(saved) {
     if (saved) {
-      this.saveConfig = false;
+      setTimeout(() => {
+        this.saveConfig = false;
+      }, 0.2);
     }
   }
 

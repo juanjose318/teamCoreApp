@@ -73,6 +73,7 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.updateTable(this.auditCollection);
+        this.auditSub = new Subscription;
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -113,11 +114,10 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
 
     fetchAuditByAllyCompany(ally, company) {
         this.auditService.getAuditConfigAllyCompanyByAllyAndCompany(ally, company);
-        this.auditSub = this.auditService.getAuditListener()
-            .subscribe((filteredAudit) => {
-                this.auditCollection = filteredAudit.audit;
-                this.updateTable(this.auditCollection);
-            });
+        this.auditSub = this.auditService.getAuditListener().pipe().subscribe((filteredAudit: any) => {
+            this.auditCollection = filteredAudit.audit;
+            this.updateTable(this.auditCollection);
+        });
     }
 
     fetchAuditByAlly(ally) {
@@ -132,17 +132,31 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
     exportexcel(): void {
         const options = {
             quoteStrings: '',
-            headers: ['ID Aliado', 'Aliado', 'Estado', 'Compañía', 'Acción Ejecutada', 'Ejecutado por',
+            headers: ['ID Aliado', 'Aliado', 'Estado', 'Compañía', 'Ejecutado por', 'IP Origen',
                 'Fecha de Configuración', 'Fecha de Actualización']
         };
-        new AngularCsv(this.auditCollection, 'Reporte Puntos de Venta', options);
+        const dataToExport = this.dataSource.filteredData.map((audits) => {
+            return {
+                idAlliedCompanyConfAudit: audits.idAlliedCompanyConfAudit,
+                alliedName: audits.allied.name,
+                state: audits.state.state,
+                company: audits.company.companyName,
+                executor: audits.executor,
+                ipOrigin: audits.ipOrigin,
+                configurationDate: audits.configurationDate,
+                updateDate: audits.updateDate
+            };
+        });
+        new AngularCsv(dataToExport, 'Reporte Auditoría', options);
     }
 
     applyFilter(filterValue) {
+        console.log(this.dataSource.filter);
         this.dataSource.filter = filterValue.trim().toLowerCase();
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
+        console.log(this.dataSource);
     }
 
     openModalForAudit(audit) {

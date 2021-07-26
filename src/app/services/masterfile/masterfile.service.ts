@@ -1,8 +1,7 @@
-import { HttpClient, HttpHeaders, HttpEvent, HttpErrorResponse, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { MasterFile } from 'src/app/models/MasterFile.interface';
+import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 

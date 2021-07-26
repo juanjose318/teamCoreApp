@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { AuditService } from 'src/app/services/audit/audit.service';
   styleUrls: ['./table-allies.component.scss'],
 })
 
-export class TableAlliesComponent implements OnInit, OnChanges {
+export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
   /**
   * Allies es el pais del que se tiene que hacer el fetch
   */
@@ -170,7 +170,7 @@ export class TableAlliesComponent implements OnInit, OnChanges {
     });
   }
 
-  OnDestroy(): void {
+  ngOnDestroy(): void {
     this.allySub.unsubscribe();
   }
 
