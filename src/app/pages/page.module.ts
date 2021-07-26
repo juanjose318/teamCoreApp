@@ -38,6 +38,7 @@ import { TableDataAuditComponent } from '../components/table-data-audit/table-da
 import { TableAlliesComponent } from '../components/table-allies/table-allies.component';
 import { TableAlliesAuditComponent } from '../components/table-allies-audit/table-allies-audit.component';
 import { ModalSaveConfirmationComponent } from '../components/modal-save-confirmation/modal-save-confirmation.component';
+import { ModalLoadingComponent } from '../components/modal-loading-spinner/modal-loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { ModalSaveConfirmationComponent } from '../components/modal-save-confirm
     TableAlliesAuditComponent,
     TableDataAuditComponent,
     TableAlliesComponent,
-    ModalSaveConfirmationComponent
+    ModalSaveConfirmationComponent,
+    ModalLoadingComponent
   ],
   imports: [
     CommonModule,
@@ -81,7 +83,8 @@ import { ModalSaveConfirmationComponent } from '../components/modal-save-confirm
     ModalDescriptionComponent,
     ModalConfigFormComponent,
     ModalAuditComponent,
-    ModalSaveConfirmationComponent
+    ModalSaveConfirmationComponent,
+    ModalLoadingComponent
   ],
   providers: [
     DatePipe

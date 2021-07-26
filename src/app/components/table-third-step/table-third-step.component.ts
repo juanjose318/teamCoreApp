@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ProductService } from 'src/app/services/products/products.service';
 import { Subscription } from 'rxjs';
 import { PointsOfSaleService } from 'src/app/services/pointsOfSale/pointsOfSale.service';
 import { ConfigService } from 'src/app/services/config/config.service';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 import * as _ from 'lodash';
+import { ModalLoadingComponent } from '../modal-loading-spinner/modal-loading-spinner.component';
 
 @Component({
     selector: 'app-table-third-step',
@@ -58,6 +60,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
         private productService: ProductService,
         private pointsOfSaleService: PointsOfSaleService,
         private _snackBar: MatSnackBar,
+        private dialog: MatDialog,
     ) { }
 
 
@@ -169,7 +172,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
     downloadDetailCsv(masterfile) {
         this.configService.getLogMasterFile(masterfile).subscribe((encodedData) => {
             if (encodedData === null) {
-                this._snackBar.open('El archivo no esta disponible', 'cerrar', {
+                this._snackBar.open('El archivo no está disponible', 'cerrar', {
                     duration: 2000,
                 });
             } else {
@@ -204,8 +207,10 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
     exportCsv() {
         if (this.selectedMaster === 'PR') {
             if (!!this.searchParams) {
+                this.openModal();
                 this.productService.getProductsByConfigAndCompany(this.searchParams.idCompany, this.searchParams.idAlliedCompanyConfig);
                 this.productsSubs = this.productService.getProductListener().subscribe((productData) => {
+                    this.dialog.closeAll();
                     this.productsCollection = productData.products;
                     console.log(this.productsCollection);
 
@@ -217,8 +222,10 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                     new AngularCsv(this.productsCollection, 'Reporte Productos', options);
                 });
             } else {
+                this.openModal();
                 this.productService.getProductsByCompany(this.idForProducts);
                 this.productsSubs = this.productService.getProductListener().subscribe((productData) => {
+                    this.dialog.closeAll();
                     this.productsCollection = productData.products;
                     const options = {
                         quoteStrings: '',
@@ -231,8 +238,10 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
         } else if (this.selectedMaster === 'PV') {
             if (!!this.searchParams) {
                 if (this.searchParams.idAlliedCompanyConfig) {
+                    this.openModal();
                     this.pointsOfSaleService.getPointsOfSale(this.searchParams.idAlliedCompanyConfig);
                     this.pointSaleSub = this.pointsOfSaleService.getPointsOfSaleListener().subscribe((pointSaleData) => {
+                        this.dialog.closeAll();
                         this.pointSaleCollection = pointSaleData.pointsOfSale;
                         const options = {
                             quoteStrings: '',
@@ -242,7 +251,9 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                     });
                 }
             } else {
+                this.openModal();
                 this.pointsOfSaleService.postTradersToGetPointSale(this.tradersCollection).subscribe((pointSaleData) => {
+                    this.dialog.closeAll();
                     const options = {
                         quoteStrings: '',
                         headers: ['Id Punto de Venta', 'EAN', 'Punto de Venta', 'Código Comercio', 'Comercio', 'Estado']
@@ -253,6 +264,12 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    openModal() {
+        const dialogRef = this.dialog.open(ModalLoadingComponent, {
+            panelClass: 'spinner-dialog',
+            height: '250px',
+        });
+    }
     /**
     * Ir al paso anterior
     */
