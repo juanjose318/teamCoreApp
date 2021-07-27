@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -21,7 +21,6 @@ export class PointsOfSaleService {
     ) { }
 
     getPointsOfSale(idAlliedCompanyConfig) {
-        console.log(idAlliedCompanyConfig);
         if (!!idAlliedCompanyConfig) {
             return this.http
                 .get<{ pointsOfSale: any[] }>(`${environment.apiUrl}/pointssale/configurations/` + idAlliedCompanyConfig, httpOptions)

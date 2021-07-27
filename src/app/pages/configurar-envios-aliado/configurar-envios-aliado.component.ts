@@ -115,7 +115,6 @@ export class ConfigurarEnviosAliadoComponent {
   handleRegistry(hasRegistry) {
     if (hasRegistry.hasRegistry === true) {
       this.hasRegistry = hasRegistry;
-      // console.log(hasRegistry);
     }
   }
 

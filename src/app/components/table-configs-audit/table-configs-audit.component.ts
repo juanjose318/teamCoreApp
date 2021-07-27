@@ -151,12 +151,10 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
     }
 
     applyFilter(filterValue) {
-        console.log(this.dataSource.filter);
         this.dataSource.filter = filterValue.trim().toLowerCase();
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
-        console.log(this.dataSource);
     }
 
     openModalForAudit(audit) {

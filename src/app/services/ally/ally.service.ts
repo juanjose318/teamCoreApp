@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material';
 import { Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 
 const httpOptions = {
     headers: new HttpHeaders({

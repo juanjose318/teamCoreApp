@@ -177,7 +177,6 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                 });
             } else {
                 const logFileName = 'CenC_' + masterfile.fileName + '_log.csv';
-                // console.log(encodedData);
                 this.exportToCsv(encodedData, logFileName);
             }
         });
@@ -212,7 +211,6 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                 this.productsSubs = this.productService.getProductListener().subscribe((productData) => {
                     this.dialog.closeAll();
                     this.productsCollection = productData.products;
-                    console.log(this.productsCollection);
 
                     const options = {
                         quoteStrings: '',

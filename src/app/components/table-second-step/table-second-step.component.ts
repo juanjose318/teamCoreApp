@@ -59,11 +59,9 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
                         this.readonlyMode = true;
                     }
                     if (change.currentValue.idAlliedCompanyConfig && change.currentValue.state.idState === 1) {
-                        console.log(change.currentValue);
                         this.readonlyMode = false;
                     }
                 } else if (!change.currentValue.idAlliedCompanyConfig && !this.readonlyMode) {
-                    console.log(change.currentValue);
                     this.fetchTradersWithoutConfig(change.currentValue.company.companyCode);
                 }
             }
@@ -71,12 +69,10 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
             if (configurationDone.currentValue) {
                 this.fetchTradersWithConfig(configurationDone.currentValue.idAlliedCompanyConfig, configurationDone.currentValue.company);
                 if (configurationDone.currentValue.checkMode === true) {
-                    console.log('readonly');
                     this.readonlyMode = true;
                 }
             }
         }
-        console.log(this.readonlyMode);
     }
 
     ngOnInit() {
@@ -88,7 +84,6 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
         this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
             this.readonlyMode = false;
-            console.log(this.readonlyMode);
             setTimeout(() => this.updateDatable(this.tradersCollection), 500);
         });
     }
@@ -100,7 +95,6 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
             this.tradersAfterMod = data.traders;
             if (this.registry.state.state === 2) {
                 this.readonlyMode = true;
-                console.log('true');
             }
             this.objToCompare.emit(this.tradersAfterMod);
             this.pushTraders(this.tradersCollection);

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -38,8 +38,7 @@ export class CompanyService {
     getCompaniesByCountry(countryCode) {
         if (!countryCode) {
             return;
-        }
-        else {
+        } else {
             return this.http
                 .get<{ companies: any[] }>(`${environment.apiUrl}/companies/countries/` + countryCode, httpOptions)
                 .pipe(

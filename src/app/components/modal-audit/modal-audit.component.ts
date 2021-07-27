@@ -21,7 +21,6 @@ export class ModalAuditComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log(this.data.registry.lstAlliedPointsSaleConfAudit.length);
      }
 
     close() {

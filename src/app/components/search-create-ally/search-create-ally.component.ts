@@ -255,7 +255,6 @@ export class SearchCreateAllyComponent implements OnChanges, OnDestroy {
    * Guardar Configuraciones
    */
   saveConfig() {
-    console.log(true);
     this.saveConfiguration.emit(true);
   }
 

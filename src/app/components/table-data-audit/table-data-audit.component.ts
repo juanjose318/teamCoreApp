@@ -31,10 +31,8 @@ export class TableDataAuditComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         const change = changes['dataType'];
         if (change) {
-            console.log(change.currentValue);
             if (change.currentValue === 'traders') {
                 this.displayedColumns = ['company.companyName', 'company.companyCode', 'state.state'];
-                console.log(this.dataSet);
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);
             } else if (change.currentValue === 'pointsSale') {
                 this.displayedColumns = ['pointSale.ean', 'pointSale.name', 'pointSale.traderCode', 'pointSale.traderName', 'state.state'];
@@ -50,7 +48,6 @@ export class TableDataAuditComponent implements OnInit, OnChanges {
 
     applyFilter(filterValue) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
-        console.log(this.dataSource.filter);
     }
 
     updateDatable(dataSource) {

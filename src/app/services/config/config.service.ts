@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
 import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 
@@ -97,14 +97,12 @@ export class ConfigService {
     }
 
     getLogMasterFile(masterParams) {
-        console.log(masterParams);
         return this.http
             .get(`${environment.apiUrl}/masters/downloads/routes/` + masterParams.idRoute + '/files/' + masterParams.fileName, { responseType: 'blob' as 'json' });
     }
 
     postMasterfile(masterfile) {
         const formatedmasterfile = JSON.stringify(masterfile);
-        // console.log(formatedmasterfile);
         return this.http.post(`${environment.apiUrl}/masters/uploads`, formatedmasterfile, httpOptions).pipe(
             catchError(err => {
                 this.showErrorMessage('No se pudo subir archivo masterfile');
@@ -115,7 +113,6 @@ export class ConfigService {
 
     postFirstConfiguration(configuration) {
         const formatedConfiguration = JSON.stringify(configuration);
-        // console.log(formatedConfiguration);
         return this.http.post(`${environment.apiUrl}/configurations/companies`, formatedConfiguration, httpOptions)
             .pipe(
                 catchError(err => {
@@ -127,7 +124,6 @@ export class ConfigService {
 
     postSecondConfiguration(configuration) {
         const formatedConfiguration = JSON.stringify(configuration);
-        // console.log(formatedConfiguration);
         return this.http.post(`${environment.apiUrl}/configurations/traders`, formatedConfiguration, httpOptions)
             .pipe(
                 catchError(err => {

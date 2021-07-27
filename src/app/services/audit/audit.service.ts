@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,7 @@ export class AuditService {
     return this.http.get(`${environment.apiUrl}/allies/audits/countries/` + country).pipe(
       map((data) => data), catchError(err => {
         this.showErrorMessage('No se pudo obtener auditoria');
-        return throwError(err)
+        return throwError(err);
       }))
       .subscribe((data => {
         this.audit = data;
@@ -50,7 +50,7 @@ export class AuditService {
     return this.http.get(`${environment.apiUrl}/audits/configurations/companies/allies/` + allyId).pipe(
       map((data) => data), catchError(err => {
         this.showErrorMessage('No se pudo obtener auditoria');
-        return throwError(err)
+        return throwError(err);
       }))
       .subscribe((data => {
         this.audit = data;
@@ -70,7 +70,7 @@ export class AuditService {
     return this.http.get(`${environment.apiUrl}/audits/configurations/companies/` + companyId + '/allies/' + allyId).pipe(
       map((data) => data), catchError(err => {
         this.showErrorMessage('No se pudo obtener auditoria');
-        return throwError(err)
+        return throwError(err);
       }))
       .subscribe((data => {
         this.audit = data;
@@ -99,7 +99,7 @@ export class AuditService {
     return this.http.get(`${environment.apiUrl}/audits/configurations/companies/`).pipe(
       map((data) => data), catchError(err => {
         this.showErrorMessage('No se pudo obtener auditoria');
-        return throwError(err)
+        return throwError(err);
       }))
       .subscribe((data => {
         this.audit = data;
@@ -118,7 +118,7 @@ export class AuditService {
     return this.http.post(`${environment.apiUrl}/allies/audits`, audit).pipe(
       catchError(err => {
         this.showErrorMessage('No se pudo crear auditoria');
-        return throwError(err)
+        return throwError(err);
       })
     );
   }
@@ -131,7 +131,7 @@ export class AuditService {
     return this.http.post(`${environment.apiUrl}/audits/configurations/traders`, audit).pipe(
       catchError(err => {
         this.showErrorMessage('No se pudo crear auditoria');
-        return throwError(err)
+        return throwError(err);
       })
     );
   }
@@ -143,9 +143,8 @@ export class AuditService {
   creatAllyCompanyConfig(configAllyCompanyAudit) {
     return this.http.post(`${environment.apiUrl}/audits/configurations/companies`, configAllyCompanyAudit).pipe(
       catchError(err => {
-        console.log(configAllyCompanyAudit);
         this.showErrorMessage('No se pudo crear auditoria');
-        return throwError(err)
+        return throwError(err);
       })
     );
   }

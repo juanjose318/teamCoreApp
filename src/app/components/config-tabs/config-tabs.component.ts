@@ -193,12 +193,10 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
    * @param objMasterfile archivo cargado
    */
   handleLoadedMasterfile(objMasterfile) {
-    // console.log(objMasterfile);
     this.uploadedFile.emit(true);
     const formatedDate = this.datepipe.transform(this.dateNow, 'yMMdHHMMSSm');
     this.wasModified3 = true;
     const userCode = '62454165';
-    // console.log(this.registryToConfigure);
     const objBeforeConfig = {
       idMasterFile: null,
       idAlliedCompanyConfAudit: null,
@@ -261,7 +259,6 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
       data: { confirm: true, cancel: false }
     });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
       if (result === true) {
         this.handleSave();
       } else {
@@ -476,7 +473,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
                 this.saved.emit(true);
                 this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig };
                 this.wasModified3 = false;
-                this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
+                this.showMessage('Socios comerciales modificados con éxito');
               });
             }
           });
@@ -495,7 +492,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           company: {
             idCompany: this.registryToConfigure.company.idCompany
           },
-          actionExecuted: null,
+          actionExecuted: 'Modificación',
           executor: 'ivan hernandez',
           ipOrigin: this.clientIp,
           configurationDate: this.registryToConfigure.configurationDate,
@@ -508,7 +505,6 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         this.tradersAfterMod.forEach(trader => {
 
           if (trader.idState !== trader.idStateTemp) {
-            // console.log("guardar en AlliedTraderConfAudit con el idStateTemp: " + trader.idStateTemp);
             const configTradersAudit = {
               state: {
                 idState: trader.idStateTemp
@@ -521,7 +517,6 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
           }
 
           if (1 === trader.idStateTemp) {
-            // console.log("guardar en AlliedTraderConfig con el idState: " + trader.idStateTemp);
             const configTraders = {
               idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
               idState: trader.idStateTemp,
@@ -562,7 +557,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
 
                     this.wasModified3 = false;
                     this.wasModified2 = false;
-                    this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
+                    this.showMessage('Socios comerciales fueron modificados con exito, estamos procesando su archivo');
                   });
                 });
               });

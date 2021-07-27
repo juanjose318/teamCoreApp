@@ -104,14 +104,11 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
       }
     } if (registry) {
       if (registry.currentValue) {
-        // this.companyConfigCollection.push(registry.currentValue);
         this.updateDatable(this.companyConfigCollection);
-        console.log(registry.currentValue);
       }
     }
     if (cancelled) {
       if (cancelled.currentValue) {
-        console.log('hit');
         if (!this.filteredAlly && !this.filteredCompany) {
           this.companyConfigCollection = [];
           this.updateDatable(this.companyConfigCollection);
@@ -203,20 +200,6 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
       this.isLoading.emit(false);
     });
   }
-
-  // checkIfRecordExist() {
-  //   if (this.selectedRecord) {
-  //     for (let i; i < this.companyConfigCollection.length; i++) {
-  //       console.log(i);
-  //       if (this.companyCollection[i] == this.selectedRecord) {
-  //         console.log("exists");
-  //       } else {
-  //         this.companyConfigCollection.push(this.selectedRecord);
-  //         console.log(this.selectedRecord);
-  //       }
-  //     }
-  //   }
-  // }
 
   /**
    * Activar alianza comercial
