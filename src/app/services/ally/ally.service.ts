@@ -4,7 +4,8 @@ import { MatSnackBar } from '@angular/material';
 import { Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment.prod';
+// import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -44,7 +45,7 @@ export class AliadoService {
         return this.http.post(`${environment.apiUrl}/allies`, convertedAlly, httpOptions).pipe(
             catchError(err => {
                 this.showErrorMessage('No se pudo crear aliado');
-                return throwError(err)
+                return throwError(err);
             })
         );
     }

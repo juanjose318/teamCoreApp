@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { environment } from '../../../environments/environment.prod';
+// import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
+
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -37,7 +39,7 @@ export class PointsOfSaleService {
         }
     }
 
-    postTradersToGetPointSale(traders){
+    postTradersToGetPointSale(traders) {
 
         return this.http.post(`${environment.apiUrl}/pointssale/traders`, traders);
     }

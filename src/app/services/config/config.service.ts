@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
 import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
+// import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 
 const httpOptionsForText = {
@@ -42,7 +43,7 @@ export class ConfigService {
             this.companyConfigListener.next({
                 companyConfig: this.companyConfig
             });
-        })
+        });
     }
 
     getAllyCompanyConfigurationByCompanyAndAlly(allyId, companyId) {
@@ -54,7 +55,7 @@ export class ConfigService {
             this.companyConfigListener.next({
                 companyConfig: this.companyConfig
             });
-        })
+        });
     }
 
     getAllAllyCompanyConfig() {
@@ -63,7 +64,7 @@ export class ConfigService {
             this.companyConfigListener.next({
                 companyConfig: this.companyConfig
             });
-        })
+        });
     }
 
     activateOrDeactivateComercialRelation(relation) {
@@ -106,9 +107,9 @@ export class ConfigService {
         return this.http.post(`${environment.apiUrl}/masters/uploads`, formatedmasterfile, httpOptions).pipe(
             catchError(err => {
                 this.showErrorMessage('No se pudo subir archivo masterfile');
-                return throwError(err)
+                return throwError(err);
             })
-        );;
+        ); ;
     }
 
     postFirstConfiguration(configuration) {
@@ -117,9 +118,9 @@ export class ConfigService {
             .pipe(
                 catchError(err => {
                     this.showErrorMessage('No se pudo crear primera configuración');
-                    return throwError(err)
+                    return throwError(err);
                 })
-            );;
+            );
     }
 
     postSecondConfiguration(configuration) {
@@ -128,9 +129,9 @@ export class ConfigService {
             .pipe(
                 catchError(err => {
                     this.showErrorMessage('No se pudo crear segunda configuración');
-                    return throwError(err)
+                    return throwError(err);
                 })
-            );;
+            );
     }
 
     postThirdConfiguration(configuration) {
@@ -138,9 +139,9 @@ export class ConfigService {
         return this.http.post(`${environment.apiUrl}/masters/`, formatedConfiguration, httpOptions).pipe(
             catchError(err => {
                 this.showErrorMessage('No se pudo crear tercera configuración');
-                return throwError(err)
+                return throwError(err);
             })
-        );;
+        );
     }
 
     showErrorMessage(message) {

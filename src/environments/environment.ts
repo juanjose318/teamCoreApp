@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8098/aliado-api/v1'
+  apiUrl: 'http://localhost:8098/allied-configuration-service/v1'
 };
 
 

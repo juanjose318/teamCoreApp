@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment.prod';
+// import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -83,7 +85,6 @@ export class AuditService {
 
   /**
    * Mostrar Mensaje de error
-   * @param message 
    */
   showErrorMessage(message) {
     this._snackBar.open(message, 'cerrar', {
@@ -93,7 +94,7 @@ export class AuditService {
 
   /**
    * Auditoria configuracion aliado y compania
-   * @returns todas las configuraciones de aliados con companias 
+   * @returns todas las configuraciones de aliados con companias
    */
   getAllAllyCompanyConfig() {
     return this.http.get(`${environment.apiUrl}/audits/configurations/companies/`).pipe(
@@ -112,7 +113,7 @@ export class AuditService {
 
   /**
    * Crear auditoria de aliado
-   * @param audit objeto de auditoria 
+   * @param audit objeto de auditoria
    */
   createAuditAlly(audit) {
     return this.http.post(`${environment.apiUrl}/allies/audits`, audit).pipe(
@@ -125,7 +126,7 @@ export class AuditService {
 
   /**
    * Crear auditoria de traders
-   * @param audit auditoria para enviar 
+   * @param audit auditoria para enviar
    */
   createTraderAudit(audit) {
     return this.http.post(`${environment.apiUrl}/audits/configurations/traders`, audit).pipe(
@@ -138,7 +139,6 @@ export class AuditService {
 
   /**
    * Crear auditoria de configuracion de alianza
-   * @param configAllyCompanyAudit 
    */
   creatAllyCompanyConfig(configAllyCompanyAudit) {
     return this.http.post(`${environment.apiUrl}/audits/configurations/companies`, configAllyCompanyAudit).pipe(

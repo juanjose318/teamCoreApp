@@ -259,6 +259,10 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                     new AngularCsv(pointSaleData, 'Reporte Puntos de Venta', options);
                 });
             }
+        } else {
+            this._snackBar.open('Por favor seleccione tipo de archivo maestro a descargar', 'cerrar', {
+                duration: 10000,
+            });
         }
     }
 

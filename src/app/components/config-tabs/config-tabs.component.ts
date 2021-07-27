@@ -432,7 +432,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
                 company: this.registryToConfigure.company.idCompany,
                 ally: this.registryToConfigure.allied.idAllied
               };
-              this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
+              this.showMessage('Socios comerciales modificados con éxito');
             });
           });
         });
@@ -473,7 +473,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
                 this.saved.emit(true);
                 this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig };
                 this.wasModified3 = false;
-                this.showMessage('Socios comerciales modificados con éxito');
+                this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
               });
             }
           });
