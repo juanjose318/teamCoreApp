@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { AuditService } from 'src/app/services/audit/audit.service';
   styleUrls: ['./results-table.component.scss'],
 })
 
-export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
+export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   /**
   * Allies es el pais del que se tiene que hacer el fetch
   */
@@ -90,7 +90,6 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.filteredAlly && !this.filteredCompany) {
       // Fetch de aliados y empresas para creacion de configuraciones
     } else if (!!this.filteredAlly && !this.filteredCompany) {
-
       this.fetchConfigsWithNoCompany(this.filteredAlly);
     } else if (!!this.filteredAlly && !!this.filteredCompany) {
       this.fetchConfigsWithAllyAndCompany(this.filteredAlly, this.filteredCompany);
@@ -125,14 +124,16 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
    * Opciones de tabla + asignacion de data a la tabla
    */
   ngOnInit() {
-    this.updateDatable(this.companyConfigCollection);
+    this.fetchAllConfigs();
     this.allyService.getIp();
     this.allySub = this.allyService.getIpListener().subscribe((data) => {
       this.clientIp = data.ip;
     });
-    this.companyAllyConfigSub = new Subscription;
   }
 
+  ngAfterViewInit() {
+    this.updateDatable(this.companyConfigCollection);
+  }
   /**
    * Actualizar tabla
    */
@@ -174,6 +175,14 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  fetchAllConfigs() {
+    this.companyConfigService.getAllAllyCompanyConfig();
+    this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
+      this.companyConfigCollection = data.companyConfig;
+      const filteredCollection = this.companyConfigCollection.filter((item) => item.allied.idState !== 4);
+      this.updateDatable(filteredCollection);
+    });
+  }
   /**
    * Llamar configuracion de de compania por aliado
    * @param idAlly id aliado
@@ -182,7 +191,8 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
     this.companyConfigService.getAllyCompanyConfiguration(idAlly);
     this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
       this.companyConfigCollection = data.companyConfig;
-      this.updateDatable(this.companyConfigCollection);
+      const filteredCollection = this.companyConfigCollection.filter((item) => item.allied.idState !== 4);
+      this.updateDatable(filteredCollection);
       this.isLoading.emit(false);
     });
   }
@@ -196,7 +206,8 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy {
     this.companyConfigService.getAllyCompanyConfigurationByCompanyAndAlly(idAlly, idCompany);
     this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
       this.companyConfigCollection = data.companyConfig;
-      this.updateDatable(this.companyConfigCollection);
+      const filteredCollection = this.companyConfigCollection.filter((item) => item.allied.idState !== 4);
+      this.updateDatable(filteredCollection);
       this.isLoading.emit(false);
     });
   }

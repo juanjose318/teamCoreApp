@@ -44,7 +44,7 @@ export class ConfigurarAliadosComponent implements OnInit {
    * Config envio de aliados
   */
   private configInfoSending = false;
-  
+
   /**
    * Spinner condicional por medio de variable boolean
    */
@@ -68,9 +68,7 @@ export class ConfigurarAliadosComponent implements OnInit {
    * @param newAlly Id de aliado
    */
   handleNewAlly(newAlly) {
-    this.aliadoService.createAlly(newAlly).subscribe(() => {
-      this.aliadoService.getAllyByCountry(newAlly.idCountry);
-    });
+    this.aliadoService.createAlly(newAlly).subscribe();
   }
   /**
    * Busqueda de aliado especifico despues de filtro de pais, se manda el id del aliado a filtrar
@@ -107,7 +105,7 @@ export class ConfigurarAliadosComponent implements OnInit {
             'valueAfter': ' ',
             'ipOrigin': this.clientIp,
             'creationDate': toDeleteAlly.creationDate,
-            'updateDate': toDeleteAlly.updateDate
+            'updateDate': updateDate
           }];
           this.auditService.createAuditAlly(allyAudit).subscribe(() => {
             this._snackBar.open('Operacion exitosa, El registro se elimino satisfactoriamente', 'cerrar', {

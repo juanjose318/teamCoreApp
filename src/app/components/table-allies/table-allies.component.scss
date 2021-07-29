@@ -2,10 +2,12 @@
 
 table {
   width: 100%;
+  table-layout: fixed;
 }
 
 td, th , .mat-sort-header-button, .mat-header-cell{
   font-size: 0.6rem;
+  word-wrap: break-word;
   text-align: center;
 }
 

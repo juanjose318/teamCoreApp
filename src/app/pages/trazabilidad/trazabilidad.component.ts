@@ -9,7 +9,7 @@ import { TraceService } from 'src/app/services/trace/trace.service';
 })
 export class TrazabilidadComponent implements OnInit {
   // tslint:disable-next-line: max-line-length
-  textBox = 'Herramienta que permite ejecutar una trazabilidad, consultando la meta data de caa uno de los archivos generados y enviados al Aliado ya sea del fabricante o del comercio';
+  textBox = 'Herramienta que permite ejecutar una trazabilidad, consultando la metadata de cada uno de los archivos generados y enviados al Aliado ya sea del fabricante o del comercio';
   private searchParams;
 
   private traceCollection;

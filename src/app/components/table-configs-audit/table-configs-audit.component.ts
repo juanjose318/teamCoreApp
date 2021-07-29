@@ -72,8 +72,7 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
     ) { }
 
     ngOnInit() {
-        this.updateTable(this.auditCollection);
-        this.auditSub = new Subscription;
+        this.fetchAllAudits();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -110,6 +109,14 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
         this.dataSource.sortingDataAccessor = _.get;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+    }
+
+    fetchAllAudits() {
+        this.auditService.getAllAudits();
+        this.auditSub = this.auditService.getAuditListener().subscribe((data) => {
+            this.auditCollection = data.audit;
+            this.updateTable(this.auditCollection);
+        });
     }
 
     fetchAuditByAllyCompany(ally, company) {

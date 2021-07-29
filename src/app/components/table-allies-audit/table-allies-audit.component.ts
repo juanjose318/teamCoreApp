@@ -55,6 +55,7 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
     ) { }
 
     ngOnInit() {
+        this.fetchAuditByCountry('CO');
         this.updateTable(this.auditCollection);
     }
 
@@ -80,10 +81,11 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     fetchAuditByCountry(country) {
-        this.auditService.getAuditByCountry(this.audit);
+        this.auditService.getAuditByCountry(country);
         this.auditSub = this.auditService.getAuditListener()
             .subscribe((filteredAudit) => {
                 this.auditCollection = filteredAudit.audit;
+                console.log('21')
                 this.updateTable(this.auditCollection);
             });
     }

@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
-// import { environment } from 'src/environments/environment.prod';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
+// import { environment } from 'src/environments/environment';
 
 
 const httpOptionsForText = {

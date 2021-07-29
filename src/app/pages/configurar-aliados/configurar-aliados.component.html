@@ -17,19 +17,10 @@
       <mat-spinner *ngIf="isLoading === true"></mat-spinner>
 
       <!-- Tabla aliados -->
-      <div *ngIf="!!allies; else notAvailable">
         <app-table-allies [allies]="allies" [filteredAlly]="selectedAlly" (isLoading)="handleIsloading($event)"
           (deletedAlly)="handleDeleteAlly($event)" (editedAlly)="handleEditedAlly($event)">
         </app-table-allies>
-      </div>
 
-      <ng-template #notAvailable>
-        <div class="card">
-          <div class="card-body">
-            No existe información para visualizar
-          </div>
-        </div>
-      </ng-template>
     </div>
 
     <!-- Tabla Auditoria -->

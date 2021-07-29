@@ -336,6 +336,10 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
                     ally: this.registryToConfigure.allied.idAllied,
                     checkMode: true
                   };
+                  // this.handleTradersModified();
+                  // this.wasModified3 = true;
+                  // this.registryToConfigure.idAlliedCompanyConfig = this.idAllyCompanyConfig;
+                  // this.registryToConfigure.configurationDate = createdConfig['configurationDate'];
                   setTimeout(() => {
                     this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
                   }, 0.8);

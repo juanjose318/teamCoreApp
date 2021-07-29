@@ -2,10 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Subject, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-
-// import { environment } from '../../../environments/environment.prod';
-import { environment } from '../../../environments/environment';
+import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.prod';
+// import { environment } from '../../../environments/environment';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -15,7 +14,9 @@ const httpOptions = {
 
 @Injectable({ providedIn: 'root' })
 export class AliadoService {
+
     private allyListener = new Subject<{ allies: any }>();
+    private _refresh$ = new Subject<void>();
     private ipListener = new Subject<{ ip: any }>();
     private allies: any;
     constructor(
@@ -40,9 +41,14 @@ export class AliadoService {
             });
     }
 
+    get refresh$() {
+        return this._refresh$;
+    }
+
     createAlly(newAlly) {
         const convertedAlly = JSON.stringify(newAlly);
         return this.http.post(`${environment.apiUrl}/allies`, convertedAlly, httpOptions).pipe(
+            tap(() => this._refresh$.next()),
             catchError(err => {
                 this.showErrorMessage('No se pudo crear aliado');
                 return throwError(err);
@@ -79,6 +85,7 @@ export class AliadoService {
         const updatedAlly = JSON.stringify(ally);
         return this.http.put(`${environment.apiUrl}/allies`, updatedAlly, httpOptions)
             .pipe(
+                tap(() => this._refresh$.next()),
                 catchError(err => {
                     this.showErrorMessage('No se pudo actualizar aliado');
                     return throwError(err);
@@ -91,6 +98,7 @@ export class AliadoService {
         return this.http.delete(
             `${environment.apiUrl}/allies/` + ally.idAllied, httpOptions
         ).pipe(
+            tap(() => this._refresh$.next()),
             catchError(err => {
                 this.showErrorMessage('No se pudo eliminar aliado');
                 return throwError(err);

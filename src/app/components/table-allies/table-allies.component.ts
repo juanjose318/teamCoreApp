@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.compo
   styleUrls: ['./table-allies.component.scss'],
 })
 
-export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
+export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy{
   /**
   * Allies es el pais del que se tiene que hacer el fetch
   */
@@ -31,6 +31,7 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
 
 
   private allySub: Subscription;
+  private refresh: Subscription;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -67,29 +68,19 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     const configurationDone = changes['configurationDone'];
     // Tabla 1 configuracion de aliados, hay objeto aliado y no hay ningun aliado filtrado
-    if (!!this.allies && !this.filteredAlly) {
-      // Todos los paises
-      if (this.allies === 'ALL') {
-        this.fetchAllAllies();
-        this.updateDatable(this.allyCollection);
-      } else {
-        // Hay aliado filtrado por pais
-        this.fetchAlliesByCountry(this.allies);
-      }
-    } else if (!!this.filteredAlly) {
-      const filtered = this.allyCollection.filter(ally => ally.idAllied == this.filteredAlly);
-      this.updateDatable(filtered);
-      this.filteredAlly = null;
-    }
+    this.checkFilter();
   }
 
   /**
    * Opciones de tabla + asignacion de data a la tabla
    */
   ngOnInit() {
-    this.updateDatable(this.allyCollection);
-
+    this.fetchAllAllies();
+    this.refresh = this.allyService.refresh$.subscribe(() => {
+      this.checkFilter();
+    });
   }
+
 
   /**
    * Actualizar tabla
@@ -107,9 +98,14 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
    */
   fetchAllAllies() {
     this.allyService.getAllies();
+    console.log('11');
     this.allySub = this.allyService.getAllyListener().subscribe((allyData) => {
       this.isLoading.emit(false);
       this.allyCollection = allyData.allies;
+      console.log('de');
+      setTimeout(() => {
+        this.updateDatable(this.allyCollection);
+      }, 0.2);
     });
   }
 
@@ -161,6 +157,24 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  checkFilter() {
+    if (!!this.allies && !this.filteredAlly) {
+      // Todos los paises
+      if (this.allies === 'ALL') {
+        this.fetchAllAllies();
+      } else {
+        // Hay aliado filtrado por pais
+        this.fetchAlliesByCountry(this.allies);
+      }
+    } else if (!!this.filteredAlly) {
+      const filtered = this.allyCollection.filter(ally => ally.idAllied == this.filteredAlly);
+      this.updateDatable(filtered);
+      this.filteredAlly = null;
+    }  else {
+      this.fetchAllAllies();
+    }
+  }
+
   deleteAlly(toDeleteAlly) {
     this.deletedAlly.emit(toDeleteAlly);
   }
@@ -172,7 +186,10 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.allySub.unsubscribe();
+    if (this.allySub || this.refresh) {
+      this.allySub.unsubscribe();
+      this.refresh.unsubscribe();
+    }
   }
 
 }

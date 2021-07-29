@@ -29,7 +29,7 @@ export class TraceTableComponent implements OnInit, OnChanges, OnDestroy {
     private traceCollection = [];
 
     displayedColumns = ['company.companyCode', 'company.companyName', 'fileName', 'generationDate', 'sendDate',
-        'numberTraders', 'numberPointsSale', 'numberProducts', 'numberRecords', 'fileType', 'detail'];
+        'numberTraders', 'numberPointsSale', 'numberProducts', 'numberRecords', 'fileType'];
 
     constructor(
         private traceService: TraceService,

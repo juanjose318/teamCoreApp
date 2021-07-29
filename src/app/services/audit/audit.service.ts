@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-// import { environment } from 'src/environments/environment.prod';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
+// import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -70,6 +70,21 @@ export class AuditService {
    */
   getAuditConfigAllyCompanyByAllyAndCompany(allyId, companyId) {
     return this.http.get(`${environment.apiUrl}/audits/configurations/companies/` + companyId + '/allies/' + allyId).pipe(
+      map((data) => data), catchError(err => {
+        this.showErrorMessage('No se pudo obtener auditoria');
+        return throwError(err);
+      }))
+      .subscribe((data => {
+        this.audit = data;
+        this.auditListener.next({
+          audit: this.audit
+        });
+      }
+      ));
+  }
+
+  getAllAudits() {
+    return this.http.get(`${environment.apiUrl}/audits/configurations/companies/`).pipe(
       map((data) => data), catchError(err => {
         this.showErrorMessage('No se pudo obtener auditoria');
         return throwError(err);

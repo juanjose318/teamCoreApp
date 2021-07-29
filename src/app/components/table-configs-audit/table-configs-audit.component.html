@@ -26,7 +26,7 @@
           <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
         </mat-form-field>
 
-        <table mat-table [dataSource]="dataSource" matSort id="excel-table" matSortDisableClear
+        <table mat-table [dataSource]="dataSource" *ngIf="dataSource; else noDisponible" matSort id="excel-table" matSortDisableClear
           matSortActive="updateDate" matSortDirection="desc">
 
           <ng-container matColumnDef="idAlliedCompanyConfAudit">

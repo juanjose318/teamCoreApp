@@ -207,13 +207,14 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
         if (this.selectedMaster === 'PR') {
             if (!!this.searchParams) {
                 this.openModal();
-                this.productService.getProductsByConfigAndCompany(this.searchParams.idCompany, this.searchParams.idAlliedCompanyConfig);
+                this.productService.getProductsByConfigAndCompany(this.searchParams.idAlliedCompanyConfig, this.searchParams.idCompany);
                 this.productsSubs = this.productService.getProductListener().subscribe((productData) => {
                     this.dialog.closeAll();
                     this.productsCollection = productData.products;
 
                     const options = {
                         quoteStrings: '',
+                        fieldSeparator: ';',
                         headers: ['Id Producto', 'EAN Producto', 'Descripción', 'Estado']
                     };
 
@@ -227,6 +228,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                     this.productsCollection = productData.products;
                     const options = {
                         quoteStrings: '',
+                        fieldSeparator: ';',
                         headers: ['Id Producto', 'EAN Producto', 'Descripción', 'Estado']
                     };
                     new AngularCsv(this.productsCollection, 'Reporte Productos', options);
@@ -243,6 +245,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                         this.pointSaleCollection = pointSaleData.pointsOfSale;
                         const options = {
                             quoteStrings: '',
+                            fieldSeparator: ';',
                             headers: ['Id Punto de Venta', 'EAN', 'Punto de Venta', 'Código Comercio', 'Comercio', 'Estado']
                         };
                         new AngularCsv(this.pointSaleCollection, 'Reporte Puntos de Venta', options);
@@ -254,6 +257,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                     this.dialog.closeAll();
                     const options = {
                         quoteStrings: '',
+                        fieldSeparator: ';',
                         headers: ['Id Punto de Venta', 'EAN', 'Punto de Venta', 'Código Comercio', 'Comercio', 'Estado']
                     };
                     new AngularCsv(pointSaleData, 'Reporte Puntos de Venta', options);
