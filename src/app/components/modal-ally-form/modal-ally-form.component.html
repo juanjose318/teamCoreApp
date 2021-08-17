@@ -14,7 +14,7 @@
 
           <div *ngIf="(nameField.invalid && nameField.touched) || nameField.dirty" class="error-msg">
             <small *ngIf="nameField.errors?.required" class="text-danger">
-              Nombre es requerido
+              Debe ingresar nombre
             </small>
             <small *ngIf="nameField.errors?.maxlength || nameField.errors?.pattern" class="text-danger">
               La información ingresada no es correcta
@@ -25,13 +25,19 @@
       <div class="row">
         <div class="mb-3 col-sm">
           <label class="form-label">*Pais</label>
-          <select class="form-select" formControlName="idCountry" required>
+          <select class="form-select" [class.is-invalid]="countryField.invalid && countryField.touched"
+            formControlName="idCountry" required formControlName="idCountry">
             <option selected>Seleccionar</option>
             <option value="CO">Colombia</option>
             <option value="AR">Argentina</option>
             <option value="PE">Perú</option>
             <option value="MX">México</option>
           </select>
+          <div *ngIf="(countryField.invalid && phoneField.touched) || countryField.dirty" class="error-msg">
+            <small *ngIf="countryField.errors?.required" class="text-danger">
+              Debe ingresar país
+            </small>
+          </div>
         </div>
 
         <div class="mb-3 col-sm">
@@ -40,7 +46,7 @@
             formControlName="phone" (keydown.space)="$event.preventDefault()" required>
           <div *ngIf="(phoneField.invalid && phoneField.touched) || phoneField.dirty" class="error-msg">
             <small *ngIf="phoneField.errors?.required" class="text-danger">
-              Teléfono es requerido
+              Debe ingresar teléfono
             </small>
           </div>
         </div>
@@ -66,7 +72,7 @@
         <div *ngIf="(identificationField.invalid && identificationField.touched) || identificationField.dirty"
           class="error-msg">
           <small *ngIf="identificationField.errors?.required" class="text-danger">
-            Identificación es requerida
+            Debe ingresar identificación
           </small>
           <small *ngIf="identificationField.errors?.maxlength || identificationField.errors?.pattern"
             class="text-danger">
@@ -81,7 +87,7 @@
             formControlName="contact" required required></div>
         <div *ngIf="(contactField.invalid && contactField.touched) || contactField.dirty" class="error-msg">
           <small *ngIf="contactField.errors?.required" class="text-danger">
-            Contacto es requerido
+            Debe ingresar contacto
           </small>
           <small *ngIf="contactField.errors?.maxlength || contactField.errors?.pattern" class="text-danger">
             La información ingresada no es correcta
@@ -96,7 +102,7 @@
               formControlName="mail"></div>
           <div *ngIf="(mailField.invalid && mailField.touched) || mailField.dirty" class="error-msg">
             <small *ngIf="mailField.errors?.required" class="text-danger">
-              Email es requerido
+              Debe ingresar email
             </small>
             <small *ngIf="mailField.errors?.pattern" class="text-danger">
               Formato de dirección de correo electrónico no válido.
@@ -112,7 +118,7 @@
         <div *ngIf="(carvajalContactField.invalid && carvajalContactField.touched) || carvajalContactField.dirty"
           class="error-msg">
           <small *ngIf="carvajalContactField.errors?.required" class="text-danger">
-            Contacto Carvajal es requerido
+            Debe ingresar contacto Carvajal
           </small>
           <small *ngIf="carvajalContactField.errors?.pattern" class="text-danger">
             Formato de dirección de correo electrónico no válido.
@@ -128,7 +134,7 @@
         </div>
         <div *ngIf="(descriptionField.invalid && descriptionField.touched) || descriptionField.dirty" class="error-msg">
           <small *ngIf="descriptionField.errors?.required" class="text-danger">
-            Descripción es requerida
+            Debe ingresar descripción
           </small>
           <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors?.pattern" class="text-danger">
             La información ingresada no es correcta
@@ -161,7 +167,7 @@
 
             <div *ngIf="(nameField.invalid && nameField.touched) || nameField.dirty" class="error-msg">
               <small *ngIf="nameField.errors?.required" class="text-danger">
-                Nombre es requerido
+                Debe ingresar nombre
               </small>
               <small *ngIf="nameField.errors?.maxlength || nameField.errors?.pattern" class="text-danger">
                 La información ingresada no es correcta
@@ -171,14 +177,20 @@
         </div>
         <div class="row">
           <div class="mb-3 col-sm">
-            <label class="form-label">País</label>
-            <select class="form-select" formControlName="idCountry" required>
+            <label class="form-label">*Pais</label>
+            <select class="form-select" [class.is-invalid]="countryField.invalid && countryField.touched"
+              formControlName="idCountry" required formControlName="idCountry">
               <option selected>Seleccionar</option>
               <option value="CO">Colombia</option>
               <option value="AR">Argentina</option>
               <option value="PE">Perú</option>
               <option value="MX">México</option>
             </select>
+            <div *ngIf="(countryField.invalid && phoneField.touched) || countryField.dirty" class="error-msg">
+              <small *ngIf="countryField.errors?.required" class="text-danger">
+                Debe ingresar país
+              </small>
+            </div>
           </div>
 
           <div class="mb-3 col-sm">
@@ -187,7 +199,7 @@
               formControlName="phone" (keydown.space)="$event.preventDefault()" required>
             <div *ngIf="(phoneField.invalid && phoneField.touched) || phoneField.dirty" class="error-msg">
               <small *ngIf="phoneField.errors?.required" class="text-danger">
-                Teléfono es requerido
+                Debe ingresar teléfono
               </small>
             </div>
           </div>
@@ -210,7 +222,7 @@
               formControlName="contact" required required></div>
           <div *ngIf="(contactField.invalid && contactField.touched) || contactField.dirty" class="error-msg">
             <small *ngIf="contactField.errors?.required" class="text-danger">
-              Contacto es requerido
+              Debe ingresar contacto
             </small>
             <small *ngIf="contactField.errors?.maxlength || contactField.errors?.pattern" class="text-danger">
               La información ingresada no es correcta
@@ -225,7 +237,7 @@
                 formControlName="mail"></div>
             <div *ngIf="(mailField.invalid && mailField.touched) || mailField.dirty" class="error-msg">
               <small *ngIf="mailField.errors?.required" class="text-danger">
-                Email es requerido
+                Debe ingresar email
               </small>
               <small *ngIf="mailField.errors?.pattern" class="text-danger">
                 Formato de dirección de correo electrónico no válido.
@@ -244,7 +256,7 @@
           <div *ngIf="(identificationField.invalid && identificationField.touched) || identificationField.dirty"
             class="error-msg">
             <small *ngIf="identificationField.errors?.required" class="text-danger">
-              Identificación es requerida
+              Debe ingresar identificación
             </small>
             <small *ngIf="identificationField.errors?.maxlength || identificationField.errors?.pattern"
               class="text-danger">
@@ -260,7 +272,7 @@
           <div *ngIf="(carvajalContactField.invalid && carvajalContactField.touched) || carvajalContactField.dirty"
             class="error-msg">
             <small *ngIf="carvajalContactField.errors?.required" class="text-danger">
-              Contacto Carvajal es requerido
+              Debe ingresar contacto Carvajal
             </small>
             <small *ngIf="carvajalContactField.errors?.pattern" class="text-danger">
               Formato de dirección de correo electrónico no válido.
@@ -277,7 +289,7 @@
           <div *ngIf="(descriptionField.invalid && descriptionField.touched) || descriptionField.dirty"
             class="error-msg">
             <small *ngIf="descriptionField.errors?.required" class="text-danger">
-              Descripción es requerida
+              Debe ingresar descripción
             </small>
             <small *ngIf="descriptionField.errors?.maxlength || descriptionField.errors?.pattern" class="text-danger">
               La información ingresada no es correcta

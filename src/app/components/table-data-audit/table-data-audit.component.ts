@@ -23,8 +23,9 @@ export class TableDataAuditComponent implements OnInit, OnChanges {
     constructor() { }
 
     ngOnInit() {
-        this.tradersCollection = this.dataSet;
-        this.updateDatable(this.tradersCollection);
+        if (this.dataSet) {
+        this.updateDatable(this.dataSet);
+        }
         // this.dataSource.sortData;
     }
 
@@ -41,7 +42,7 @@ export class TableDataAuditComponent implements OnInit, OnChanges {
                 this.displayedColumns = ['product.ean', 'product.product', 'state.state'];
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);
             } else {
-                this.displayedColumns = ['master.idMasterFile', 'master.master', 'state.state'];
+                this.displayedColumns = ['idMasterFile', 'master', 'state.state'];
                 setTimeout(() => this.updateDatable(this.dataSet), 0.2);            }
         }
     }

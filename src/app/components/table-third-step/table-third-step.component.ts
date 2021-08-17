@@ -54,6 +54,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
     private masterSub: Subscription;
     private pointSaleSub: Subscription;
     private productsSubs: Subscription;
+    private refresh: Subscription;
 
     constructor(
         private configService: ConfigService,
@@ -95,7 +96,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                             idCompany: changeConfiguration.currentValue.company,
                             idAlliedCompanyConfig: changeConfiguration.currentValue.idAlliedCompanyConfig
                         };
-                        // this.searchParams.idAlliedCompanyConfig = changeConfiguration.currentValue.idAlliedCompanyConfig;
+                        this.searchParams.idAlliedCompanyConfig = changeConfiguration.currentValue.idAlliedCompanyConfig;
                         this.idToRefresh = changeConfiguration.currentValue.idAlliedCompanyConfig;
                         this.fetchMasterFile(changeConfiguration.currentValue.idAlliedCompanyConfig);
                     }
@@ -105,6 +106,16 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit() {
+        this.refresh = this.configService.refresh$.subscribe(() => {
+            if (this.registry.idAlliedCompanyConfig) {
+                this.fetchMasterFile(this.registry.idAlliedCompanyConfig);
+
+            } else if (!!this.configurationDone) {
+                if(this.configurationDone.idAlliedCompanyConfig){
+                this.fetchMasterFile(this.configurationDone.idAlliedCompanyConfig);
+                }
+            }
+        });
         this.updateDatable(this.masterFileCollection);
         this.pointSaleSub = new Subscription;
         this.productsSubs = new Subscription;
@@ -148,7 +159,10 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
             };
             this.loadedMasterfile.emit(obj);
         } else {
-            return;
+            this._snackBar.open('Por favor seleccione tipo de archivo masterfile y vuelva a seleccionar archivo', 'cerrar', {
+                duration: 2000,
+            });
+            this.loadedMasterfile.emit(null);
         }
     }
 
@@ -165,6 +179,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
         } else if (master === 'PV') {
             this.selectedMaster = 'PV';
         } else {
+        
             return;
         }
     }
@@ -186,7 +201,6 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
         const dataType = data.type;
         const binaryData = [];
         binaryData.push(data);
-
         const filePath = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
         const downloadLink = document.createElement('a');
         downloadLink.href = filePath;
@@ -246,7 +260,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                         const options = {
                             quoteStrings: '',
                             fieldSeparator: ';',
-                            headers: ['Id Punto de Venta', 'EAN', 'Punto de Venta', 'Código Comercio', 'Comercio', 'Estado']
+                            headers: ['Id Punto de Venta', 'Comercio',  'Punto de Venta', 'EAN', 'Estado']
                         };
                         new AngularCsv(this.pointSaleCollection, 'Reporte Puntos de Venta', options);
                     });
@@ -258,8 +272,8 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                     const options = {
                         quoteStrings: '',
                         fieldSeparator: ';',
-                        headers: ['Id Punto de Venta', 'EAN', 'Punto de Venta', 'Código Comercio', 'Comercio', 'Estado']
-                    };
+                        headers: ['Id Punto de Venta', 'Comercio', 'Punto de Venta',  'EAN', 'Estado']
+                       };
                     new AngularCsv(pointSaleData, 'Reporte Puntos de Venta', options);
                 });
             }

@@ -22,7 +22,7 @@ export class ConfigurarEnviosAliadoComponent {
   * Mensajes para textBox component
   */
   // tslint:disable-next-line: max-line-length
-  descriptionText: String = 'Herramienta que permite habilitar e inhabilitar tanto comercio como un fabricante y sobre este último, activar los socios comerciales y las referencias del cátalogo de productos para el envío de la metadata de ventas para inventarios al aliado';
+  descriptionText: String = 'Herramienta que permite habilitar e inhabilitar tanto comercio como un fabricante y sobre este último, activar los socios comerciales y las referencias del catálogo de productos para el envío de la metadata de ventas para inventarios al aliado';
 
   /**
    * Conficional para Saber si se trata de la pantalla configurar envios de aliado
@@ -130,19 +130,15 @@ export class ConfigurarEnviosAliadoComponent {
     }
   }
 
-  handleSave() {
-    if(this.saveConfig === false){
+  handleSave(save) {
+    if (save ) {
       this.saveConfig = true;
-    } else {
-      this.saveConfig = false;
     }
   }
 
   handleWasSaved(saved) {
     if (saved) {
-      setTimeout(() => {
-        this.saveConfig = true;
-      }, 0.2);
+        this.saveConfig = false;
     } else {
       this.saveConfig = false;
     }

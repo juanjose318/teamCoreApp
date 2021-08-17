@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 import { environment } from 'src/environments/environment.prod';
 // import { environment } from 'src/environments/environment';
@@ -24,6 +24,7 @@ export class ConfigService {
     private companyConfigListener = new Subject<{ companyConfig: any }>();
     private traderListener = new Subject<{ traders: any }>();
     private masterFileListener = new Subject<{ masterFiles: any }>();
+    private _refresh$ = new Subject<void>();
 
     private companyConfig: any;
     private traders;
@@ -39,6 +40,30 @@ export class ConfigService {
             return;
         }
         return this.http.get(`${environment.apiUrl}/configurations/companies/allies/` + allyId, httpOptions).subscribe((data) => {
+            this.companyConfig = data;
+            this.companyConfigListener.next({
+                companyConfig: this.companyConfig
+            });
+        });
+    }
+
+    getAllyCompanyConfigurationByCompany(companyId) {
+        if (!companyId) {
+            return;
+        }
+        return this.http.get(`${environment.apiUrl}/configurations/companies/` + companyId , httpOptions).subscribe((data) => {
+            this.companyConfig = data;
+            this.companyConfigListener.next({
+                companyConfig: this.companyConfig
+            });
+        });
+    }
+
+    getConfigurationsByCountry(country) {
+        if (!country) {
+            return;
+        }
+        return this.http.get(`${environment.apiUrl}/configurations/companies/countries/` + country , httpOptions).subscribe((data) => {
             this.companyConfig = data;
             this.companyConfigListener.next({
                 companyConfig: this.companyConfig
@@ -104,12 +129,14 @@ export class ConfigService {
 
     postMasterfile(masterfile) {
         const formatedmasterfile = JSON.stringify(masterfile);
-        return this.http.post(`${environment.apiUrl}/masters/uploads`, formatedmasterfile, httpOptions).pipe(
-            catchError(err => {
-                this.showErrorMessage('No se pudo subir archivo masterfile');
-                return throwError(err);
-            })
-        ); ;
+        return this.http.post(`${environment.apiUrl}/masters/uploads`, formatedmasterfile, httpOptions)
+            .pipe(
+                tap(() => this._refresh$.next()),
+                catchError(err => {
+                    this.showErrorMessage('No se pudo subir archivo masterfile');
+                    return throwError(err);
+                })
+            );
     }
 
     postFirstConfiguration(configuration) {
@@ -117,7 +144,8 @@ export class ConfigService {
         return this.http.post(`${environment.apiUrl}/configurations/companies`, formatedConfiguration, httpOptions)
             .pipe(
                 catchError(err => {
-                    this.showErrorMessage('No se pudo crear primera configuración');
+                    tap(() => this._refresh$.next()),
+                        this.showErrorMessage('No se pudo crear primera configuración');
                     return throwError(err);
                 })
             );
@@ -127,6 +155,7 @@ export class ConfigService {
         const formatedConfiguration = JSON.stringify(configuration);
         return this.http.post(`${environment.apiUrl}/configurations/traders`, formatedConfiguration, httpOptions)
             .pipe(
+                tap(() => this._refresh$.next()),
                 catchError(err => {
                     this.showErrorMessage('No se pudo crear segunda configuración');
                     return throwError(err);
@@ -137,6 +166,7 @@ export class ConfigService {
     postThirdConfiguration(configuration) {
         const formatedConfiguration = JSON.stringify(configuration);
         return this.http.post(`${environment.apiUrl}/masters/`, formatedConfiguration, httpOptions).pipe(
+            tap(() => this._refresh$.next()),
             catchError(err => {
                 this.showErrorMessage('No se pudo crear tercera configuración');
                 return throwError(err);
@@ -171,5 +201,8 @@ export class ConfigService {
         return this.traderListener.asObservable();
     }
 
+    get refresh$() {
+        return this._refresh$;
+    }
 
 }

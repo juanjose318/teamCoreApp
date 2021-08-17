@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { ModalAllyFormComponent } from '../modal-ally-form/modal-ally-form.compo
   styleUrls: ['./table-allies.component.scss'],
 })
 
-export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy{
+export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
   /**
   * Allies es el pais del que se tiene que hacer el fetch
   */
@@ -75,12 +75,13 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy{
    * Opciones de tabla + asignacion de data a la tabla
    */
   ngOnInit() {
-    this.fetchAllAllies();
+    this.updateDatable(this.allyCollection);
+    this.allySub = new Subscription;
+    this.dataSource.paginator = this.paginator;
     this.refresh = this.allyService.refresh$.subscribe(() => {
       this.checkFilter();
     });
   }
-
 
   /**
    * Actualizar tabla
@@ -98,11 +99,9 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy{
    */
   fetchAllAllies() {
     this.allyService.getAllies();
-    console.log('11');
     this.allySub = this.allyService.getAllyListener().subscribe((allyData) => {
       this.isLoading.emit(false);
       this.allyCollection = allyData.allies;
-      console.log('de');
       setTimeout(() => {
         this.updateDatable(this.allyCollection);
       }, 0.2);
@@ -147,6 +146,10 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy{
       if (!!modifiedAlly) {
         modifiedAlly = {
           ...modifiedAlly,
+          name: modifiedAlly.name.toUpperCase(),
+          contact: modifiedAlly.contact.toUpperCase(),
+          mail: modifiedAlly.mail.toUpperCase(),
+          carvajalContact: modifiedAlly.carvajalContact.toUpperCase(),
           channel: { idChannel: selectedAlly.channel.idChannel },
           route: { idRoute: selectedAlly.route.idRoute }
         };
@@ -166,12 +169,22 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy{
         // Hay aliado filtrado por pais
         this.fetchAlliesByCountry(this.allies);
       }
-    } else if (!!this.filteredAlly) {
-      const filtered = this.allyCollection.filter(ally => ally.idAllied == this.filteredAlly);
-      this.updateDatable(filtered);
-      this.filteredAlly = null;
-    }  else {
-      this.fetchAllAllies();
+    } else if (!!this.allies && !!this.filteredAlly) {
+      if (this.allies === 'ALL' && this.filteredAlly === 'ALL') {
+        this.fetchAllAllies();
+      } else if (this.allies === 'ALL' && this.filteredAlly) {
+        const filtered = this.allyCollection.filter(ally => ally.idAllied == this.filteredAlly);
+        this.updateDatable(filtered);
+        this.filteredAlly = null;
+      } else if (this.allies !== 'ALL' && this.filteredAlly === 'ALL') {
+        this.fetchAlliesByCountry(this.allies);
+      } else if (this.allies !== 'ALL' && this.filteredAlly !== 'ALL') {
+        const filtered = this.allyCollection.filter(ally => ally.idAllied == this.filteredAlly);
+        this.updateDatable(filtered);
+        this.filteredAlly = null;
+      } 
+    } else {
+      // this.fetchAllAllies();
     }
   }
 

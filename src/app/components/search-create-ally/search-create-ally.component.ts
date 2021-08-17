@@ -76,7 +76,7 @@ export class SearchCreateAllyComponent implements OnChanges, OnDestroy {
     const change = changes['allies'];
 
     if (change) {
-      if (change.currentValue !== null) {
+      if (!!change.currentValue) {
         this.handleFetchAllies(change.currentValue);
         this.handleFetchCompanies(change.currentValue);
       } else {
@@ -218,7 +218,7 @@ export class SearchCreateAllyComponent implements OnChanges, OnDestroy {
    * Modal para creacion de nuevo aliado
    */
   openDialog(): void {
-    const dialogRef = this.dialog.open(ModalAllyFormComponent, {
+  const dialogRef = this.dialog.open(ModalAllyFormComponent, {
       width: '50%',
       maxHeight: '90vh',
       id: 'a-create-ally-modal'
@@ -227,6 +227,10 @@ export class SearchCreateAllyComponent implements OnChanges, OnDestroy {
       if (!!result) {
         result = {
           ...result,
+          name: result.name.toUpperCase(),
+          contact: result.contact.toUpperCase(),
+          mail: result.mail.toUpperCase(),
+          carvajalContact: result.carvajalContact.toUpperCase(),
           channel: { idChannel: 2 },
           route: { idRoute: 1 },
           idState: 1

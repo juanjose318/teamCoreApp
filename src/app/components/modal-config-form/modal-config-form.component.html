@@ -9,7 +9,7 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Nombre Aliado</mat-label>
-      <mat-select [(ngModel)]="allyName" (ngModelChange)="filterByAllyName($event)" required>
+      <mat-select [(ngModel)]="allyName"  (ngModelChange)="filterByAllyName($event)" required>
         <mat-option *ngFor="let ally of allyCollectionForConfiguration" [value]="ally.name">
           {{ ally?.name }}
         </mat-option>

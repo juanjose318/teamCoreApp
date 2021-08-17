@@ -1,8 +1,10 @@
 import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
 import { CompanyService } from 'src/app/services/company/company.service';
+import { ConfigService } from 'src/app/services/config/config.service';
 
 @Component({
     selector: 'app-modal-config-form',
@@ -20,19 +22,21 @@ export class ModalConfigFormComponent implements OnInit, OnDestroy {
     private companyCode;
     private companyName;
     private configurationDate: Date = new Date();
+    private saving: boolean;
 
     private allyCollectionForConfiguration = [];
     private companyCollectionForConfiguration = [];
 
     private allySub: Subscription;
     private companySub: Subscription;
-
-
+    private allyCompanyConfig: Subscription;
 
     constructor(
         private allyService: AliadoService,
         private dialogRef: MatDialogRef<ModalConfigFormComponent>,
         private companyService: CompanyService,
+        private _snackBar: MatSnackBar,
+        private companyConfigService: ConfigService,
     ) { }
 
     ngOnInit() {
@@ -46,35 +50,55 @@ export class ModalConfigFormComponent implements OnInit, OnDestroy {
 
     save() {
         // Registro para guardar en memoria local
-        const configOne = {
-            idAlliedCompanyConfig: null,
-            allied: {
-                idAllied: this.idAlly
-            },
-            company: {
-                idCompany: this.idCompany
-            },
-            state: {
-                idState: 2
-            },
-            configurationDate: this.configurationDate
+        this.saving = true;
+        if (this.idAlly && this.allyName && this.companyCode && this.companyName && this.saving) {
+            this.companyConfigService.getAllyCompanyConfigurationByCompanyAndAlly(this.idAlly, this.idCompany);
+            this.allyCompanyConfig = this.companyConfigService.getAllyCompanyConfigListener().subscribe(
+                (collection: any) => {
+                    if (collection.companyConfig.length >= 1) {
+                        this._snackBar.open('No se pueden crear alianzas ya existentes', 'cerrar', {
+                            duration: 2000,
+                        }); 
+                        return
+                    } else {
+                        const configOne = {
+                            idAlliedCompanyConfig: null,
+                            allied: {
+                                idAllied: this.idAlly
+                            },
+                            company: {
+                                idCompany: this.idCompany
+                            },
+                            state: {
+                                idState: 2
+                            },
+                            configurationDate: this.configurationDate
+                        };
+                        // Registro para seguir a paso 2
+                        const registryToPush = {
+                            allied: {
+                                idAllied: this.idAlly,
+                                name: this.allyName
+                            },
+                            company: {
+                                idCompany: this.idCompany,
+                                companyName: this.companyName,
+                                companyCode: this.companyCode
+                            },
+                            state: { idState: 2 },
+                        };
+                        // Pasar ambos objetos a componente tabla
+                        this.saving = false;
+                        this.dialogRef.close({ configOne, registryToPush });
+                    }
+                }
+            );
+        } else {
+            this._snackBar.open('No se pueden guardar configuraciones vacías', 'cerrar', {
+                duration: 2000,
+            });
         }
-        // Registro para seguir a paso 2
-        const registryToPush = {
-            allied: {
-                idAllied: this.idAlly,
-                name: this.allyName
-            },
-            company: {
-                idCompany: this.idCompany,
-                companyName: this.companyName,
-                companyCode: this.companyCode
-            },
-            state: { idState: 2 },
-            // configurationDate: this.configurationDate
-        };
-        // Pasar ambos objetos a componente tabla
-        this.dialogRef.close({ configOne, registryToPush });
+
     }
 
     close() {
@@ -120,9 +144,10 @@ export class ModalConfigFormComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if (this.allySub || this.companySub) {
+        if (this.allySub || this.companySub || this.allyCompanyConfig) {
             this.allySub.unsubscribe();
             this.companySub.unsubscribe();
+            this.allyCompanyConfig.unsubscribe();
         }
     }
 }

@@ -24,6 +24,7 @@
           <mat-label *ngIf="isConfiginfoSending === true">*Nombre Aliado</mat-label>
           <mat-select matNativeControl [(ngModel)]="selectedAlly" (ngModelChange)="filterAlly($event)">
             <mat-option selected value="EMPTY" disabled>Seleccionar</mat-option>
+            <mat-option value="ALL">Todos</mat-option>
             <mat-option *ngFor="let ally of allyCollection" [value]="ally.idAllied">
               {{ ally?.name }}
             </mat-option>
@@ -49,11 +50,6 @@
             (ngModelChange)="filterByCompanyCode($event)">
         </mat-form-field>
       </div>
-      <!-- 
-      <mat-form-field appearance="fill">
-        <mat-label>ID</mat-label>
-        <input matInput placeholder="Id Empresa" [(ngModel)]="companyId" (ngModelChange)="filterByCompanyId($event)">
-      </mat-form-field> -->
 
     </div>
     <mat-divider class="divider"></mat-divider>

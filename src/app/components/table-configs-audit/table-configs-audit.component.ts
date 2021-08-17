@@ -49,6 +49,7 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
      */
     @Input() selectedCompany;
     @Input() selectedAlly;
+    @Input() selectedCountry;
 
     /**
      * Objeto para auditoria de configuracion de aliados
@@ -72,31 +73,14 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
     ) { }
 
     ngOnInit() {
-        this.fetchAllAudits();
+        this.auditService.refresh$.subscribe(() => {
+            this.filterAudit(this.selectedAlly, this.selectedCompany, this.selectedCountry);
+        });
+        this.updateTable(this.auditCollection);
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        const change = changes['configurationDone'];
-        const changeAudit = changes['updatedAudit'];
-        const changesAlly = changes['selectedAlly'];
-        const changesCompany = changes['selectedCompany'];
-
-        if (!!this.selectedAlly && !this.selectedCompany) {
-            this.fetchAuditByAlly(this.selectedAlly);
-        } else if (!!this.selectedAlly && !!this.selectedCompany) {
-            this.fetchAuditByAllyCompany(this.selectedAlly, this.selectedCompany);
-        } else if (change) {
-            if (change.currentValue) {
-                if (change.currentValue.isDone) {
-                    this.fetchAuditByAllyCompany(change.currentValue.ally, change.currentValue.company);
-                }
-            }
-        } if (!!changeAudit) {
-            if (!!changeAudit.currentValue) {
-                this.isUpdated = changeAudit.currentValue;
-                this.handleAuditCompanyConfig();
-            }
-        }
+    ngOnChanges() {
+        this.filterAudit(this.selectedAlly, this.selectedCompany, this.selectedCountry);
     }
 
     updateTable(collection) {
@@ -111,8 +95,38 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
         this.dataSource.paginator = this.paginator;
     }
 
+    filterAudit(ally, company, country) {
+        if (country === 'ALL' && ally === 'ALL' && !company) {
+            this.fetchAllAudits();
+        } else if(( !!country && country !== 'ALL') && ally === 'ALL' && !company ) {
+            this.fetchAuditsByCountry(country);
+        } else if (ally === 'ALL' && !!company ) {
+           this.fetchAuditsByCompany(company);
+        } else if ((!!ally && ally !== 'ALL') && !company) {
+            this.fetchAuditByAlly(ally);
+        } else if (!!ally && !!company) {
+            this.fetchAuditByAllyCompany(ally, company);
+        }
+    }
+
     fetchAllAudits() {
         this.auditService.getAllAudits();
+        this.auditSub = this.auditService.getAuditListener().subscribe((data) => {
+            this.auditCollection = data.audit;
+            this.updateTable(this.auditCollection);
+        });
+    }
+
+    fetchAuditsByCountry(country) {
+        this.auditService.getConfigAuditsByCountry(country);
+        this.auditSub = this.auditService.getAuditListener().subscribe((data:any) => {
+            this.auditCollection = data.audit;
+            this.updateTable(this.auditCollection);
+        });
+    }
+
+    fetchAuditsByCompany(idCompany) {
+        this.auditService.getAuditsByCompany(idCompany);
         this.auditSub = this.auditService.getAuditListener().subscribe((data) => {
             this.auditCollection = data.audit;
             this.updateTable(this.auditCollection);
@@ -168,16 +182,5 @@ export class TableConfigsAuditComponent implements OnInit, OnChanges {
         const dialogRef = this.dialog.open(ModalAuditComponent, {
             data: { registry: audit }
         });
-    }
-
-    handleAuditCompanyConfig() {
-        if (this.isUpdated) {
-            if (!!this.selectedAlly && !this.selectedCompany) {
-                this.fetchAuditByAlly(this.selectedAlly);
-            } else if (!!this.selectedAlly && !!this.selectedCompany) {
-                this.fetchAuditByAllyCompany(this.selectedAlly, this.selectedCompany);
-            }
-        }
-        this.isUpdated = false;
     }
 }

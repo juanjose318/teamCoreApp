@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog, MatSnackBar, MatStepper } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { ConfigService } from 'src/app/services/config/config.service';
@@ -13,9 +13,10 @@ import { ModalSaveConfirmationComponent } from '../modal-save-confirmation/modal
   templateUrl: './config-tabs.component.html',
   styleUrls: ['./config-tabs.component.scss'],
 })
-export class ConfigTabsComponent implements OnChanges, OnInit {
+export class ConfigTabsComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() selectedAlly;
   @Input() selectedCompany;
+  @Input() selectedCountry;
   @Input() cleanConfig;
   @Input() saveConfig;
 
@@ -112,6 +113,10 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.stepper._getIndicatorType = () => 'number';
+  }
+
   /**
    *
    * @param step TODO poner numeros con constantes
@@ -193,36 +198,41 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
    * @param objMasterfile archivo cargado
    */
   handleLoadedMasterfile(objMasterfile) {
-    this.uploadedFile.emit(true);
-    const formatedDate = this.datepipe.transform(this.dateNow, 'yMMdHHMMSSm');
-    this.wasModified3 = true;
-    const userCode = '62454165';
-    const objBeforeConfig = {
-      idMasterFile: null,
-      idAlliedCompanyConfAudit: null,
-      state: {
-        idState: 5
-      },
-      idRoute: objMasterfile.idRoute,
-      userName: 'ivaherco',
-      master: objMasterfile.master,
-      fileName: objMasterfile.fileInfo + '_' + formatedDate + '_' + userCode + '.csv',
-      detail: null,
-      startDateLoad: null,
-      endDateLoad: null,
-      fileUpload: objMasterfile.codedfile
-    };
-
-    if (this.registryToConfigure.idAlliedCompanyConfig) {
-      this.objMasterFile = {
-        ...objBeforeConfig,
-        idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
+    if(!!objMasterfile) {
+      this.uploadedFile.emit(true);
+      const formatedDate = this.datepipe.transform(this.dateNow, 'yMMdHHMMSSm');
+      this.wasModified3 = true;
+      const userCode = '62454165';
+      const objBeforeConfig = {
+        idMasterFile: null,
+        alliedCompanyConfAudit: {
+          idAlliedCompanyConfAudit: null,
+        },
+        state: {
+          idState: 5
+        },
+        idRoute: objMasterfile.idRoute,
+        userName: 'ivaherco',
+        master: objMasterfile.master,
+        fileName: objMasterfile.fileInfo + '_' + formatedDate + '_' + userCode + '.csv',
+        detail: null,
+        startDateLoad: null,
+        endDateLoad: null,
+        fileUpload: objMasterfile.codedfile
       };
+      if (this.registryToConfigure.idAlliedCompanyConfig) {
+        this.objMasterFile = {
+          ...objBeforeConfig,
+          idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
+        };
+      } else {
+        this.objMasterFile = {
+          ...objBeforeConfig,
+          idAlliedCompanyConfig: null,
+        };
+      }
     } else {
-      this.objMasterFile = {
-        ...objBeforeConfig,
-        idAlliedCompanyConfig: null,
-      };
+      this.objMasterFile = null;
     }
   }
 
@@ -238,7 +248,14 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
     this.isActive2 = false;
     this.isActive3 = false;
     this.cleanConfig = true;
+    this.cleanRegister = true;
     this.resetStepper.emit(true);
+  }
+
+  checkReset(wasReset) {
+    if(wasReset) {
+      this.cleanRegister = false;
+    }
   }
 
   /**
@@ -320,10 +337,8 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
               this.configurationService.postSecondConfiguration(secondConfigObj).subscribe(() => {
                 const objForThirdConfiguration = {
                   ...this.objMasterFile,
+                  alliedCompanyConfAudit: null,
                   idAlliedCompanyConfig: this.idAllyCompanyConfig,
-                  alliedCompanyConfAudit: {
-                    idAlliedCompanyConfAudit: null
-                  },
                   fileUpload: null
                 };
 
@@ -334,12 +349,11 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
                     idAlliedCompanyConfig: this.idAllyCompanyConfig,
                     company: this.registryToConfigure.company.companyCode,
                     ally: this.registryToConfigure.allied.idAllied,
+                    state: createdConfig['state'],
                     checkMode: true
                   };
-                  // this.handleTradersModified();
-                  // this.wasModified3 = true;
-                  // this.registryToConfigure.idAlliedCompanyConfig = this.idAllyCompanyConfig;
-                  // this.registryToConfigure.configurationDate = createdConfig['configurationDate'];
+                  this.registryToConfigure.idAlliedCompanyConfig = this.idAllyCompanyConfig;
+                  this.registryToConfigure.configurationDate = new Date;
                   setTimeout(() => {
                     this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
                   }, 0.8);
@@ -465,6 +479,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         this.auditService.creatAllyCompanyConfig(objForconfig).subscribe((responseAudit: any) => {
           this.configurationService.postMasterfile(this.objMasterFile).subscribe((response) => {
             if (response === true) {
+              delete this.objMasterFile.alliedCompanyConfAudit;
               const objForThirdConfiguration = {
                 ...this.objMasterFile,
                 alliedCompanyConfAudit: {
@@ -475,7 +490,7 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
               };
               this.configurationService.postThirdConfiguration(objForThirdConfiguration).subscribe(() => {
                 this.saved.emit(true);
-                this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig };
+                this.configurationDone = { isDone: true, idAlliedCompanyConfig: this.idAllyCompanyConfig, companyId: this.registryToConfigure.company.idCompany};
                 this.wasModified3 = false;
                 this.showMessage('El procesamiento del archivo se hará de forma desatendida, por favor espere a que se procese');
               });
@@ -486,7 +501,9 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
         // poner auditoria de lo que dice la hoja
         // this.auditService.creatAllyCompanyConfig()
         const objForconfig = {
-          idAlliedCompanyConfAudit: null,
+          AlliedCompanyConfAudit: {
+            idAlliedCompanyConfAudit: null,
+          },
           allied: {
             idAllied: this.registryToConfigure.allied.idAllied
           },
@@ -543,8 +560,10 @@ export class ConfigTabsComponent implements OnChanges, OnInit {
 
               this.configurationService.postSecondConfiguration(configForTraders).subscribe(() => {
                 this.auditService.createTraderAudit(configforTradersAudit).subscribe(() => {
+                  delete this.objMasterFile.alliedCompanyConfAudit;
                   const objForThirdConfiguration = {
                     ...this.objMasterFile,
+                    idAlliedCompanyConfAudit: null,
                     idAlliedCompanyConfig: this.registryToConfigure.idAlliedCompanyConfig,
                     fileUpload: null
                   };

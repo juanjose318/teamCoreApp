@@ -128,14 +128,14 @@
 
   <table mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort matSortDirection="desc" matSortDisableClear class="card-body">
 
-    <ng-container matColumnDef="master.idMasterFile">
+    <ng-container matColumnDef="idMasterFile">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-      <td mat-cell *matCellDef="let row"> {{ row.master.idMasterFile}} </td>
+      <td mat-cell *matCellDef="let row"> {{ row.idMasterFile}} </td>
     </ng-container>
     
-    <ng-container matColumnDef="master.master">
+    <ng-container matColumnDef="master">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre Maestro </th>
-      <td mat-cell *matCellDef="let row"> {{ row.master.master }} </td>
+      <td mat-cell *matCellDef="let row"> {{ row.master }} </td>
     </ng-container>
 
     <ng-container matColumnDef="state.state">

@@ -24,13 +24,13 @@
 .infoAlly {
   display: flex;
   flex-flow: row;
-  align-items: center;
+  align-items: right;
 }
 
 .btn-wrapper {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: left;
+  justify-content: right;
   align-items: baseline;
 }
 
@@ -71,6 +71,10 @@
 
 .no-click {
   pointer-events: none;
+}
+
+.spacing {
+  margin-bottom: 2%;
 }
 
 small, .bi-info-circle {

@@ -25,6 +25,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
     @Output() objToCompare: EventEmitter<any> = new EventEmitter();
 
     private traderSub: Subscription;
+    private refresh: Subscription;
     // coleccion de traders
     tradersCollection = [];
     // traders en modo edicion despues de selccionar y deseleccionar
@@ -55,27 +56,33 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
                     this.configId = change.currentValue.idAlliedCompanyConfig;
                     this.companyCode = change.currentValue.company.companyCode;
                     this.fetchTradersWithConfig(this.configId, this.companyCode);
-                    if (change.currentValue.state.idState === 2) {
-                        this.readonlyMode = true;
-                    }
-                    if (change.currentValue.idAlliedCompanyConfig && change.currentValue.state.idState === 1) {
-                        this.readonlyMode = false;
-                    }
-                } else if (!change.currentValue.idAlliedCompanyConfig && !this.readonlyMode) {
+                    this.checkState(change.currentValue.state.idState);
+                } else if (!change.currentValue.idAlliedCompanyConfig ) {
+                    this.readonlyMode = false;
                     this.fetchTradersWithoutConfig(change.currentValue.company.companyCode);
                 }
             }
-        } else if (configurationDone) {
-            if (configurationDone.currentValue) {
-                this.fetchTradersWithConfig(configurationDone.currentValue.idAlliedCompanyConfig, configurationDone.currentValue.company);
-                if (configurationDone.currentValue.checkMode === true) {
-                    this.readonlyMode = true;
+        } if (!!configurationDone) {
+            if (!!configurationDone.currentValue) {
+                if (!!configurationDone.currentValue.checkMode) {
+                    this.fetchTradersWithConfig(configurationDone.currentValue.idAlliedCompanyConfig, configurationDone.currentValue.company);
+                    this.checkState(configurationDone.currentValue.state.idState);
                 }
             }
         }
     }
 
     ngOnInit() {
+        this.refresh = this.companyConfigService.refresh$.subscribe(() => {
+        //     if (!!this.configurationDone) {
+        //         if (this.configurationDone.idAlliedCompanyConfig) {
+        //             this.fetchTradersWithConfig(this.configurationDone.idAlliedCompanyConfig, this.configurationDone.company);
+        //         }
+        //         if (this.configurationDone.checkMode === true) {
+        //             this.readonlyMode = true;
+        //         }
+            // }
+        });
         this.updateDatable(this.tradersCollection);
     }
 
@@ -83,7 +90,6 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
         this.companyConfigService.getTradersFirstTime(companyCode);
         this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
-            this.readonlyMode = false;
             setTimeout(() => this.updateDatable(this.tradersCollection), 500);
         });
     }
@@ -93,9 +99,6 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
         this.traderSub = this.companyConfigService.getTraderListener().subscribe((data) => {
             this.tradersCollection = data.traders;
             this.tradersAfterMod = data.traders;
-            if (this.registry.state.state === 2) {
-                this.readonlyMode = true;
-            }
             this.objToCompare.emit(this.tradersAfterMod);
             this.pushTraders(this.tradersCollection);
             setTimeout(() => this.updateDatable(this.tradersCollection), 500);
@@ -131,6 +134,17 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
         this.objToCompare.emit(this.tradersAfterMod);
         this.objTradersToConfig.emit(this.objTraders);
 
+    }
+
+    checkState(state) {
+        if (state === 2) {
+            this.readonlyMode = true;
+        } else if (state === 1) {
+            this.readonlyMode = false;
+        } else {
+            this.readonlyMode = false;
+        }
+        this.updateDatable(this.tradersCollection);
     }
 
     updateDatable(dataSource) {

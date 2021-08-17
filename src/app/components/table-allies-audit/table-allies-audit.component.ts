@@ -55,7 +55,6 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
     ) { }
 
     ngOnInit() {
-        this.fetchAuditByCountry('CO');
         this.updateTable(this.auditCollection);
     }
 
@@ -63,10 +62,23 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
         const change = changes['audit'];
         if (change) {
             if (change.currentValue) {
-                this.selectedCountry = change.currentValue;
-                this.fetchAuditByCountry(this.selectedCountry);
+                if (change.currentValue !== 'ALL') {
+                    this.selectedCountry = change.currentValue;
+                    this.fetchAuditByCountry(this.selectedCountry);
+                } else if (change.currentValue === 'ALL') {
+                    this.fetchAllAudits();
+                }
             }
         }
+    }
+
+    fetchAllAudits() {
+        this.auditService.getAllAlliesAudits();
+        this.auditSub = this.auditService.getAuditListener()
+            .subscribe((filteredAudit) => {
+                this.auditCollection = filteredAudit.audit;
+                this.updateTable(this.auditCollection);
+            });
     }
 
     updateTable(dataSource) {
@@ -85,7 +97,6 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
         this.auditSub = this.auditService.getAuditListener()
             .subscribe((filteredAudit) => {
                 this.auditCollection = filteredAudit.audit;
-                console.log('21')
                 this.updateTable(this.auditCollection);
             });
     }

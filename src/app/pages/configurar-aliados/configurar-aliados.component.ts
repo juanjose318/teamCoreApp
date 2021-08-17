@@ -182,6 +182,7 @@ export class ConfigurarAliadosComponent implements OnInit {
         break;
       case 'ALL':
         this.allies = country;
+        this.audit = country;
         break;
       case 'AR':
         this.allies = country;

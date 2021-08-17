@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { config, Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
 import { ConfigService } from 'src/app/services/config/config.service';
 import { ModalDescriptionComponent } from '../modal-description/modal-description.component';
@@ -25,12 +25,13 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
   @Input() registry;
   @Input() configurationDone;
   @Input() cleanRegister;
-
+  @Input() selectedCountry;
 
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter();
   @Output() nextStepWithRegistry: EventEmitter<any> = new EventEmitter();
   @Output() createAllyCompanyConfig: EventEmitter<any> = new EventEmitter();
   @Output() auditCreated: EventEmitter<any> = new EventEmitter();
+  @Output() cleanedConfig: EventEmitter<any> = new EventEmitter();
 
 
   private allySub: Subscription;
@@ -86,9 +87,12 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
     const configurationDone = changes['configurationDone'];
     const registry = changes['registry'];
     const cancelled = changes['cleanRegister'];
-
-    if (!this.filteredAlly && !this.filteredCompany) {
-      // Fetch de aliados y empresas para creacion de configuraciones
+      if (this.selectedCountry === 'ALL' && this.filteredAlly === 'ALL' && !this.filteredCompany) {
+      this.fetchAllConfigs();
+    } else if (this.selectedCountry !== 'ALL' && this.filteredAlly === 'ALL'  && !this.filteredCompany) {
+      this.fetchConfigsByCountry(this.selectedCountry);
+    } else if (this.filteredAlly === 'ALL' && !!this.filteredCompany) {
+      this.fetchConfigsByCompany(this.filteredCompany);
     } else if (!!this.filteredAlly && !this.filteredCompany) {
       this.fetchConfigsWithNoCompany(this.filteredAlly);
     } else if (!!this.filteredAlly && !!this.filteredCompany) {
@@ -108,14 +112,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
     }
     if (cancelled) {
       if (cancelled.currentValue) {
-        if (!this.filteredAlly && !this.filteredCompany) {
-          this.companyConfigCollection = [];
-          this.updateDatable(this.companyConfigCollection);
-        } else if (!!this.filteredAlly && !this.filteredCompany) {
-          this.fetchConfigsWithNoCompany(this.filteredAlly);
-        } else if (!!this.filteredAlly && !!this.filteredCompany) {
-          this.fetchConfigsWithAllyAndCompany(this.filteredAlly, this.filteredCompany);
-        }
+        this.cleanConfig();
       }
     }
   }
@@ -124,7 +121,8 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
    * Opciones de tabla + asignacion de data a la tabla
    */
   ngOnInit() {
-    this.fetchAllConfigs();
+    this.updateDatable(this.companyConfigCollection);
+    this.companyAllyConfigSub = new Subscription;
     this.allyService.getIp();
     this.allySub = this.allyService.getIpListener().subscribe((data) => {
       this.clientIp = data.ip;
@@ -134,6 +132,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
   ngAfterViewInit() {
     this.updateDatable(this.companyConfigCollection);
   }
+
   /**
    * Actualizar tabla
    */
@@ -156,6 +155,21 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
     });
   }
 
+  cleanConfig() {
+    if (!this.filteredAlly && !this.filteredCompany) {
+      this.companyConfigCollection = [];
+      this.updateDatable(this.companyConfigCollection);
+      this.cleanedConfig.emit(true);
+    } else if (!!this.filteredAlly && !this.filteredCompany) {
+      this.companyConfigCollection = [];
+      this.cleanedConfig.emit(true);
+      this.fetchConfigsWithNoCompany(this.filteredAlly);
+    } else if (!!this.filteredAlly && !!this.filteredCompany) {
+      this.companyConfigCollection = [];
+      this.cleanedConfig.emit(true);
+      this.fetchConfigsWithAllyAndCompany(this.filteredAlly, this.filteredCompany);
+    }
+  }
 
   /**
    * Modal para agregar configuracion de envio de la informacion
@@ -197,6 +211,26 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
     });
   }
 
+  fetchConfigsByCompany(idCompany) {
+    this.companyConfigService.getAllyCompanyConfigurationByCompany(idCompany);
+    this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
+      this.companyConfigCollection = data.companyConfig;
+      const filteredCollection = this.companyConfigCollection.filter((item) => item.allied.idState !== 4);
+      this.updateDatable(filteredCollection);
+      this.isLoading.emit(false);
+    });
+  }
+
+  fetchConfigsByCountry(country) {
+    this.companyConfigService.getConfigurationsByCountry(country);
+    this.companyAllyConfigSub = this.companyConfigService.getAllyCompanyConfigListener().subscribe((data) => {
+      this.companyConfigCollection = data.companyConfig;
+      const filteredCollection = this.companyConfigCollection.filter((item) => item.allied.idState !== 4 && item.allied.idCountry === country);
+      this.updateDatable(filteredCollection);
+      this.isLoading.emit(false);
+    });
+  }
+
   /**
    * Llamar configuraciones usando aliado y compania
    * @param idAlly id de aliado
@@ -217,6 +251,11 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
    */
   activateOrDeactivateComercialRelation() {
     const registry = this.configAllyCompanyToActivateOrDeactivate;
+    // tslint:disable-next-line: max-line-length
+
+    const canActivate = (configuration) => configuration.state.idState === 1;
+    const canDeactivate = (configuration) => configuration.state.idState === 2;
+
     registry.forEach(configAllyCompany => {
       const activateRelations = [{
         idAlliedCompanyConfig: configAllyCompany.idAlliedCompanyConfig,
@@ -234,7 +273,9 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
         configurationDate: configAllyCompany.configurationDate
       }];
 
-      if (configAllyCompany.state.idState === 1) {
+
+
+      if (registry.every(canActivate)) {
         this.companyConfigService.activateOrDeactivateComercialRelation(deactivateRelations).subscribe(() => {
           this.configAllyCompanyToActivateOrDeactivate = [];
           this.handleAuditAllyCompanyConfig(deactivateRelations);
@@ -244,7 +285,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
             this.fetchConfigsWithAllyAndCompany(this.filteredAlly, this.filteredCompany);
           }
         });
-      } else {
+      } else if (registry.every(canDeactivate)) {
         this.companyConfigService.activateOrDeactivateComercialRelation(activateRelations).subscribe(() => {
           this.configAllyCompanyToActivateOrDeactivate = [];
           this.handleAuditAllyCompanyConfig(activateRelations);
@@ -254,6 +295,8 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
             this.fetchConfigsWithAllyAndCompany(this.filteredAlly, this.filteredCompany);
           }
         });
+      } else {
+        this.showMessage('Sólo se pueden activar o desactivar configuraciones con el mismo estado');
       }
     });
   }

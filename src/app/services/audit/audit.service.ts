@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Subject, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment.prod';
 // import { environment } from 'src/environments/environment';
 
@@ -13,6 +13,8 @@ import { environment } from 'src/environments/environment.prod';
 export class AuditService {
   private auditListener = new Subject<{ audit: any[] }>();
   private audit: any;
+  private _refresh$ = new Subject<void>();
+
 
   constructor(
     private http: HttpClient,
@@ -43,6 +45,40 @@ export class AuditService {
       ));
   }
 
+  get refresh$() {
+    return this._refresh$;
+  }
+
+
+  getAllAlliesAudits() {
+    return this.http.get(`${environment.apiUrl}/allies/audits`).pipe(
+      map((data) => data), catchError(err => {
+        this.showErrorMessage('No se pudo obtener auditoria');
+        return throwError(err);
+      }))
+      .subscribe((data => {
+        this.audit = data;
+        this.auditListener.next({
+          audit: this.audit
+        });
+      }
+      ));
+  }
+
+  getAuditsByCompany(idCompany) {
+    return this.http.get(`${environment.apiUrl}/audits/configurations/companies/` + idCompany).pipe(
+      map((data) => data), catchError(err => {
+        this.showErrorMessage('No se pudo obtener auditoria');
+        return throwError(err);
+      }))
+      .subscribe((data => {
+        this.audit = data;
+        this.auditListener.next({
+          audit: this.audit
+        });
+      }
+      ));
+  }
   /**
    * Auditoria configuracion aliado y compania
    * @param allyId id de aliado seleccionado en filtros
@@ -81,6 +117,25 @@ export class AuditService {
         });
       }
       ));
+  }
+
+  getConfigAuditsByCountry(country) {
+    if (!country) {
+      return;
+    } else {
+      return this.http.get(`${environment.apiUrl}/audits/configurations/companies/countries/` + country).pipe(
+        map((data) => data), catchError(err => {
+          this.showErrorMessage('No se pudo obtener auditoria');
+          return throwError(err);
+        }))
+        .subscribe((data => {
+          this.audit = data;
+          this.auditListener.next({
+            audit: this.audit
+          });
+        }
+        ));
+    }
   }
 
   getAllAudits() {
@@ -132,6 +187,7 @@ export class AuditService {
    */
   createAuditAlly(audit) {
     return this.http.post(`${environment.apiUrl}/allies/audits`, audit).pipe(
+      tap(() => this._refresh$.next()),
       catchError(err => {
         this.showErrorMessage('No se pudo crear auditoria');
         return throwError(err);
@@ -145,6 +201,7 @@ export class AuditService {
    */
   createTraderAudit(audit) {
     return this.http.post(`${environment.apiUrl}/audits/configurations/traders`, audit).pipe(
+      tap(() => this._refresh$.next()),
       catchError(err => {
         this.showErrorMessage('No se pudo crear auditoria');
         return throwError(err);
@@ -157,12 +214,12 @@ export class AuditService {
    */
   creatAllyCompanyConfig(configAllyCompanyAudit) {
     return this.http.post(`${environment.apiUrl}/audits/configurations/companies`, configAllyCompanyAudit).pipe(
+      tap(() => this._refresh$.next()),
       catchError(err => {
         this.showErrorMessage('No se pudo crear auditoria');
         return throwError(err);
       })
     );
   }
-
 
 }

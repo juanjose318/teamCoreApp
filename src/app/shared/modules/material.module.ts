@@ -11,8 +11,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRadioModule } from '@angular/material';
-import {MatTooltipModule} from '@angular/material/tooltip'; 
+import { MatAutocompleteModule, MatRadioModule } from '@angular/material';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 @NgModule({
     imports: [
         MatDialogModule,
@@ -28,6 +29,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         MatStepperModule,
         MatCheckboxModule,
         MatRadioModule,
+        MatAutocompleteModule,
         MatTooltipModule
     ],
     exports: [
@@ -43,6 +45,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         MatProgressSpinnerModule,
         MatStepperModule,
         MatCheckboxModule,
+        MatAutocompleteModule,
         MatRadioModule,
         MatTooltipModule
     ],

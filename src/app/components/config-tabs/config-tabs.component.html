@@ -2,10 +2,12 @@
   <mat-step label="Paso 1 - Empresas" [completed]="isActive1 === true ? true : false">
 
     <app-results-table 
+    [selectedCountry]="selectedCountry"
     [configurationDone]="configurationDone"
     [registry]="registryToConfigure"
     [filteredAlly]="selectedAlly" 
     [cleanRegister]="cleanRegister"
+    (cleanedConfig)="checkReset($event)"
     [filteredCompany]="selectedCompany"
     (nextStepWithRegistry)="continueToSecondStep($event)"
     (createAllyCompanyConfig)="createAllyCompanyConfig($event)"
@@ -16,6 +18,7 @@
     [updatedAudit]="updatedAudit"
     [selectedCompany]="selectedCompany"
     [selectedAlly]="selectedAlly"
+    [selectedCountry]="selectedCountry"
     ></app-table-configs-audit>
 
   </mat-step>

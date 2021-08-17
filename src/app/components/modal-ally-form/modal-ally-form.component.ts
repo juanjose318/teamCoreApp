@@ -34,7 +34,7 @@ export class ModalAllyFormComponent implements OnInit {
 
   save() {
     if (this.formGroup.invalid) {
-      this.showValidationMsg(this.formGroup)
+      this.showValidationMsg(this.formGroup);
       return;
     }
     this.dialogRef.close(this.formGroup.value);
@@ -93,7 +93,7 @@ export class ModalAllyFormComponent implements OnInit {
 
   get carvajalContactField() {
     return this.formGroup.get('carvajalContact');
-  }
+}
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -121,7 +121,7 @@ export class ModalAllyFormComponent implements OnInit {
         Validators.maxLength(100)]),
       mail: new FormControl(this.mail, [
         Validators.required,
-        Validators.pattern('^[a-zA-Z]+.*[a-zA-Z]+@[a-zA-Z]+\.[a-zA-Z]+$'),
+        Validators.pattern('[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}'),
         Validators.maxLength(100)]),
       phone: new FormControl(this.phone, [
         Validators.required,
@@ -133,7 +133,7 @@ export class ModalAllyFormComponent implements OnInit {
       carvajalContact: new FormControl(this.carvajalContact, [
         Validators.required,
         Validators.maxLength(100),
-        Validators.pattern('^[a-zA-Z]+.*[a-zA-Z]+@[a-zA-Z]+\.[a-zA-Z]+$')]),
+        Validators.pattern('[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}')]),
       creationDate: new FormControl(this.creationDate)
     });
 
