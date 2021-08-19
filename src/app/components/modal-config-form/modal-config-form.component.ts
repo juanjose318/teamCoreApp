@@ -55,11 +55,11 @@ export class ModalConfigFormComponent implements OnInit, OnDestroy {
             this.companyConfigService.getAllyCompanyConfigurationByCompanyAndAlly(this.idAlly, this.idCompany);
             this.allyCompanyConfig = this.companyConfigService.getAllyCompanyConfigListener().subscribe(
                 (collection: any) => {
-                    if (collection.companyConfig.length >= 1) {
+                    if (collection.companyConfig.length >= 1 && this.saving === true) {
                         this._snackBar.open('No se pueden crear alianzas ya existentes', 'cerrar', {
                             duration: 2000,
-                        }); 
-                        return
+                        });
+                        return;
                     } else {
                         const configOne = {
                             idAlliedCompanyConfig: null,

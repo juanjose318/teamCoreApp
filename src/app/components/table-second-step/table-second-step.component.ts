@@ -41,6 +41,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
     // ID de configuracion
     configId;
 
+
     dataSource: MatTableDataSource<any>;
 
     constructor(
@@ -65,6 +66,7 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
         } if (!!configurationDone) {
             if (!!configurationDone.currentValue) {
                 if (!!configurationDone.currentValue.checkMode) {
+                    this.readonlyMode = configurationDone.currentValue.checkMode;
                     this.fetchTradersWithConfig(configurationDone.currentValue.idAlliedCompanyConfig, configurationDone.currentValue.company);
                     this.checkState(configurationDone.currentValue.state.idState);
                 }
@@ -73,16 +75,6 @@ export class SecondStepTableComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit() {
-        this.refresh = this.companyConfigService.refresh$.subscribe(() => {
-        //     if (!!this.configurationDone) {
-        //         if (this.configurationDone.idAlliedCompanyConfig) {
-        //             this.fetchTradersWithConfig(this.configurationDone.idAlliedCompanyConfig, this.configurationDone.company);
-        //         }
-        //         if (this.configurationDone.checkMode === true) {
-        //             this.readonlyMode = true;
-        //         }
-            // }
-        });
         this.updateDatable(this.tradersCollection);
     }
 
