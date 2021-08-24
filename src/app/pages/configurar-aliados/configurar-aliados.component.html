@@ -17,16 +17,16 @@
       <mat-spinner *ngIf="isLoading === true"></mat-spinner>
 
       <!-- Tabla aliados -->
-        <app-table-allies [allies]="allies" [filteredAlly]="selectedAlly" (isLoading)="handleIsloading($event)"
-          (deletedAlly)="handleDeleteAlly($event)" (editedAlly)="handleEditedAlly($event)">
-        </app-table-allies>
+      <app-table-allies [allies]="allies" [filteredAlly]="selectedAlly" (isLoading)="handleIsloading($event)"
+        (deletedAlly)="handleDeleteAlly($event)" (editedAlly)="handleEditedAlly($event)">
+      </app-table-allies>
 
     </div>
 
     <!-- Tabla Auditoria -->
     <div class="card">
       <div class="card-body">
-        <app-table-allies-audit [audit]="audit"></app-table-allies-audit>
+        <app-table-allies-audit [audit]="audit" [selectedAlly]="selectedAlly"></app-table-allies-audit>
       </div>
     </div>
   </div>

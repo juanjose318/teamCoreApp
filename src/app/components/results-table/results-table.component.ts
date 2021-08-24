@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { MatCheckboxChange, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
+import { MatCheckbox, MatCheckboxChange, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { config, Subscription } from 'rxjs';
 import { AliadoService } from 'src/app/services/ally/ally.service';
@@ -38,6 +38,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
   private companyAllyConfigSub: Subscription;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatCheckbox) checkbox: MatCheckbox;
   @ViewChild(MatSort) sort: MatSort;
 
   /**
@@ -61,12 +62,17 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
   /**
    * Registro Selecionado
    */
-  selectedRecord;
+  private selectedRecord;
 
   /**
    * Collecion de configuraciones
    */
-  configOne;
+  private configOne;
+
+  /**
+   * Is matbox checked
+   */
+  private isEnabled;
 
   /**
    * Depedencia de modal
@@ -87,9 +93,9 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
     const configurationDone = changes['configurationDone'];
     const registry = changes['registry'];
     const cancelled = changes['cleanRegister'];
-      if (this.selectedCountry === 'ALL' && this.filteredAlly === 'ALL' && !this.filteredCompany) {
+    if (this.selectedCountry === 'ALL' && this.filteredAlly === 'ALL' && !this.filteredCompany) {
       this.fetchAllConfigs();
-    } else if (this.selectedCountry !== 'ALL' && this.filteredAlly === 'ALL'  && !this.filteredCompany) {
+    } else if (this.selectedCountry !== 'ALL' && this.filteredAlly === 'ALL' && !this.filteredCompany) {
       this.fetchConfigsByCountry(this.selectedCountry);
     } else if (this.filteredAlly === 'ALL' && !!this.filteredCompany) {
       this.fetchConfigsByCompany(this.filteredCompany);
@@ -217,7 +223,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
       this.companyConfigCollection = data.companyConfig;
       const filteredCollection = this.companyConfigCollection.filter((item) => item.allied.idState !== 4);
       this.updateDatable(filteredCollection);
-      this.isLoading.emit(false);
+    this.isLoading.emit(false);
     });
   }
 
@@ -251,7 +257,6 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
    */
   activateOrDeactivateComercialRelation() {
     const registry = this.configAllyCompanyToActivateOrDeactivate;
-    // tslint:disable-next-line: max-line-length
 
     const canActivate = (configuration) => configuration.state.idState === 1;
     const canDeactivate = (configuration) => configuration.state.idState === 2;
@@ -272,8 +277,6 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
         company: { idCompany: configAllyCompany.company.idCompany },
         configurationDate: configAllyCompany.configurationDate
       }];
-
-
 
       if (registry.every(canActivate)) {
         this.companyConfigService.activateOrDeactivateComercialRelation(deactivateRelations).subscribe(() => {
@@ -340,18 +343,21 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
     this.auditService.creatAllyCompanyConfig(objAudit).subscribe();
   }
 
-  handleCheck(event: MatCheckboxChange, config) {
+  handleCheck(event: MatCheckboxChange, config: any) {
     if (event.checked) {
+      this.isEnabled = true;
       this.configAllyCompanyToActivateOrDeactivate.push(config);
     } else {
       for (let i = this.configAllyCompanyToActivateOrDeactivate.length - 1; i >= 0; --i) {
-        if (this.configAllyCompanyToActivateOrDeactivate[i].idAllied === config.idAllied) {
+        if (this.configAllyCompanyToActivateOrDeactivate[i].idAlliedCompanyConfig === config.idAlliedCompanyConfig) {
           this.configAllyCompanyToActivateOrDeactivate.splice(i, 1);
+          if (this.configAllyCompanyToActivateOrDeactivate.length === 0) {
+            this.isEnabled = false;
+          }
         }
       }
     }
   }
-
 
   /**
    * Abre modal para confirmar que se quiere confirmar registro y permite pasar al siguiente paso de configuracion

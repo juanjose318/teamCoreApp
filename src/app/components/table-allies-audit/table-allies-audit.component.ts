@@ -20,12 +20,12 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
     * audit es el pais seleccionado para filtrar
     */
     @Input() audit;
+    @Input() selectedAlly;
 
     /**
      * Objeto para auditoria de configuracion de aliados
      */
     @Input() objAllyCompanyAudit;
-
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -69,6 +69,11 @@ export class TableAlliesAuditComponent implements OnInit, OnChanges, OnDestroy {
                     this.fetchAllAudits();
                 }
             }
+        } if (!!this.selectedAlly) {
+            console.log(this.selectedAlly);
+            const filtered = this.auditCollection.filter(ally => ally.idAllied == this.selectedAlly);
+            this.updateTable(filtered);
+            this.selectedAlly = null;
         }
     }
 

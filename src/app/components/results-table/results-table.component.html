@@ -1,6 +1,6 @@
 <div class="btn-wrapper">
   <button class="btn btn-primary" (click)="activateOrDeactivateComercialRelation()"
-    *ngIf="configAllyCompanyToActivateOrDeactivate?.length; else active">Activar/Desactivar<i class="bi bi-patch-check"></i></button>
+    *ngIf="isEnabled; else active">Activar/Desactivar<i class="bi bi-patch-check"></i></button>
   <ng-template #active>
     <button class="btn btn-primary" #active disabled>Activar/Desactivar<i class="bi bi-patch-check"></i></button>
   </ng-template>

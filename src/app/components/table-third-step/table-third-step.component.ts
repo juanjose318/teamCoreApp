@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductService } from 'src/app/services/products/products.service';
@@ -16,7 +16,7 @@ import { ModalLoadingComponent } from '../modal-loading-spinner/modal-loading-sp
 })
 
 
-export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
+export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
 
     @Input() registry;
     @Input() traders;
@@ -35,7 +35,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
     /**
    * Columnas para configuracion de masterfile
    */
-    displayedColumns: String[] = ['id', 'startLoadingDate', 'user', 'master', 'fileUploaded', 'state', 'detail'];
+    displayedColumns: String[] = ['idMasterFile', 'startLoadingDate', 'userName', 'master', 'fileUploaded', 'state.state', 'detail'];
 
     masterFileCollection = [];
     pointSaleCollection = [];
@@ -106,25 +106,29 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit() {
+        this.updateDatable(this.masterFileCollection);
         this.refresh = this.configService.refresh$.subscribe(() => {
             if (this.registry.idAlliedCompanyConfig) {
                 this.fetchMasterFile(this.registry.idAlliedCompanyConfig);
 
             } else if (!!this.configurationDone) {
-                if(this.configurationDone.idAlliedCompanyConfig){
-                this.fetchMasterFile(this.configurationDone.idAlliedCompanyConfig);
+                if (this.configurationDone.idAlliedCompanyConfig) {
+                    this.fetchMasterFile(this.configurationDone.idAlliedCompanyConfig);
                 }
             }
         });
-        this.updateDatable(this.masterFileCollection);
         this.pointSaleSub = new Subscription;
         this.productsSubs = new Subscription;
         this.masterSub = new Subscription;
     }
 
+    ngAfterViewInit() {
+        this.updateDatable(this.masterFileCollection);
+    }
+
     /**
-    * Llamar archivos masterfile
-    */
+        * Llamar archivos masterfile
+        */
     fetchMasterFile(companyConfigId) {
         this.configService.getMasterFiles(companyConfigId);
         this.masterSub = this.configService.getMasterFileListener().subscribe((data) => {
@@ -169,6 +173,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
     updateDatable(dataSource) {
         this.dataSource = new MatTableDataSource<any>(dataSource);
         this.dataSource.paginator = this.paginator;
+        this.paginator._intl.itemsPerPageLabel = 'Registros por página';
         this.dataSource.sortingDataAccessor = _.get;
         this.dataSource.sort = this.sort;
     }
@@ -179,7 +184,6 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
         } else if (master === 'PV') {
             this.selectedMaster = 'PV';
         } else {
-        
             return;
         }
     }
@@ -260,7 +264,7 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                         const options = {
                             quoteStrings: '',
                             fieldSeparator: ';',
-                            headers: ['Id Punto de Venta', 'Comercio',  'Punto de Venta', 'EAN', 'Estado']
+                            headers: ['Id Punto de Venta', 'Comercio', 'Punto de Venta', 'EAN', 'Estado']
                         };
                         new AngularCsv(this.pointSaleCollection, 'Reporte Puntos de Venta', options);
                     });
@@ -272,8 +276,8 @@ export class ThirdStepTableComponent implements OnInit, OnChanges, OnDestroy {
                     const options = {
                         quoteStrings: '',
                         fieldSeparator: ';',
-                        headers: ['Id Punto de Venta', 'Comercio', 'Punto de Venta',  'EAN', 'Estado']
-                       };
+                        headers: ['Id Punto de Venta', 'Comercio', 'Punto de Venta', 'EAN', 'Estado']
+                    };
                     new AngularCsv(pointSaleData, 'Reporte Puntos de Venta', options);
                 });
             }
