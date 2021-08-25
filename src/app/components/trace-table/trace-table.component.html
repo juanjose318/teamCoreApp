@@ -80,4 +80,4 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
-<mat-paginator [length]="dataSource?.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 30, 40]"></mat-paginator>
+<mat-paginator [length]="dataSource?.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 30, 40]"></mat-paginator>

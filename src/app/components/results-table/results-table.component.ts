@@ -51,28 +51,28 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
   /**
    * Colecciones
    */
-  private configAllyCompanyToActivateOrDeactivate = [];
-  private companyConfigCollection = [];
+  configAllyCompanyToActivateOrDeactivate = [];
+  companyConfigCollection = [];
 
   /**
    * Client
    */
-  private clientIp;
+  clientIp;
 
   /**
    * Registro Selecionado
    */
-  private selectedRecord;
+  selectedRecord;
 
   /**
    * Collecion de configuraciones
    */
-  private configOne;
+  configOne;
 
   /**
    * Is matbox checked
    */
-  private isEnabled;
+  isEnabled;
 
   /**
    * Depedencia de modal
@@ -223,7 +223,7 @@ export class ResultsTableComponent implements OnInit, OnChanges, OnDestroy, Afte
       this.companyConfigCollection = data.companyConfig;
       const filteredCollection = this.companyConfigCollection.filter((item) => item.allied.idState !== 4);
       this.updateDatable(filteredCollection);
-    this.isLoading.emit(false);
+      this.isLoading.emit(false);
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+   import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
@@ -23,10 +23,8 @@ export class TraceTableComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
-    private traceSub: Subscription;
-
-
-    private traceCollection = [];
+    traceSub: Subscription;
+    traceCollection = [];
 
     displayedColumns = ['company.companyCode', 'company.companyName', 'fileName', 'generationDate', 'sendDate',
         'numberTraders', 'numberPointsSale', 'numberProducts', 'numberRecords', 'fileType'];

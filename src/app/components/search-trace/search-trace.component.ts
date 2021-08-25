@@ -25,21 +25,21 @@ export class SearchTraceComponent implements OnInit, OnDestroy {
     /**
     * Filtros
     */
-    private selectedCountry;
-    private selectedAlly;
-    private companyType;
-    private selectedCompany;
+    selectedCountry;
+    selectedAlly;
+    companyType;
+    selectedCompany;
     /**
     * Subscripciones
     */
-    private allySub: Subscription;
-    private companySub: Subscription;
-    private auditSub: Subscription;
+    allySub: Subscription;
+    companySub: Subscription;
+    auditSub: Subscription;
     /**
      * Colecciones
      */
-    private companyCollection;
-    private allyCollection;
+    companyCollection;
+    allyCollection;
 
     ngOnInit() {
         this.auditSub = new Subscription;

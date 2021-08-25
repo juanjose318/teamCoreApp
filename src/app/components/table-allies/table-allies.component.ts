@@ -30,8 +30,8 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
   @Output() createAllyCompanyConfig: EventEmitter<any> = new EventEmitter();
 
 
-  private allySub: Subscription;
-  private refresh: Subscription;
+  allySub: Subscription;
+  refresh: Subscription;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -48,19 +48,19 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Colección
    */
-  private allyCollection = [];
+  allyCollection = [];
 
   /**
    * Client
    */
-  private clientIp;
+  clientIp;
 
   constructor(
     public dialog: MatDialog,
     private allyService: AliadoService,
     private auditService: AuditService,
-    private _snackBar: MatSnackBar
-  ) { }
+    private _snackBar: MatSnackBar,
+      ) { }
 
   /**
    * Si es tabla uno y hay un objeto de aliados como input revisar si es de un solo pais o de todos
@@ -88,6 +88,7 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
    */
   updateDatable(dataSource) {
     this.dataSource = new MatTableDataSource<any>(dataSource);
+    console.log(this.dataSource);
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Registros por página';
     this.dataSource.sortingDataAccessor = _.get;
@@ -182,7 +183,7 @@ export class TableAlliesComponent implements OnInit, OnChanges, OnDestroy {
         const filtered = this.allyCollection.filter(ally => ally.idAllied == this.filteredAlly);
         this.updateDatable(filtered);
         this.filteredAlly = null;
-      } 
+      }
     } else {
       // this.fetchAllAllies();
     }

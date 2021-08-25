@@ -17,22 +17,22 @@ export class ConfigurarAliadosComponent implements OnInit {
    * allies : Pais a filtrar
    * selectedAlly: Aliado a filtrar
    */
-  private selectedAlly;
-  private allies: any;
-  private allySub: Subscription;
+  selectedAlly;
+  allies: any;
+  allySub: Subscription;
   /**
    * Check para ver que pais esta seleccionado
    */
-  private selectedCountry: string;
+  selectedCountry: string;
   /**
    * Ip
    */
-  private clientIp;
+  clientIp;
   /**
    * Auditoria
    */
-  private audit: any;
-  private auditSub: Subscription;
+  audit: any;
+  auditSub: Subscription;
 
   /**
    * Mensajes para textBox component
@@ -43,7 +43,7 @@ export class ConfigurarAliadosComponent implements OnInit {
   /**
    * Config envio de aliados
   */
-  private configInfoSending = false;
+  configInfoSending = false;
 
   /**
    * Spinner condicional por medio de variable boolean

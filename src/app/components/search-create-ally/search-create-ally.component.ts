@@ -37,21 +37,21 @@ export class SearchCreateAllyComponent implements OnChanges, OnDestroy {
   /**
    * Colleciones iterables
    */
-  private allyCollection;
-  private companyCollection;
+  allyCollection;
+  companyCollection;
   @Input() testCollection;
 
   /**
    * Subscripciones
    */
-  private allySub: Subscription;
-  private companySub: Subscription;
+  allySub: Subscription;
+  companySub: Subscription;
 
   /**
   * Filtros
   */
-  private selectedCountry;
-  private selectedAlly;
+  selectedCountry;
+  selectedAlly;
 
   /**
    * Autofill empresa

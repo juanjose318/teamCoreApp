@@ -53,13 +53,11 @@
     [configurationDone]="configurationDone"
     (previousStep)="handlePreviousStep($event)"
     (loadedMasterfile)="handleLoadedMasterfile($event)"
-    (downloadCsv)="handleDownload($event)"
     ></app-table-third-step>
 
     <app-table-configs-audit 
     [configurationDone]="configurationDone"
     [selectedCompany]="selectedCompany"
     [selectedAlly]="selectedAlly"></app-table-configs-audit>
-
   </mat-step>
 </mat-horizontal-stepper>

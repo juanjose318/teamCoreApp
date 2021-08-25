@@ -14,9 +14,9 @@ export class ConfigurarEnviosAliadoComponent {
   /**
  * Aliado
  */
-  private selectedAlly;
-  private selectedCountry: any;
-  private selectedCompany;
+  selectedAlly;
+  selectedCountry: any;
+  selectedCompany;
 
   /**
   * Mensajes para textBox component
@@ -27,7 +27,7 @@ export class ConfigurarEnviosAliadoComponent {
   /**
    * Conficional para Saber si se trata de la pantalla configurar envios de aliado
    */
-  private configInfoSending = true;
+  configInfoSending = true;
 
   /**
   * tableNumber define desde que componente se va a reutilizar la tabla de display de informacion
@@ -37,24 +37,24 @@ export class ConfigurarEnviosAliadoComponent {
   /**
   * Auditoria
   */
-  private audit: any;
-  private auditSub: Subscription;
+  audit: any;
+  auditSub: Subscription;
 
   /**
    * Coleccion
    */
-  private allyCollection;
-  private companyCollection;
+  allyCollection;
+  companyCollection;
 
   /**
    * Reset de configuracion
    */
-  private cleanConfig;
+  cleanConfig;
 
   /**
    * Guardar configuraciones
    */
-  private saveConfig;
+  saveConfig;
 
   /**
    * Condicional de registro

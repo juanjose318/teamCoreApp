@@ -23,7 +23,6 @@ import { ModalDescriptionComponent } from '../components/modal-description/modal
 import { TableConfigsAuditComponent } from '../components/table-configs-audit/table-configs-audit.component';
 import { ConfigurarEnviosAliadoComponent } from './configurar-envios-aliado/configurar-envios-aliado.component';
 import { ConfigTabsComponent } from '../components/config-tabs/config-tabs.component';
-import { AuditConfigComponent } from '../components/audit-config/audit-config.component';
 import { UploadMasterFileComponent } from '../components/upload-master-file/upload-master-file.component';
 import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
 import { ModalAllyFormComponent } from '../components/modal-ally-form/modal-ally-form.component';
@@ -46,7 +45,6 @@ import { ModalLoadingComponent } from '../components/modal-loading-spinner/modal
     ResultsTableComponent,
     SearchCreateAllyComponent,
     TextBoxComponent,
-    AuditConfigComponent,
     ConfigurarEnviosAliadoComponent,
     ConfigTabsComponent,
     UploadMasterFileComponent,

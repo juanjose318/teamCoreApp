@@ -16,7 +16,6 @@
     <div class="card-body">
       <app-trace-table
       [(traceParams)]="searchParams" 
-      (ngModelChange)="updateTable($event)"
       [isLoading]="isLoading"
       (stopLoading)="handleIsloading($event)"></app-trace-table>
     </div>

@@ -7,7 +7,6 @@
     </div>
   </ng-template>
 
-
   <table mat-table [dataSource]="dataSource" class="card-body" *ngIf="allyCollection?.length; else noDisponible" matSort
     matSortActive="creationDate" matSortDirection="desc" matSortDisableClear>
     <ng-container matColumnDef="idAllied">
@@ -83,5 +82,5 @@
 
   </table>
 
-  <mat-paginator [length]="dataSource?.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 30, 40]"></mat-paginator>
+  <mat-paginator [length]="dataSource?.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 30, 40]"></mat-paginator>
 </div>

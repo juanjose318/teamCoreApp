@@ -16,20 +16,20 @@ export class ModalConfigFormComponent implements OnInit, OnDestroy {
     /**
      * Campos para data binding y creacion de objetos
      */
-    private idAlly;
-    private allyName;
-    private idCompany;
-    private companyCode;
-    private companyName;
-    private configurationDate: Date = new Date();
-    private saving: boolean;
+    idAlly;
+    allyName;
+    idCompany;
+    companyCode;
+    companyName;
+    configurationDate: Date = new Date();
+    saving: boolean;
 
-    private allyCollectionForConfiguration = [];
-    private companyCollectionForConfiguration = [];
+    allyCollectionForConfiguration = [];
+    companyCollectionForConfiguration = [];
 
-    private allySub: Subscription;
-    private companySub: Subscription;
-    private allyCompanyConfig: Subscription;
+    allySub: Subscription;
+    companySub: Subscription;
+    allyCompanyConfig: Subscription;
 
     constructor(
         private allyService: AliadoService,
